@@ -141,7 +141,9 @@ html[data-theme="dark"] .orbs { animation-name: hueflowDark; }
 .lens-ring i { position: absolute; inset: 0; border-radius: 24px;
   backdrop-filter: blur(1px) url(#lensFilter); -webkit-backdrop-filter: blur(1px); }
 
-/* ── 组件样例：导航药丸 / 卡片 / 按钮 / 输入框 / 分段控制 ── */
+/* ── 组件样例：导航药丸 / 卡片 / 按钮 / 输入框 / 分段控制 ──
+   导航药丸参数已在生产应用(pulse 现场投票)验证:.42s cubic-bezier(.3,1.35,.4,1)
+   的 mover 滑动 + 8px 14px 的链接内边距 + initPill 的 fonts.ready 重定位。 */
 .nav { display: flex; align-items: center; gap: 4px; padding: 5px; border-radius: var(--r-pill); width: fit-content; }
 .navmover { position: absolute; top: 5px; bottom: 5px; border-radius: var(--r-pill); z-index: 0;
   background: var(--mover-bg); box-shadow: var(--mover-shadow);

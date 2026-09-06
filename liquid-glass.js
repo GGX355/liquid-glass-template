@@ -43,8 +43,10 @@ export function initTheme({ key = "lg-theme", onChange } = {}) {
     document.documentElement.dataset.theme = t;
     const btn = document.querySelector(".lg-theme-btn");
     if (btn) {
-      btn.textContent = pref === "system" ? "🌗 系统" : pref === "dark" ? "🌙 黑夜" : "☀️ 白天";
+      // 纯图标(与 pulse 审核定稿一致):三态 🌗/🌙/☀️ 循环,名称进 title/aria
+      btn.textContent = pref === "system" ? "🌗" : pref === "dark" ? "🌙" : "☀️";
       btn.title = "当前：" + (pref === "system" ? "跟随系统" : pref === "dark" ? "黑夜" : "白天") + "（点击切换）";
+      btn.setAttribute("aria-label", "主题：" + (pref === "system" ? "跟随系统" : pref === "dark" ? "黑夜" : "白天"));
     }
     if (onChange) onChange(t);
   }
@@ -93,7 +95,15 @@ export function initPill(container, { attr = "data-page", onPick } = {}) {
   }));
   const current = container.querySelector("a.on, button.on") || items[0];
   if (current) move(current, true);
-  return { move };
+  // 生产经验(pulse):webfont 加载与窗口变化都会改变字宽,不重定位滑块
+  // 会停在错误位置。fonts.ready 后再校正一次,resize 持续跟随。
+  const replace = () => {
+    const on = container.querySelector("a.on, button.on") || items[0];
+    if (on) move(on, true);
+  };
+  document.fonts?.ready.then(replace);
+  addEventListener("resize", replace);
+  return { move, replace };
 }
 
 /* ── 非模块化用法（<script src> 直接引入时挂到全局） ── */

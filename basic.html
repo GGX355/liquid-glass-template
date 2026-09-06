@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liquid Glass Template · 苹果液态玻璃 Web 模板</title>
+<link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./liquid-glass.css"/>
+<style>
+  .wrap { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 30px 20px 90px; }
+  .panel { margin-top: var(--sp-4); border-radius: var(--r-lg); padding: var(--sp-5); }
+  h1 { margin-top: var(--sp-1); font-size: var(--fs-large-title); font-weight: 700; letter-spacing: -.4px; }
+  .kicker { font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
+  .sec-title { margin: 30px 0 12px; font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+  .card h3 { font-size: var(--fs-headline); font-weight: 600; }
+  .card p { margin-top: 6px; font-size: var(--fs-footnote); color: var(--ink3); line-height: 1.6; }
+  .theme-btn { position: relative; z-index: 1; margin-left: 6px; border: none; border-radius: var(--r-pill);
+    padding: 10px 14px; cursor: pointer; background: var(--mover-bg); box-shadow: var(--mover-shadow);
+    color: var(--ink); font-size: var(--fs-subhead); font-weight: 600; font-family: inherit;
+    transition: transform .5s cubic-bezier(.28,1.7,.4,1); }
+  .theme-btn:active { transform: scale(.92); transition-duration: .08s; }
+  .rows { display: flex; flex-direction: column; gap: 10px; }
+  .row { border-radius: var(--r-md); padding: 15px 18px; font-size: var(--fs-subhead); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="lensFilter" x="0%" y="0%" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.010" numOctaves="2" seed="17" result="noise"/>
+    <feGaussianBlur in="noise" stdDeviation="2.2" result="soft"/>
+    <feDisplacementMap in="SourceGraphic" in2="soft" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="orbs"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i><i class="o5"></i></div>
+<div class="grain"></div>
+
+<div class="wrap">
+  <nav class="nav glass" id="nav">
+    <span class="navmover"></span>
+    <span style="font-weight:800;font-size:17px;padding:0 14px 0 12px;position:relative;z-index:1">Glass</span>
+    <a data-page="a" class="on">组件</a>
+    <a data-page="b">材质</a>
+    <button class="lg-theme-btn theme-btn"></button>
+  </nav>
+
+  <p class="kicker">LIQUID GLASS TEMPLATE</p>
+  <h1>苹果液态玻璃 · Web 模板</h1>
+  <p style="margin-top:10px;font-size:var(--fs-subhead);color:var(--ink3)">
+    依照 Apple HIG 字阶与 WWDC25 Liquid Glass 三层模型实现：中性玻璃 + 边缘棱光 + 透镜折射 + Aurora 流动背景。
+  </p>
+
+  <section class="panel glass" style="margin-top:20px">
+    <div class="lens-ring"><i></i></div>
+    <div id="page-a">
+      <p class="sec-title">组件样例 · 点卡片看弹簧</p>
+      <div class="cards">
+        <div class="card" style="animation-delay:0ms"><h3>玻璃卡片</h3><p>四向棱边高光 + 红蓝色散 + 指针眩光。</p></div>
+        <div class="card" style="animation-delay:80ms"><h3>阻尼弹簧</h3><p>点击任意元素感受衰减回弹的果冻手感。</p></div>
+        <div class="card" style="animation-delay:160ms"><h3>双主题</h3><p>右上角按钮循环：跟随系统 → 黑夜 → 白天。</p></div>
+      </div>
+      <p class="sec-title">列表行</p>
+      <div class="rows">
+        <div class="row glass card" style="animation-delay:.05s">列表行 · 副标题走 Subhead 15</div>
+        <div class="row glass card" style="animation-delay:.12s">列表行 · 触控目标 ≥ 44px</div>
+      </div>
+      <p class="sec-title">控件</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button class="btn">主按钮</button>
+        <input class="input" style="max-width:240px" placeholder="输入框 · Body 17"/>
+      </div>
+      <p class="sec-title">分段控制</p>
+      <div class="seg glass" id="seg">
+        <span class="mover"></span>
+        <button data-page="one" class="on">第一项</button>
+        <button data-page="two">第二项</button>
+        <button data-page="three">第三项</button>
+      </div>
+    </div>
+    <div id="page-b" style="display:none">
+      <p class="sec-title">材质说明</p>
+      <div class="rows">
+        <div class="row glass card">玻璃是中性无色的，颜色全部来自身后的 Aurora 流动色块</div>
+        <div class="row glass card">棱边 = 上缘高光 + 底部暗化收边 + 红蓝色散</div>
+        <div class="row glass card">阴影 = 1px 接触影 + 小环境影，贴地不飘</div>
+        <div class="row glass card">字阶 = HIG：34 / 22 / 17 / 15 / 13 / 12，间距 8pt 网格</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script type="module">
+  import { initTheme, initGlare, initPill, jelly, stageIn } from "./liquid-glass.js";
+  initTheme();
+  initGlare();
+  initPill(document.getElementById("seg"), {
+    onPick: (v) => {
+      if (v === "one" || v === "two" || v === "three") return;
+    }
+  });
+  const nav = document.getElementById("nav");
+  nav.querySelectorAll("a[data-page]").forEach(a => a.addEventListener("click", () => {
+    document.getElementById("page-a").style.display = a.dataset.page === "a" ? "" : "none";
+    document.getElementById("page-b").style.display = a.dataset.page === "b" ? "" : "none";
+    const panel = document.querySelector(".panel");
+    jelly(panel);
+    stageIn(document.getElementById("page-" + a.dataset.page));
+  }));
+  document.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => jelly(c)));
+</script>
+</body>
+</html>

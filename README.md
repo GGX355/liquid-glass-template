@@ -2,6 +2,15 @@
 
 依照 **Apple HIG**（Typography / Materials）与 **WWDC25 Liquid Glass** 三层模型（highlight / shadow / illumination）实现的通用 Web 设计规范模板。纯 HTML + CSS + 原生 JS，零依赖，复制即用。
 
+## 在线演示
+
+**https://ggx355.github.io/liquid-glass-template/**
+
+- index.html — 完整演示：盲选抽签场景，全局液态玻璃，默认 ②Smooth 动画，页面右上角循环主题
+- basic.html — 最小组件示例
+
+动画五档映射苹果 duration+bounce 弹簧模型（WWDC23）：① Snappy .35s/.45 ② Smooth .55s/0（无过冲，默认）③ Bouncy .6s/.65 ④ Liquid 方向性形变 ⑤ Island 面板 morph。URL 加 ?v=1~5 切换。
+
 ## 特性
 
 - **真·液态玻璃材质**：中性无色玻璃（薄白膜 ~28-50%），颜色来自玻璃后的内容；`backdrop-filter: blur(10px) saturate(195%)`

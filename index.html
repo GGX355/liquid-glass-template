@@ -29,7 +29,7 @@
 
   /* ── 翻牌 ── */
   .scene { perspective: 900px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .draw-card { position: relative; height: 104px; display: grid; place-items: center; cursor: pointer;
+  .draw-card { position: relative; height: 104px; border-radius: var(--r-md); display: grid; place-items: center; cursor: pointer;
     transform-style: preserve-3d; transition: transform .7s cubic-bezier(.25,.7,.18,1), opacity .4s;
     animation: rise .55s cubic-bezier(.22,1,.36,1) both; }
   .draw-card.flipping { animation: none; transform: rotateY(180deg); cursor: default; }

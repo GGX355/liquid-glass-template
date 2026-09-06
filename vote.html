@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Liquid Glass · 投票页预览（pulse 移植效果）</title>
+<link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="./liquid-glass.css"/>
+<style>
+  .wrap { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 30px 20px 90px; }
+  h1 { margin-top: var(--sp-1); font-size: var(--fs-large-title); font-weight: 700; letter-spacing: -.4px; }
+  .kicker { font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
+  .status { margin-top: 10px; font-size: var(--fs-subhead); color: var(--ink3); display: flex; align-items: center; gap: 8px; }
+  .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #34c759); animation: breathe 2.2s ease-in-out infinite; }
+  @keyframes breathe { 50% { opacity: .35; } }
+
+  /* 投票选项：pulse 同款玻璃行 + 填充条（Smooth 节奏） */
+  .popts { display: flex; flex-direction: column; gap: 12px; }
+  .popt { position: relative; overflow: hidden; border-radius: var(--r-md); padding: 16px var(--sp-4); cursor: pointer;
+    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
+    border: 1px solid var(--glass-border); box-shadow: var(--rim-sm);
+    transition: transform .55s cubic-bezier(.28,1.7,.4,1), border-color .25s, box-shadow .25s, opacity .3s;
+    animation: rise .55s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.97); } }
+  .popt:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--accent) 35%, var(--glass-border)); }
+  .popt.voted:active { transform: scale(.965); transition-duration: .08s; }
+  .popt .fill { position: absolute; inset: 0; z-index: 0;
+    background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 16%, transparent), color-mix(in oklab, var(--accent2, #7d5aff) 12%, transparent));
+    transform-origin: left; transform: scaleX(var(--f, 0)); transition: transform .9s cubic-bezier(.22,1,.36,1); }
+  .popt .prow { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .popt .pnm { font-size: var(--fs-headline); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .popt .pct { font-size: var(--fs-subhead); color: var(--ink3); font-variant-numeric: tabular-nums; font-weight: 600; }
+  .popt.is-mine { border-color: color-mix(in oklab, var(--accent) 55%, var(--glass-border));
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 16%, transparent), 0 10px 30px color-mix(in oklab, var(--accent) 16%, transparent), var(--rim-sm); }
+  .popt.is-locked { cursor: default; }
+  .popt.is-locked:not(.is-mine) { opacity: .72; }
+  .mine-tag { display: none; font-size: var(--fs-caption); color: var(--accent); font-weight: 700; }
+  .popt.is-mine .mine-tag { display: inline; animation: popin .4s cubic-bezier(.34,1.56,.64,1) both; }
+  @keyframes popin { from { opacity: 0; transform: scale(.5); } 70% { transform: scale(1.12); } to { opacity: 1; transform: scale(1); } }
+  .float1 { position: absolute; right: 16px; top: 8px; z-index: 2; font-size: var(--fs-caption); font-weight: 700;
+    color: var(--accent); pointer-events: none; animation: floatup .8s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes floatup { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-18px); } }
+  .live-total { display: inline-flex; align-items: center; gap: 7px; padding: 6px 14px; border-radius: var(--r-pill);
+    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
+    border: 1px solid var(--glass-border); font-size: var(--fs-footnote); color: var(--ink3);
+    font-variant-numeric: tabular-nums; box-shadow: var(--rim-sm); }
+  .poll-note { margin-top: 14px; text-align: center; font-size: var(--fs-footnote); color: var(--ink4); }
+  .footer-link { margin-top: 28px; font-size: var(--fs-footnote); color: var(--ink3); }
+  .footer-link a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <filter id="lensFilter" x="0%" y="0%" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.010 0.010" numOctaves="2" seed="17" result="noise"/>
+    <feGaussianBlur in="noise" stdDeviation="2.2" result="soft"/>
+    <feDisplacementMap in="SourceGraphic" in2="soft" scale="60" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="orbs"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i><i class="o5"></i></div>
+<div class="grain"></div>
+
+<div class="wrap">
+  <nav class="nav glass" id="nav">
+    <span class="navmover"></span>
+    <span style="font-weight:800;font-size:17px;padding:0 14px 0 12px;position:relative;z-index:1">Pulse</span>
+    <a data-page="vote" class="on">投票</a>
+    <a data-page="draw" href="./index.html">抽签</a>
+    <button class="lg-theme-btn theme-btn" style="border:none;cursor:pointer;font-family:inherit;background:none;box-shadow:none;color:inherit;font-size:var(--fs-subhead);font-weight:600"></button>
+  </nav>
+
+  <p class="kicker">投票</p>
+  <h1>午饭吃什么？</h1>
+  <p class="status" style="justify-content:space-between">
+    <span style="display:flex;align-items:center;gap:8px"><span class="dot"></span><span id="voteStatus">点击选项即可投票 · 实时出结果</span></span>
+    <span class="live-total" id="liveTotal">共 0 票</span>
+  </p>
+
+  <div class="popts" id="popts" style="margin-top:20px"></div>
+  <p class="poll-note" id="pollNote">每人一票 · 投完立刻看到大家的实时选择</p>
+  <p class="footer-link">往期投票见 <a href="./index.html">抽签演示</a> · 本页为 pulse 移植效果静态预览</p>
+</div>
+
+<script type="module">
+  import { initTheme, initGlare } from "./liquid-glass.js";
+  initTheme();
+  initGlare();
+
+  /* Smooth 档投票模拟：点击投票 → 实时票数/填充生长 + "+1" 浮层 */
+  const POLL = [
+    { label: "拉面", count: 0 },
+    { label: "便当", count: 0 },
+    { label: "沙拉", count: 0 },
+    { label: "随便", count: 0 },
+  ];
+  let voted = false, timers = [];
+  const popts = document.getElementById("popts");
+
+  function build() {
+    timers.forEach(clearTimeout); timers = [];
+    voted = false;
+    POLL.forEach(p => p.count = 0);
+    popts.innerHTML = "";
+    POLL.forEach((p, i) => {
+      const d = document.createElement("div");
+      d.className = "popt"; d.style.animationDelay = (i * 70) + "ms";
+      d.innerHTML = '<div class="fill" style="--f:0"></div><div class="prow">' +
+        '<span class="pnm">' + p.label + '<span class="mine-tag">我的选择</span></span>' +
+        '<span class="pct">点击投票</span></div>';
+      d.onclick = () => castVote(i);
+      popts.appendChild(d);
+    });
+    document.getElementById("voteStatus").textContent = "点击选项即可投票 · 实时出结果";
+    document.getElementById("liveTotal").textContent = "共 0 票";
+    document.getElementById("pollNote").textContent = "每人一票 · 投完立刻看到大家的实时选择";
+  }
+
+  function castVote(i) {
+    if (voted) return; voted = true;
+    POLL[i].count += 1;
+    const rows = [...popts.children];
+    rows.forEach((r, k) => {
+      r.classList.add("voted", "is-locked");
+      if (k === i) r.classList.add("is-mine");
+    });
+    document.getElementById("voteStatus").textContent = "投票进行中 · 其他人陆续加入";
+    update(rows, -1);
+    let ticks = 0;
+    const tick = () => {
+      if (ticks++ > 9) return;
+      const others = POLL.map((p, k) => k).filter(k => k !== i);
+      const k = others[Math.floor(Math.random() * others.length)];
+      POLL[k].count += 1;
+      update(rows, k);
+      timers.push(setTimeout(tick, 650 + Math.random() * 750));
+    };
+    timers.push(setTimeout(tick, 900));
+    document.getElementById("pollNote").textContent = "票数会持续生长，直到现场所有人投完";
+  }
+
+  function update(rows, justVoted) {
+    const total = POLL.reduce((s, p) => s + p.count, 0);
+    document.getElementById("liveTotal").textContent = "共 " + total + " 票";
+    POLL.forEach((p, k) => {
+      const f = total ? p.count / total : 0;
+      rows[k].querySelector(".fill").style.setProperty("--f", f.toFixed(3));
+      rows[k].querySelector(".pct").textContent = p.count + " 票 · " + Math.round(f * 100) + "%";
+    });
+    if (justVoted >= 0) {
+      const f1 = document.createElement("span");
+      f1.className = "float1"; f1.textContent = "+1";
+      rows[justVoted].appendChild(f1);
+      setTimeout(() => f1.remove(), 850);
+    }
+    if (voted && total >= 11) {
+      document.getElementById("voteStatus").textContent = "已全部投完 · 结果如上";
+      document.getElementById("pollNote").textContent = "结果实时可见，发起人端还会滚动显示名单";
+    }
+  }
+
+  build();
+</script>
+</body>
+</html>

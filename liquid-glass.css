@@ -86,6 +86,11 @@ html[data-theme="dark"] {
 }
 
 /* ── 基础 ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+}
+body { transition: color 0.45s ease; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: "SF Pro Display", "Inter", -apple-system, "PingFang SC",

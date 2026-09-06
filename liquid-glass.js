@@ -51,7 +51,9 @@ export function initTheme({ key = "lg-theme", onChange } = {}) {
   function cycle() {
     pref = pref === "system" ? "dark" : pref === "dark" ? "light" : "system";
     localStorage.setItem(key, pref);
-    apply();
+    // View Transitions：整页交叉淡化，主题切换如苹果般顺滑
+    if (document.startViewTransition) document.startViewTransition(() => apply());
+    else apply();
   }
   colorScheme.addEventListener("change", () => { if (pref === "system") apply(); });
   const btn = document.querySelector(".lg-theme-btn");

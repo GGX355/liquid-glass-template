@@ -46,6 +46,11 @@
     border: 1px solid var(--glass-border); font-size: var(--fs-footnote); color: var(--ink3);
     font-variant-numeric: tabular-nums; box-shadow: var(--rim-sm); }
   .poll-note { margin-top: 14px; text-align: center; font-size: var(--fs-footnote); color: var(--ink4); }
+  .lg-theme-btn { border: none; cursor: pointer; font-family: inherit; position: relative; z-index: 1;
+    background: var(--mover-bg); box-shadow: var(--mover-shadow); color: var(--ink);
+    font-size: var(--fs-subhead); font-weight: 600; border-radius: var(--r-pill); padding: 8px 14px;
+    transition: transform .5s cubic-bezier(.28,1.7,.4,1); }
+  .lg-theme-btn:active { transform: scale(.92); transition-duration: .08s; }
   .footer-link { margin-top: 28px; font-size: var(--fs-footnote); color: var(--ink3); }
   .footer-link a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 </style>
@@ -68,7 +73,7 @@
     <span style="font-weight:800;font-size:17px;padding:0 14px 0 12px;position:relative;z-index:1">Pulse</span>
     <a data-page="vote" class="on">投票</a>
     <a data-page="draw" href="./index.html">抽签</a>
-    <button class="lg-theme-btn theme-btn" style="border:none;cursor:pointer;font-family:inherit;background:none;box-shadow:none;color:inherit;font-size:var(--fs-subhead);font-weight:600"></button>
+    <button class="lg-theme-btn theme-btn"></button>
   </nav>
 
   <p class="kicker">投票</p>

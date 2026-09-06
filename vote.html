@@ -20,15 +20,22 @@
   .popt { position: relative; overflow: hidden; border-radius: var(--r-md); padding: 16px var(--sp-4); cursor: pointer;
     background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
     border: 1px solid var(--glass-border); box-shadow: var(--rim-sm);
-    transition: transform .55s cubic-bezier(.28,1.7,.4,1), border-color .25s, box-shadow .25s, opacity .3s;
+    transform: translateY(var(--lift, 0)) translateX(var(--magx, 0));
+    transition: transform .6s cubic-bezier(.28,1.7,.4,1), border-color .25s, box-shadow .25s, opacity .3s;
     animation: rise .55s cubic-bezier(.22,1,.36,1) both; }
   @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.97); } }
-  .popt:hover { transform: translateY(-2px); border-color: color-mix(in oklab, var(--accent) 35%, var(--glass-border)); }
-  .popt.voted:active { transform: scale(.965); transition-duration: .08s; }
+  .popt:hover { --lift: -3px; border-color: color-mix(in oklab, var(--accent) 35%, var(--glass-border)); }
+  .popt.voted:active { --press: .965; transition-duration: .08s; }
+  /* 指针眩光：跟随鼠标的高光斑（liquid-glass.js 写入 --mx/--my） */
+  .popt::before { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; pointer-events: none;
+    background: radial-gradient(130px circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,.4), transparent 70%);
+    opacity: 0; transition: opacity .3s ease; }
+  .popt:hover::before { opacity: 1; }
+  .popt.voted:active { transform: translateY(var(--lift, 0)) translateX(var(--magx, 0)) scale(.97); }
   .popt .fill { position: absolute; inset: 0; z-index: 0;
     background: linear-gradient(90deg, color-mix(in oklab, var(--accent) 16%, transparent), color-mix(in oklab, var(--accent2, #7d5aff) 12%, transparent));
     transform-origin: left; transform: scaleX(var(--f, 0)); transition: transform .9s cubic-bezier(.22,1,.36,1); }
-  .popt .prow { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .popt .prow { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   .popt .pnm { font-size: var(--fs-headline); font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .popt .pct { font-size: var(--fs-subhead); color: var(--ink3); font-variant-numeric: tabular-nums; font-weight: 600; }
   .popt.is-mine { border-color: color-mix(in oklab, var(--accent) 55%, var(--glass-border));
@@ -103,6 +110,26 @@
   let voted = false, timers = [];
   const popts = document.getElementById("popts");
 
+  /* 灵动悬停：行内眩光跟随 + 磁吸偏移（弹簧回弹） */
+  function bindHover() {
+    const rows = [...popts.children];
+    popts.addEventListener("pointermove", e => {
+      for (const r of rows) {
+        const rect = r.getBoundingClientRect();
+        if (e.clientY < rect.top - 6 || e.clientY > rect.bottom + 6) continue;
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        r.style.setProperty("--mx", (e.clientX - rect.left).toFixed(0) + "px");
+        r.style.setProperty("--my", (e.clientY - rect.top).toFixed(0) + "px");
+        if (!r.classList.contains("is-locked")) {
+          r.style.setProperty("--magx", (Math.max(-5, Math.min(5, dx * 0.03))).toFixed(1) + "px");
+        }
+      }
+    });
+    popts.addEventListener("pointerleave", () => {
+      for (const r of rows) r.style.setProperty("--magx", "0px");
+    });
+  }
+
   function build() {
     timers.forEach(clearTimeout); timers = [];
     voted = false;
@@ -120,6 +147,7 @@
     document.getElementById("voteStatus").textContent = "点击选项即可投票 · 实时出结果";
     document.getElementById("liveTotal").textContent = "共 0 票";
     document.getElementById("pollNote").textContent = "每人一票 · 投完立刻看到大家的实时选择";
+    bindHover();
   }
 
   function castVote(i) {

@@ -8,37 +8,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="./liquid-glass.css"/>
 <style>
+  /* 页面布局（材料全部来自模板令牌） */
   .wrap { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 30px 20px 90px; }
   .panel { border-radius: var(--r-lg); padding: var(--sp-5); }
   h1 { margin-top: var(--sp-1); font-size: var(--fs-large-title); font-weight: 700; letter-spacing: -.4px; }
   .kicker { font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
   .status { margin-top: 10px; font-size: var(--fs-subhead); color: var(--ink3); display: flex; align-items: center; gap: 8px; }
-  .status .dot { width: 7px; height: 7px; border-radius: 50%; background: #34c759; animation: breathe 2.2s ease-in-out infinite; }
+  .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dot, #34c759); animation: breathe 2.2s ease-in-out infinite; }
   @keyframes breathe { 50% { opacity: .35; } }
+  .theme-btn { border: none; cursor: pointer; font-family: inherit; position: relative; z-index: 1;
+    background: var(--mover-bg); box-shadow: var(--mover-shadow); color: var(--ink);
+    font-size: var(--fs-subhead); font-weight: 600; border-radius: var(--r-pill); padding: 8px 14px;
+    transition: transform .5s cubic-bezier(.28,1.7,.4,1); }
+  .theme-btn:active { transform: scale(.92); transition-duration: .08s; }
 
-  /* 当前档位徽章 */
-  .badge { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); z-index: 50;
-    font-size: var(--fs-caption); color: var(--ink2); background: var(--glass-bg);
-    backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
-    border: 1px solid var(--glass-border); border-radius: var(--r-pill); padding: 5px 14px;
-    box-shadow: var(--rim-sm); font-family: var(--font-sans); white-space: nowrap; }
+  /* Smooth 档编排（duration .55s / bounce 0，无过冲） */
+  .stage { display: none; transform-origin: 50% 45%; will-change: transform, filter, opacity; }
+  .stage.on { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; min-height: 340px; width: 100%; }
+  .stage.on > .scene, .stage.on > .deck, .stage.on > .grid9 { width: 100%; }
 
-  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-    min-height: 176px; text-align: center; transition: min-height .4s ease; }
-  .hero.island { min-height: 240px; }
-  .hero .note { width: min(300px, 100%); }
-  .fineprint { font-size: var(--fs-footnote); color: var(--ink4); }
-
-  .sec-title { margin: 30px 0 12px; font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; perspective: 900px; }
-  @media (max-width: 560px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-  .draw-card { position: relative; height: 96px; display: grid; place-items: center; cursor: pointer;
-    transform-style: preserve-3d; transition: opacity .4s, border-color .25s, box-shadow .25s;
-    animation: rise .55s cubic-bezier(.22,1,.36,1) both; will-change: transform; }
+  /* ── 翻牌 ── */
+  .scene { perspective: 900px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .draw-card { position: relative; height: 104px; display: grid; place-items: center; cursor: pointer;
+    transform-style: preserve-3d; transition: transform .7s cubic-bezier(.25,.7,.18,1), opacity .4s;
+    animation: rise .55s cubic-bezier(.22,1,.36,1) both; }
   .draw-card.flipping { animation: none; transform: rotateY(180deg); cursor: default; }
-  .draw-card.dim-fade { opacity: .38; }
   .draw-card.dim-blur { opacity: .5; filter: blur(2.5px); }
-  .draw-card.dim-fadescale { opacity: .38; transform: scale(.94) !important; }
   .draw-card.rolling .dc-face.front { border-color: color-mix(in oklab, var(--accent) 55%, var(--glass-border));
     box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 18%, transparent), var(--rim-sm); }
   .dc-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -53,6 +48,62 @@
     -webkit-background-clip: text; background-clip: text; color: transparent; }
   .tip { text-align: center; margin-top: 14px; font-size: var(--fs-footnote); color: var(--ink4); }
 
+  /* ── 刮奖 ── */
+  .deck { display: flex; justify-content: center; gap: 14px; }
+  .pick { width: 108px; height: 150px; border-radius: var(--r-md); cursor: pointer; position: relative; display: grid; place-items: center;
+    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
+    border: 1px solid var(--glass-border); box-shadow: var(--rim-sm);
+    transition: transform .55s cubic-bezier(.28,1.7,.4,1), box-shadow .3s, opacity .3s;
+    animation: rise .6s cubic-bezier(.22,1,.36,1) both; }
+  .pick:hover { transform: translateY(-6px) scale(1.02); }
+  .pick:active { transform: scale(.94); transition-duration: .09s; }
+  .pick.hidden { opacity: 0; transform: scale(.82); pointer-events: none; }
+  .pick .seal { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 6px 16px color-mix(in oklab, var(--accent) 35%, transparent), inset 0 1px 1px rgba(255,255,255,.6); }
+  .pick .cap { position: absolute; bottom: 12px; font-size: var(--fs-caption2); letter-spacing: .22em; color: var(--ink4); }
+  .scratch-card { position: relative; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--glass-border); box-shadow: var(--rim); }
+  .prize-face { padding: 40px 24px 36px; text-align: center; min-height: 196px; display: flex; flex-direction: column; justify-content: center;
+    background: radial-gradient(130% 110% at 50% 0%, #eaf1ff 0%, #f7f3ff 65%); }
+  html[data-theme="dark"] .prize-face { background: radial-gradient(130% 110% at 50% 0%, #1c1e30 0%, #101120 65%); }
+  .prize-face .lb { font-size: var(--fs-footnote); letter-spacing: .3em; color: var(--ink3); }
+  .prize-face .big { margin-top: 10px; font-size: var(--fs-large-title); font-weight: 700;
+    background: linear-gradient(120deg, var(--accent), var(--accent2) 55%, var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .prize-face .who { margin-top: 10px; font-size: var(--fs-footnote); color: var(--ink3); }
+  #foil { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; transition: opacity .6s ease; }
+  #foil.clear { opacity: 0; pointer-events: none; }
+
+  /* ── 九宫格 ── */
+  .grid9 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; width: min(320px, 92vw); margin: 0 auto; }
+  .cell9 { height: 90px; border-radius: var(--r-md); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
+    border: 1px solid var(--glass-border); box-shadow: var(--rim-sm); font-weight: 600; font-size: var(--fs-headline);
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .cell9 .s { font-size: var(--fs-caption2); color: var(--ink4); font-weight: 500; }
+  .cell9.lit { border-color: color-mix(in oklab, var(--accent) 60%, var(--glass-border));
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent) 20%, transparent), 0 8px 24px color-mix(in oklab, var(--accent) 22%, transparent);
+    transform: translateY(-2px) scale(1.02); }
+  .cell9.win { border-color: color-mix(in oklab, var(--accent3) 65%, var(--glass-border));
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--accent3) 28%, transparent), 0 10px 30px color-mix(in oklab, var(--accent3) 30%, transparent);
+    animation: winpulse 1s ease infinite alternate; }
+  @keyframes winpulse { to { transform: translateY(-3px) scale(1.04); } }
+  .go9 { height: 90px; border-radius: var(--r-md); border: none; cursor: pointer; font-size: var(--fs-headline);
+    font-weight: 700; letter-spacing: .16em; text-indent: .16em; color: #fff; font-family: inherit;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    box-shadow: 0 10px 26px color-mix(in oklab, var(--accent) 35%, transparent), inset 0 1px 1px rgba(255,255,255,.5);
+    transition: transform .55s cubic-bezier(.28,1.7,.4,1), box-shadow .2s; }
+  .go9:hover { transform: scale(1.045); }
+  .go9:active { transform: scale(.93); transition-duration: .09s; }
+  .go9:disabled { filter: saturate(.4); cursor: default; transform: none; }
+  .band { text-align: center; margin-top: 20px; min-height: 56px; }
+  .band .lb { font-size: var(--fs-subhead); color: var(--ink3); }
+  .band .big { margin-top: 4px; font-size: var(--fs-title); font-weight: 700;
+    background: linear-gradient(120deg, var(--accent), var(--accent2) 55%, var(--accent3));
+    -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+  /* ── 实时数据 ── */
+  .sec-title { margin: 30px 0 12px; font-size: var(--fs-footnote); font-weight: 600; letter-spacing: .1em; color: var(--ink3); }
   .rows { display: flex; flex-direction: column; gap: 10px; }
   .grow { position: relative; overflow: hidden; border-radius: var(--r-md); padding: 15px 18px;
     display: flex; justify-content: space-between; align-items: center; gap: 12px; }
@@ -63,20 +114,15 @@
   .grow .nm { font-size: var(--fs-headline); font-weight: 600; }
   .grow .ct { font-size: var(--fs-subhead); color: var(--ink3); font-variant-numeric: tabular-nums; }
   .admin { margin-top: 30px; padding: var(--sp-4); }
-  .admin .chips { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-caption); color: var(--ink3); }
+  .admin .chips { display: flex; flex-wrap: wrap; gap: 8px; font-size: var(--fs-caption); color: var(--ink3); margin-bottom: 12px; }
   .admin .chips span { border: 1px solid var(--glass-border); border-radius: var(--r-pill); padding: 4px 10px;
-    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf);
-    box-shadow: var(--rim-sm); }
+    background: var(--glass-bg); backdrop-filter: var(--glass-bf); -webkit-backdrop-filter: var(--glass-bf); box-shadow: var(--rim-sm); }
   .reset { margin-top: 26px; text-align: center; }
   .reset button { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--ink2);
     font-size: var(--fs-subhead); cursor: pointer; border-radius: var(--r-pill); padding: 12px 24px; min-height: var(--touch); font-family: inherit; }
-  .theme-btn { border: none; cursor: pointer; font-family: inherit;
-    background: var(--mover-bg); box-shadow: var(--mover-shadow); color: var(--ink);
-    font-size: var(--fs-subhead); font-weight: 600; border-radius: var(--r-pill); padding: 8px 14px;
-    transition: transform .5s cubic-bezier(.28,1.7,.4,1); }
-  .theme-btn:active { transform: scale(.92); transition-duration: .08s; }
-  .other { text-align: center; margin-top: 14px; font-size: var(--fs-caption); color: var(--ink4); }
-  .other a { color: var(--accent); text-decoration: none; margin: 0 4px; }
+  .footer-link { margin-top: 28px; font-size: var(--fs-footnote); color: var(--ink3); text-align: center; }
+  .footer-link a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(18px) scale(.97); } }
 </style>
 </head>
 <body>
@@ -90,273 +136,106 @@
 
 <div class="orbs"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i><i class="o5"></i></div>
 <div class="grain"></div>
-<div class="badge" id="badge"></div>
 
 <div class="wrap">
   <nav class="nav glass" id="nav">
     <span class="navmover"></span>
     <span style="font-weight:800;font-size:17px;padding:0 14px 0 12px;position:relative;z-index:1">Pulse</span>
+    <a data-page="draw" class="on">抽签</a>
+    <a data-page="vote" href="./vote.html">投票</a>
     <button class="lg-theme-btn theme-btn"></button>
   </nav>
 
-  <p class="kicker">现场抽签 · 动画对比</p>
+  <p class="kicker">现场抽签</p>
   <h1>周末值班选人</h1>
-  <p class="status"><span class="dot"></span>盲选中 · 抽之前看不到人数和结果</p>
+  <p class="status"><span class="dot"></span>盲选中 · 抽之前看不到人数和结果 · 揭晓动画可在下方切换</p>
 
-  <section class="glass panel hero" id="hero" style="margin-top:20px">
+  <div class="seg glass" id="seg" style="margin-top:16px">
+    <span class="mover"></span>
+    <button data-mode="flip" class="on">🂠 翻牌</button>
+    <button data-mode="scratch">✦ 刮奖</button>
+    <button data-mode="grid">▦ 九宫格</button>
+  </div>
+
+  <section class="glass panel" id="panel" style="margin-top:20px">
     <div class="lens-ring"><i></i></div>
-    <div id="heroRoll" style="display:none;font-size:var(--fs-large-title);font-weight:700;letter-spacing:2px" class="dc-face big">一等奖</div>
-    <input class="input note" placeholder="请填写姓名，随结果记名"/>
-    <button class="btn" id="btnDraw">抽一次</button>
-    <p class="fineprint">每人限抽一次 · 点下之前，谁抽到了什么一律保密</p>
-  </section>
 
-  <p class="sec-title">签位 · 全部保密中</p>
-  <div class="cards" id="cards"></div>
-  <p class="tip" id="tip"></p>
+    <div class="stage on" id="stage-flip">
+      <div class="scene" id="cards"></div>
+      <p class="tip" id="flipTip">点「抽一次」，你抽中的那张卡会翻面</p>
+    </div>
+
+    <div class="stage" id="stage-scratch">
+      <div class="deck" id="deck"></div>
+      <div id="scratchWrap" style="display:none; margin-top:18px; width:min(340px,100%)">
+        <div class="scratch-card">
+          <div class="prize-face">
+            <p class="lb">CONGRATULATIONS</p>
+            <p class="big" id="scratchLabel"></p>
+            <p class="who">小明 · 刚刚</p>
+          </div>
+          <canvas id="foil"></canvas>
+        </div>
+        <p class="tip">按住鼠标 <b>刮开涂层</b></p>
+      </div>
+    </div>
+
+    <div class="stage" id="stage-grid">
+      <div class="grid9" id="grid9">
+        <div class="cell9" data-cell="0">一等奖<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="1">谢谢参与<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="2">二等奖<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="3">谢谢参与<span class="s">保密中</span></div>
+        <button class="go9" id="go9">开始</button>
+        <div class="cell9" data-cell="4">三等奖<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="5">谢谢参与<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="6">三等奖<span class="s">保密中</span></div>
+        <div class="cell9" data-cell="7">谢谢参与<span class="s">保密中</span></div>
+      </div>
+      <div class="band" id="gridBand"></div>
+    </div>
+  </section>
 
   <p class="sec-title">实时数据（仅发起人可见）</p>
   <section class="glass panel admin">
     <div class="lens-ring"><i></i></div>
     <div class="chips" id="chips"><span>0 人已参与</span><span>进行中</span></div>
-    <div class="rows" style="margin-top:12px" id="rows"></div>
+    <div class="rows" id="rows"></div>
   </section>
 
   <div class="reset"><button onclick="location.reload()">↺ 重演一遍</button></div>
-  <p class="other">其他档位：
-    <a href="?v=1">① Snappy</a><a href="?v=2">② Smooth</a><a href="?v=3">③ Bouncy</a><a href="?v=4">④ Liquid</a><a href="?v=5">⑤ Island</a>
-  </p>
+  <p class="footer-link">投票页预览见 <a href="./vote.html">投票演示</a> · 动画为 ②Smooth 软档（duration .55s / bounce 0）</p>
 </div>
 
 <canvas id="fx" style="position:fixed;inset:0;pointer-events:none;z-index:99"></canvas>
 <script type="module">
-  import { initTheme, initGlare, jelly, spring } from "./liquid-glass.js";
+  import { initTheme, initGlare, initPill } from "./liquid-glass.js";
   initTheme();
   initGlare();
+  initPill(document.getElementById("seg"), { attr: "data-mode", onPick: (m) => setMode(m) });
 
-  /* ═══ 5 档动画配置：都映射到苹果 duration+bounce 弹簧模型 ══
-     WWDC23：bounce 0=无过冲(.smooth)、0.45=脆弹(.snappy)、0.65=大果冻(.bouncy)
-     ④=WWDC25 Liquid 的方向性形变  ⑤=灵动岛式面板 morph 揭晓 */
-  const PROFILES = {
-    "1": { name: "① Snappy 脆弹 · duration .35s / bounce .45",
-      spring: { dur: 720, freq: 4.2, decay: 6.0 },
-      flip: { dur: 520, ease: "cubic-bezier(.32,1.35,.4,1)" },
-      rollInterval: 70, rollSteps: 12,
-      dim: "dim-fade", heroReveal: "pop", hoverLift: true,
-      confetti: 130, bgSpeed: 1.0 },
-    "2": { name: "② Smooth 丝滑 · duration .55s / bounce 0",
-      spring: { dur: 820, freq: 2.4, decay: 12 },
-      flip: { dur: 700, ease: "cubic-bezier(.25,.7,.18,1)" },
-      rollInterval: 105, rollSteps: 11,
-      dim: "dim-blur", heroReveal: "fade", hoverLift: false,
-      confetti: 70, bgSpeed: 0.6 },
-    "3": { name: "③ Bouncy 大果冻 · duration .6s / bounce .65",
-      spring: { dur: 1350, freq: 2.5, decay: 3.0 },
-      flip: { dur: 1000, ease: "cubic-bezier(.25,1.55,.35,1)" },
-      rollInterval: 55, rollSteps: 24,
-      dim: "dim-fadescale", heroReveal: "pop", hoverLift: true,
-      confetti: 220, bgSpeed: 1.5 },
-    "4": { name: "④ Liquid 液滴形变 · WWDC25 directional stretch",
-      spring: { dur: 1000, freq: 3.0, decay: 4.2 },
-      flip: { dur: 900, ease: "cubic-bezier(.3,1.3,.4,1)", squash: true },
-      rollInterval: 80, rollSteps: 15, stretchRoll: true, magneticHover: true,
-      dim: "dim-fade", heroReveal: "morph",
-      confetti: 150, bgSpeed: 1.2 },
-    "5": { name: "⑤ Island 灵动岛揭晓 · panel morph",
-      spring: { dur: 900, freq: 2.8, decay: 4.6 },
-      flip: { dur: 700, ease: "cubic-bezier(.3,1.35,.4,1)" },
-      rollInterval: 75, rollSteps: 16, heroRoll: true, panelMorph: true,
-      dim: "dim-fade", heroReveal: "island",
-      confetti: 180, bgSpeed: 1.0 },
-  };
-
-  const qs = new URLSearchParams(location.search);
-  const pid = qs.get("v") && PROFILES[qs.get("v")] ? qs.get("v") : "2";
-  const P = PROFILES[pid];
-  document.getElementById("badge").textContent = "A 版动画 · " + P.name;
-  document.title = "A 版动画 " + P.name.split("·")[0].trim();
-
-  // 背景流速
-  document.querySelectorAll(".orbs i").forEach((b, i) => {
-    const d = parseFloat(getComputedStyle(b).animationDuration) * P.bgSpeed;
-    b.style.animationDuration = d + "s";
-  });
-
-  // 弹簧包装（用当前档位参数）
-  const elSpring = (el) => el && spring(el, 0.045, -0.045, P.spring);
-  function flipAnim(el, my) {
-    const sq = P.flip.squash;
-    el.animate([
-      { transform: "rotateY(0deg) scale(1)" },
-      { transform: `rotateY(90deg) scale(${sq ? 1.1 : 1}, ${sq ? 0.9 : 1})`, offset: 0.5 },
-      { transform: "rotateY(180deg) scale(1)" },
-    ], { duration: P.flip.dur, easing: P.flip.ease });
-  }
-
-  /* ── 布局与状态 ── */
-  const SLOTS = ["一等奖", "二等奖", "谢谢参与"];
-  const cards = document.getElementById("cards");
-  const hero = document.getElementById("hero");
-  const tip = document.getElementById("tip");
-  let done = false, timers = [];
-  const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
-  const every = (fn, ms) => { const id = setInterval(fn, ms); timers.push(id); return id; };
-
-  function build() {
-    timers.forEach(clearTimeout); timers.forEach(clearInterval); timers = [];
-    done = false; cards.innerHTML = "";
-    hero.classList.remove("island");
-    tip.textContent = P.name;
-    SLOTS.forEach((label, i) => {
-      const u = document.createElement("div");
-      u.className = "draw-card"; u.style.animationDelay = (i * 75) + "ms";
-      u.innerHTML =
-        '<div class="dc-face front"><span class="lbl">' + label + '</span></div>' +
-        '<div class="dc-face back"><span class="win">你抽到了</span><span class="big">' + label + '</span></div>';
-      if (P.hoverLift) u.addEventListener("pointerenter", () => { if (!done) elSpring(u); });
-      cards.appendChild(u);
-    });
-    updateAdmin(0, 0, 0);
-  }
-  const units = () => [...cards.children];
-
-  // 悬停磁吸（档位④）：卡朝指针微微偏移
-  if (P.magneticHover) {
-    cards.addEventListener("pointermove", e => {
-      if (done) return;
-      units().forEach(u => {
-        const r = u.getBoundingClientRect();
-        const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
-        u.style.transform = `translateX(${(dx * 6).toFixed(1)}px)`;
-      });
-    });
-    cards.addEventListener("pointerleave", () => units().forEach(u => u.style.transform = ""));
-  }
-
-  function startDraw() {
-    if (done) return; done = true;
-    const heroIdle = hero.querySelectorAll(".note, .btn, .fineprint");
-    heroIdle.forEach(el => el.style.visibility = "hidden");
-
-    // ⑤ 灵动岛：hero 内文字快滚
-    if (P.heroRoll) {
-      const roll = document.getElementById("heroRoll");
-      roll.style.display = "";
-      let i = 0;
-      every(() => { roll.textContent = SLOTS[i++ % SLOTS.length]; }, P.rollInterval);
+  /* ══ Smooth 档弹簧（duration .55s / bounce 0，无过冲） ══ */
+  const SM = { dur: 820, freq: 2.4, decay: 12 };
+  function springKF(ax, ay, { freq = SM.freq, decay = SM.decay, dur = SM.dur } = {}) {
+    const N = 40, kf = [];
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const env = Math.exp(-decay * t);
+      const w = Math.cos(freq * Math.PI * 2 * t);
+      kf.push({ transform: `scale(${(1 + ax * env * w).toFixed(4)}, ${(1 + ay * env * w).toFixed(4)})`, offset: t });
     }
-
-    const steps = P.rollSteps;
-    let k = 0;
-    every(() => {
-      const u = units()[k % units().length];
-      units().forEach(c => c.classList.remove("rolling"));
-      u.classList.add("rolling");
-      if (P.stretchRoll) {   // ④ 波形经过时水平拉伸（方向性形变）
-        u.animate([
-          { transform: "scaleX(1) scaleY(1)" },
-          { transform: "scaleX(1.07) scaleY(.95)" },
-          { transform: "scaleX(1) scaleY(1)" },
-        ], { duration: P.rollInterval * 2.4, easing: "ease-out" });
-      }
-      k++;
-      if (k >= steps) {
-        timers.forEach(clearTimeout); timers.forEach(clearInterval); timers = [];
-        units().forEach(c => c.classList.remove("rolling"));
-        land(0);
-      }
-    }, P.rollInterval);
+    return kf;
   }
-
-  function land(idx) {
-    const u = units()[idx];
-    const my = SLOTS[idx];
-    u.classList.add("flipping");
-    flipAnim(u);
-    if (P.heroRoll) {
-      document.getElementById("heroRoll").textContent = my;
-    }
-    later(() => {
-      units().forEach((c, i) => { if (i !== idx) c.classList.add(P.dim); });
-      heroReveal(my);
-      if (idx === 0) burst(P.confetti);
-      updateAdmin(1, 0, 0);
-      tip.textContent = "结果已定 · 全场揭晓";
-    }, P.flip.dur * 0.55);
+  const jellyOn = el => el && el.animate(springKF(0.03, -0.03), { duration: SM.dur, easing: "linear" });
+  function stageIn(el) {
+    el && el.animate([
+      { opacity: 0, transform: "translateY(14px)" },
+      { opacity: 1, transform: "translateY(0)" },
+    ], { duration: 480, easing: "cubic-bezier(.25,.7,.18,1)" });
   }
-
-  function heroReveal(my) {
-    const idle = hero.querySelectorAll(".note, .btn, .fineprint, #heroRoll");
-    idle.forEach(el => el.style.visibility = "hidden");
-    let box = hero.querySelector(".result");
-    if (!box) {
-      box = document.createElement("div");
-      box.className = "result";
-      box.innerHTML = '<p style="font-size:var(--fs-footnote);color:var(--ink3)">你抽到了</p>' +
-        '<p class="dc-face big" id="bigLabel" style="font-size:var(--fs-title);font-weight:700">' + my + '</p>';
-      hero.insertBefore(box, hero.querySelector(".fineprint"));
-    } else {
-      box.querySelector("#bigLabel").textContent = my;
-      box.style.display = "";
-    }
-    const big = box.querySelector("#bigLabel");
-    if (P.heroReveal === "pop") {
-      big.animate([{ transform: "scale(.5)", opacity: 0 }, { transform: "scale(1.15)", opacity: 1, offset: .7 }, { transform: "scale(1)" }], { duration: P.spring.dur * 0.6, easing: "ease-out" });
-    } else if (P.heroReveal === "fade") {
-      big.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: P.spring.dur * 0.8, easing: "ease-out" });
-    } else if (P.heroReveal === "morph") {
-      big.animate([
-        { transform: "scale(.4,.6)", opacity: 0 },
-        { transform: "scale(1.12,.94)", opacity: 1, offset: .55 },
-        { transform: "scale(.97,1.03)", offset: .8 },
-        { transform: "scale(1,1)" },
-      ], { duration: P.spring.dur, easing: "linear" });
-    } else if (P.heroReveal === "island") {
-      hero.classList.add("island");
-      big.animate([
-        { transform: "scale(.3)", opacity: 0 },
-        { transform: "scale(1.25)", opacity: 1, offset: .5 },
-        { transform: "scale(.94)", offset: .78 },
-        { transform: "scale(1)" },
-      ], { duration: P.spring.dur, easing: "linear" });
-      elSpring(hero);
-    }
-    elSpring(hero);
-  }
-
-  function updateAdmin(a, b, c) {
-    const chips = document.getElementById("chips");
-    chips.innerHTML = '<span>' + (1 + b + c) + ' 人已参与</span><span>进行中</span>';
-    const rows = document.getElementById("rows");
-    if (!rows.dataset.built) {
-      const data = [["一等奖", 1], ["二等奖", 2], ["谢谢参与", 6]];
-      data.forEach(([nm, ct], i) => {
-        const r = document.createElement("div");
-        r.className = "grow card"; r.style.animationDelay = (i * 60) + "ms";
-        r.innerHTML = '<div class="fill"></div><span class="nm">' + nm + '</span><span class="ct">0/' + ct + '</span>';
-        r.dataset.total = ct;
-        rows.appendChild(r);
-      });
-      rows.dataset.built = "1";
-    }
-    rows.querySelectorAll(".grow").forEach((r, i) => {
-      const taken = [a, b, c][i], total = +r.dataset.total;
-      r.querySelector(".fill").style.setProperty("--f", taken / total);
-      r.querySelector(".ct").textContent = taken + "/" + total;
-      if (i === 0 && taken > 0 && !r.querySelector(".mine-tag")) {
-        const t = document.createElement("span");
-        t.className = "mine-tag";
-        t.textContent = "我的签";
-        t.style.cssText = "margin-left:8px;font-size:var(--fs-caption);color:var(--accent);font-weight:700";
-        r.querySelector(".nm").appendChild(t);
-      }
-    });
-  }
-
-  document.getElementById("btnDraw").onclick = startDraw;
-
-  function burst(n) {
-    const colors = ["#0066ff", "#7d5aff", "#ff5f8f", "#ffb340", "#40c8b0"];
+  function confetti(n = 70) {
+    const style = getComputedStyle(document.documentElement);
+    const colors = [style.getPropertyValue("--accent").trim() || "#0066ff", "#7d5aff", "#ff5f8f", "#ffb340", "#40c8b0"];
     const cv = document.getElementById("fx"), ctx = cv.getContext("2d");
     cv.width = innerWidth; cv.height = innerHeight;
     const parts = [];
@@ -380,7 +259,227 @@
     })(t0);
   }
 
-  build();
+  /* ══ 状态与模式切换 ══ */
+  const SLOTS = [
+    { label: "一等奖", count: 1 }, { label: "二等奖", count: 2 },
+    { label: "三等奖", count: 3 }, { label: "谢谢参与", count: 6 },
+  ];
+  const GRID_NAMES = { 0: "一等奖", 2: "二等奖", 4: "三等奖", 5: "三等奖", 1: "谢谢参与", 3: "谢谢参与", 6: "谢谢参与", 7: "谢谢参与" };
+  const GRID_ORDER = [0, 1, 2, 4, 7, 6, 5, 3];
+  let mode = "flip", done = false, timers = [];
+  const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
+  const every = (fn, ms) => { const id = setInterval(fn, ms); timers.push(id); return id; };
+  const clearTimers = () => { timers.forEach(clearTimeout); timers.forEach(clearInterval); timers = []; };
+
+  const seg = document.getElementById("seg"), mover = seg.querySelector(".mover");
+  function moveMover(btn, instant) {
+    mover.style.left = btn.offsetLeft + "px";
+    mover.style.width = btn.offsetWidth + "px";
+    if (!instant) mover.animate(springKF(0.1, -0.1, { freq: 3.5, decay: 5.4, dur: 660 }), { duration: 660, easing: "linear" });
+  }
+  seg.querySelectorAll("button").forEach(b => b.onclick = () => setMode(b.dataset.mode));
+  function setMode(m, instant) {
+    mode = m;
+    const btn = seg.querySelector(`[data-mode="${m}"]`);
+    seg.querySelectorAll("button").forEach(b => b.classList.toggle("on", b === btn));
+    moveMover(btn, instant);
+    ["flip", "scratch", "grid"].forEach(k => document.getElementById("stage-" + k).classList.remove("on"));
+    const target = document.getElementById("stage-" + m);
+    target.classList.add("on");
+    if (!instant) { jellyOn(document.getElementById("panel")); stageIn(target); }
+    resetModes();
+  }
+
+  function resetModes() {
+    clearTimers(); done = false;
+    buildFlip(); buildDeck(); resetGrid();
+  }
+
+  /* ── 翻牌 ── */
+  const cards = document.getElementById("cards");
+  function buildFlip() {
+    cards.innerHTML = "";
+    document.getElementById("flipTip").textContent = "点「抽一次」，你抽中的那张卡会翻面";
+    SLOTS.forEach((s, i) => {
+      const u = document.createElement("div");
+      u.className = "draw-card"; u.style.animationDelay = (i * 75) + "ms";
+      u.innerHTML =
+        '<div class="dc-face front"><span class="lbl">' + s.label + '</span></div>' +
+        '<div class="dc-face back"><span class="win">你抽到了</span><span class="big">' + s.label + '</span></div>';
+      u.onclick = () => flipPick(i);
+      cards.appendChild(u);
+    });
+  }
+  const units = () => [...cards.children];
+  function flipPick(idx) {
+    if (done) return; done = true;
+    let k = 0;
+    every(() => {
+      units().forEach(c => c.classList.remove("rolling"));
+      units()[k++ % units().length].classList.add("rolling");
+    }, 105);
+    later(() => {
+      clearTimers();
+      units().forEach(c => c.classList.remove("rolling"));
+      const u = units()[idx];
+      u.classList.add("flipping");
+      u.animate([
+        { transform: "rotateY(0deg) scale(1)" },
+        { transform: "rotateY(90deg) scale(1)" },
+        { transform: "rotateY(180deg) scale(1)" },
+      ], { duration: 700, easing: "cubic-bezier(.25,.7,.18,1)" });
+      later(() => {
+        units().forEach((c, i) => { if (i !== idx) c.classList.add("dim-blur"); });
+        if (idx === 0) confetti(70);
+        showRows(idx);
+        document.getElementById("flipTip").textContent = "结果已定 · 全场揭晓";
+      }, 420);
+    }, 1150);
+  }
+
+  /* ── 刮奖 ── */
+  const deck = document.getElementById("deck");
+  function buildDeck() {
+    deck.innerHTML = "";
+    document.getElementById("scratchWrap").style.display = "none";
+    [0, 1, 2].forEach(i => {
+      const p = document.createElement("div");
+      p.className = "pick"; p.style.animationDelay = (i * 80) + "ms";
+      p.innerHTML = '<span class="seal">?</span><span class="cap">PULSE</span>';
+      p.onclick = () => scratchSelect(i);
+      deck.appendChild(p);
+    });
+  }
+  function scratchSelect(i) {
+    if (done) return; done = true;
+    deck.querySelectorAll(".pick").forEach(p => p.classList.add("hidden"));
+    document.getElementById("scratchLabel").textContent = SLOTS[i].label;
+    document.getElementById("scratchWrap").style.display = "";
+    later(() => initFoil(), 60);
+  }
+  function initFoil() {
+    const card = document.querySelector(".scratch-card");
+    const cv = document.getElementById("foil");
+    const w = card.clientWidth, h = card.clientHeight;
+    cv.width = w * devicePixelRatio; cv.height = h * devicePixelRatio;
+    const ctx = cv.getContext("2d");
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    const g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, "#cdd1d9"); g.addColorStop(.25, "#a2a6b0"); g.addColorStop(.5, "#dde0e6");
+    g.addColorStop(.75, "#9296a0"); g.addColorStop(1, "#c5c8d0");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = 1;
+    for (let x = -h; x < w; x += 14) { ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + h, 0); ctx.stroke(); }
+    ctx.fillStyle = "#5a5f6a"; ctx.font = "800 24px 'Segoe UI', 'Microsoft YaHei', sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("刮开此处", w / 2, h / 2 - 14);
+    ctx.font = "600 12px 'Segoe UI', 'Microsoft YaHei', sans-serif";
+    ctx.fillStyle = "#6d727c"; ctx.fillText("SCRATCH HERE", w / 2, h / 2 + 16);
+    let scratching = false, last = null, moves = 0;
+    const pos = e => { const r = cv.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    const stroke = (a, b) => {
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.lineWidth = 34; ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.beginPath(); ctx.arc(b.x, b.y, 17, 0, 7); ctx.fill();
+    };
+    cv.onpointerdown = e => { scratching = true; last = pos(e); stroke(last, last); e.preventDefault(); };
+    cv.onpointermove = e => {
+      if (!scratching) return;
+      const p = pos(e); stroke(last, p); last = p;
+      if (++moves % 6 === 0) scratchCheck();
+      e.preventDefault();
+    };
+    cv.onpointerup = () => { scratching = false; scratchCheck(); };
+    cv.onpointerleave = () => { scratching = false; };
+    window.__scratchAuto = () => {
+      const steps = 12;
+      for (let i = 0; i <= steps; i++) {
+        const y = (h / steps) * i;
+        stroke({ x: i % 2 ? w - 10 : 10, y }, { x: i % 2 ? 10 : w - 10, y: y + h / steps });
+      }
+      scratchCheck();
+    };
+  }
+  function scratchCheck() {
+    const cv = document.getElementById("foil");
+    const ctx = cv.getContext("2d");
+    const data = ctx.getImageData(0, 0, cv.width, cv.height).data;
+    let clear = 0, total = 0;
+    for (let i = 3; i < data.length; i += 4 * 16) { total++; if (data[i] === 0) clear++; }
+    if (clear / total > 0.42 && !cv.classList.contains("clear")) {
+      cv.classList.add("clear");
+      if (document.getElementById("scratchLabel").textContent === "一等奖") confetti(70);
+      showRows(0);
+    }
+  }
+
+  /* ── 九宫格 ── */
+  const cellOf = dc => document.querySelector(`.cell9[data-cell="${dc}"]`);
+  function resetGrid() {
+    document.querySelectorAll(".cell9").forEach(c => c.classList.remove("lit", "win"));
+    document.getElementById("gridBand").innerHTML = "";
+    const go = document.getElementById("go9");
+    go.disabled = false; go.textContent = "开始";
+  }
+  function gridRun(winDc) {
+    if (done) return; done = true;
+    const go = document.getElementById("go9");
+    go.disabled = true; go.textContent = "…";
+    const landing = 22 + ((GRID_ORDER.indexOf(winDc) + 8) % 8);
+    const steps = [];
+    for (let i = 0; i <= landing; i++) {
+      const t = i / landing;
+      steps.push({ cell: GRID_ORDER[i % 8], delay: t < 0.72 ? 105 : 105 + Math.pow((t - 0.72) / 0.28, 1.6) * 480 });
+    }
+    let acc = 0;
+    steps.forEach((st, k) => {
+      acc += st.delay;
+      later(() => {
+        document.querySelectorAll(".cell9").forEach(c => c.classList.remove("lit"));
+        cellOf(st.cell).classList.add("lit");
+        if (k === steps.length - 1) {
+          cellOf(st.cell).classList.remove("lit");
+          cellOf(st.cell).classList.add("win");
+          const label = GRID_NAMES[st.cell];
+          document.getElementById("gridBand").innerHTML = '<p class="lb">跑灯落定 · 你抽到了</p><p class="big">' + label + "</p>";
+          if (label !== "谢谢参与") confetti(70);
+          const taken = { "一等奖": 1, "二等奖": 0, "三等奖": 1, "谢谢参与": 2 };
+          showRowsCommon(label, taken);
+          go.textContent = "已抽完";
+        }
+      }, acc);
+    });
+  }
+  document.getElementById("go9").onclick = () => gridRun(Math.random() < 0.4 ? 0 : [2, 4, 5, 1][Math.floor(Math.random() * 4)]);
+
+  /* ── 揭晓数据 ── */
+  function showRows(mineIdx) {
+    const taken = [1, 0, 1, 2];
+    SLOTS.forEach((s, i) => s.taken = taken[i]);
+    showRowsCommon(SLOTS[mineIdx].label);
+  }
+  function showRowsCommon(myLabel, takenOverride) {
+    const rows = document.getElementById("rows");
+    rows.innerHTML = "";
+    SLOTS.forEach((s, i) => {
+      const taken = takenOverride ? (takenOverride[s.label] ?? 0) : s.taken;
+      const mine = s.label === myLabel;
+      const r = document.createElement("div");
+      r.className = "grow card"; r.style.animationDelay = (i * 60) + "ms";
+      r.innerHTML = '<div class="fill" style="--f:' + (taken / s.count) + '"></div>' +
+        '<span class="nm">' + s.label + (mine ? '<span class="mine-tag" style="margin-left:8px;font-size:var(--fs-caption);color:var(--accent);font-weight:700">我的签</span>' : "") + '</span>' +
+        '<span class="ct" style="font-size:var(--fs-subhead);color:var(--ink3)">' + taken + "/" + s.count + '</span>';
+      rows.appendChild(r);
+    });
+    const chips = document.getElementById("chips");
+    const total = SLOTS.reduce((s2, s) => s2 + (takenOverride ? (takenOverride[s.label] ?? 0) : s.taken), 0);
+    chips.innerHTML = '<span>' + total + ' 人已参与</span><span>进行中</span>';
+  }
+
+  /* ── 初始化 ── */
+  requestAnimationFrame(() => moveMover(seg.querySelector(".on"), true));
+  setMode("flip", true);
 </script>
 </body>
 </html>

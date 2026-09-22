@@ -12,7 +12,7 @@ This is an independent, interactive PULSE visual prototype built inside the lab,
 - `pulse-site.js` contains demo UI state, pointer highlights, three-tab spring navigation, shape switching, the expandable capsule, native dialogs and pause/reduced-motion behavior. `pulse-interactions.js` reuses the lab's `glide` integration for draggable-lens inertia, adds pointer-card tilt and provides a persistent system/dark/light theme control.
 - Dialogs center the scene in view and temporarily hide underlying activity copy. The real scene remains behind the glass; no opaque modal reading panel is added.
 - The lab homepage gains a PULSE link. Its original page and interactions remain available at `index.html`.
-- Static publication uses the explicit asset allowlist in `prepare-static.mjs`, including the PULSE page and its three assets. Documentation, evidence, tests and server scripts are not published.
+- Static publication uses the explicit asset allowlist in `prepare-static.mjs`, including the PULSE page and its four assets. Documentation, evidence, tests and server scripts are not published.
 
 ## Verified on 2026-09-22
 
@@ -46,3 +46,7 @@ Browser checks additionally exercised:
 The browser controller cannot dispatch simulated touch events in this environment. Pointer behavior and mobile layout were checked, but physical touch-device behavior remains unverified.
 
 This verifies the prototype in Chromium, not acceptance of a new PULSE product design. Safari, Firefox, physical touch devices, screen-reader behavior and GPU performance are not yet measured. At this deliberate strength, background lettering is strongly distorted near edges; the page does not automatically weaken the material.
+
+## Readability and motion refinement
+
+The subsequent review keeps all five reference files and strength 50 unchanged. `pulse-polish.css` adjusts only PULSE typography, layout and landscape illumination. Release velocity now averages a short pointer path; invitation-card tilt follows a critically damped spring with an untransformed measurement plane. Pointer highlights batch reads/writes once per frame. See [VISUAL_REVIEW.md](VISUAL_REVIEW.md) for the findings, verification and remaining limits. The current test command runs ten tests.

@@ -1,1 +1,1 @@
-{"name":"liquid-glass-lab","private":true,"type":"module","scripts":{"dev":"node server.mjs","test":"node --test optics.test.mjs motion.test.mjs","build":"node prepare-static.mjs"}}
+{"name":"liquid-glass-lab","private":true,"type":"module","scripts":{"dev":"node server.mjs","test":"node --test optics.test.mjs motion.test.mjs pulse-interactions.test.mjs","build":"node prepare-static.mjs"}}

@@ -12,6 +12,8 @@ themeControl({ button: $('#pulse-theme'), signal: abort.signal });
 // All surfaces share Liquid / 02's unmodified engine and material, at strength 50.
 const surfaces = new Map($$('[data-glass]').map(element => [element, createLiquidGlass(element, { strength: 50, radius: Number(element.dataset.glass) })]));
 const animations = new Set();
+const lights = new Map();
+let lightFrame = 0;
 let mode = 'explore', paused = false, visible = true, confirmed = false, selected = '', dialogAction = null;
 let lensMotion = null, cardTilt = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
@@ -31,7 +33,7 @@ function updateMotion() {
   $('#motion').setAttribute('aria-pressed', String(paused));
   $('#motion').disabled = reduced.matches;
   $('#lens-instructions').textContent = reduced.matches ? '已遵循系统减少动态效果设置。仍可拖动、切换形状与操作所有功能。' : paused ? '动效已暂停。仍可拖动透镜、切换形状与体验交互。' : '拖动后松手，感受惯性与回弹。聚焦透镜后，也可用方向键移动。';
-  if (!active()) { for (const animation of animations) animation.cancel(); lensMotion?.stop(); cardTilt?.reset(); }
+  if (!active()) { for (const animation of animations) animation.cancel(); lensMotion?.stop(); cardTilt?.reset(); cancelAnimationFrame(lightFrame); lightFrame = 0; lights.clear(); }
   if (!visible) lensMotion?.stop();
 }
 on($('#motion'), 'click', () => { paused = !paused; updateMotion(); });
@@ -83,12 +85,27 @@ for (const button of $$('.scenes button')) on(button, 'click', () => {
   $('#scene-name').textContent = { aurora: '01 / AURORA', dune: '02 / DUNE', blueprint: '03 / BLUEPRINT' }[button.dataset.palette];
 });
 
-for (const element of $$('[data-glass]')) on(element, 'pointermove', event => {
-  if (!active()) return;
-  const rect = element.getBoundingClientRect();
-  element.style.setProperty('--light-x', `${(event.clientX - rect.left) / rect.width * 100}%`);
-  element.style.setProperty('--light-y', `${(event.clientY - rect.top) / rect.height * 100}%`);
-});
+for (const element of $$('[data-glass]')) {
+  on(element, 'pointermove', event => {
+    if (!active()) return;
+    lights.set(element, { x: event.clientX, y: event.clientY });
+    if (lightFrame) return;
+    lightFrame = requestAnimationFrame(() => {
+      lightFrame = 0;
+      const updates = [...lights].map(([surface, point]) => ({ surface, point, rect: surface.getBoundingClientRect() }));
+      for (const { surface, point, rect } of updates) {
+        if (!rect.width || !rect.height) continue;
+        surface.style.setProperty('--light-x', `${Math.max(0, Math.min(100, (point.x - rect.left) / rect.width * 100))}%`);
+        surface.style.setProperty('--light-y', `${Math.max(0, Math.min(100, (point.y - rect.top) / rect.height * 100))}%`);
+      }
+      lights.clear();
+    });
+  });
+  on(element, 'pointerleave', () => {
+    lights.delete(element);
+    element.style.removeProperty('--light-x'); element.style.removeProperty('--light-y');
+  });
+}
 
 lensMotion = draggableLens({ element: $('#lens'), scene: stage, canAnimate: () => active() && visible, bounce: spring, signal: abort.signal });
 cardTilt = tiltCard({ element: $('#prize'), canAnimate: active, signal: abort.signal });
@@ -175,6 +192,7 @@ on($('#prize'), 'click', revealFortune);
 on(window, 'pagehide', event => {
   if (event.persisted) return;
   abort.abort(); observer.disconnect();
+  cancelAnimationFrame(lightFrame); lights.clear();
   lensMotion.destroy(); cardTilt.destroy();
   for (const animation of animations) animation.cancel();
   for (const surface of surfaces.values()) surface.destroy();

@@ -1,5 +1,34 @@
 import { glide } from './motion.js';
 
+// Average a short path instead of magnifying the last, possibly noisy, event.
+export function releaseVelocity(samples, now) {
+  if (samples.length < 2) return { x: 0, y: 0 };
+  const last = samples.at(-1), age = Math.max(0, now - last.t);
+  if (age >= 100) return { x: 0, y: 0 };
+  const cutoff = now - 90;
+  let first = samples[0];
+  for (let i = 1; i < samples.length; i++) {
+    if (samples[i].t <= cutoff) { first = samples[i]; continue; }
+    if (first.t < cutoff) {
+      const ratio = (cutoff - first.t) / (samples[i].t - first.t);
+      first = { x: first.x + (samples[i].x - first.x) * ratio, y: first.y + (samples[i].y - first.y) * ratio, t: cutoff };
+    }
+    break;
+  }
+  const elapsed = (last.t - first.t) / 1000;
+  if (elapsed < .012) return { x: 0, y: 0 };
+  let x = (last.x - first.x) / elapsed, y = (last.y - first.y) / elapsed;
+  const gain = Math.min(1, 1100 / Math.max(1, Math.hypot(x, y))) * Math.exp(-age / 45);
+  return { x: x * gain, y: y * gain };
+}
+
+// Exact critically damped response: stable across display refresh rates.
+export function settle(position, velocity, target, dt) {
+  dt = Math.max(0, Math.min(.06, dt));
+  const omega = 17, offset = position - target, impulse = velocity + omega * offset, decay = Math.exp(-omega * dt);
+  return { position: target + (offset + impulse * dt) * decay, velocity: (velocity - omega * impulse * dt) * decay };
+}
+
 // Pointer capture keeps drags continuous beyond the lens, without blocking page
 // scrolling anywhere else. The existing lab optics only resize when necessary.
 export function draggableLens({ element, scene, canAnimate, bounce, signal }) {
@@ -30,26 +59,27 @@ export function draggableLens({ element, scene, canAnimate, bounce, signal }) {
     stop();
     atHome = false;
     drag = { id: event.pointerId, x: event.clientX, y: event.clientY, left: element.offsetLeft, top: element.offsetTop,
-      lastX: event.clientX, lastY: event.clientY, time: performance.now(), vx: 0, vy: 0 };
+      samples: [{ x: element.offsetLeft, y: element.offsetTop, t: performance.now() }] };
     element.setPointerCapture(event.pointerId);
     element.focus({ preventScroll: true });
     element.classList.add('held');
   });
   on(element, 'pointermove', event => {
     if (!drag || drag.id !== event.pointerId) return;
-    const now = performance.now(), dt = Math.max(.008, (now - drag.time) / 1000);
-    drag.vx = Math.max(-1400, Math.min(1400, (event.clientX - drag.lastX) / dt));
-    drag.vy = Math.max(-1400, Math.min(1400, (event.clientY - drag.lastY) / dt));
-    drag.lastX = event.clientX; drag.lastY = event.clientY; drag.time = now;
+    const now = performance.now();
     place(drag.left + event.clientX - drag.x, drag.top + event.clientY - drag.y);
+    drag.samples.push({ x: parseFloat(element.style.left), y: parseFloat(element.style.top), t: now });
+    while (drag.samples.length > 2 && drag.samples[1].t < now - 100) drag.samples.shift();
   });
   function release(event) {
     if (!drag || drag.id !== event.pointerId) return;
     const previous = drag; drag = null; element.classList.remove('held');
     if (event.type !== 'pointerup') return;
     bounce(element, .07);
-    if (!canAnimate() || performance.now() - previous.time > 120) return;
-    let x = element.offsetLeft, y = element.offsetTop, vx = previous.vx, vy = previous.vy, last = performance.now();
+    if (!canAnimate()) return;
+    const velocity = releaseVelocity(previous.samples, performance.now());
+    let x = element.offsetLeft, y = element.offsetTop, vx = velocity.x, vy = velocity.y, last = performance.now();
+    if (Math.hypot(vx, vy) < 5) return;
     const tick = now => {
       if (!canAnimate()) { flight = 0; return; }
       const dt = (now - last) / 1000; last = now;
@@ -74,7 +104,7 @@ export function draggableLens({ element, scene, canAnimate, bounce, signal }) {
     if (!positioned || atHome) home(); else place(element.offsetLeft, element.offsetTop);
   });
   resize.observe(element); resize.observe(scene);
-  on(window, 'resize', home);
+  // ResizeObserver clamps a moved lens, preserving the user's placement.
   home();
   return {
     home, stop,
@@ -88,18 +118,36 @@ export function draggableLens({ element, scene, canAnimate, bounce, signal }) {
 }
 
 export function tiltCard({ element, canAnimate, signal }) {
-  let frame = 0;
-  function reset() { cancelAnimationFrame(frame); frame = 0; element.style.transform = ''; }
+  let frame = 0, last = 0, x = 0, y = 0, vx = 0, vy = 0, tx = 0, ty = 0;
+  function reset() {
+    cancelAnimationFrame(frame); frame = 0; last = 0;
+    x = y = vx = vy = tx = ty = 0; element.style.transform = '';
+  }
+  function tick(now) {
+    frame = 0;
+    if (!canAnimate()) { reset(); return; }
+    const dt = last ? (now - last) / 1000 : 1 / 60; last = now;
+    const ax = settle(x, vx, tx, dt), ay = settle(y, vy, ty, dt);
+    x = ax.position; vx = ax.velocity; y = ay.position; vy = ay.velocity;
+    element.style.transform = `perspective(650px) rotateX(${y}deg) rotateY(${x}deg)`;
+    if (Math.abs(x - tx) + Math.abs(y - ty) + Math.abs(vx) + Math.abs(vy) > .015) frame = requestAnimationFrame(tick);
+    else { last = 0; if (tx === 0 && ty === 0) reset(); }
+  }
+  function start() { if (!frame) frame = requestAnimationFrame(tick); }
   element.addEventListener('pointermove', event => {
     if (event.pointerType !== 'mouse' || !canAnimate()) return;
-    const rect = element.getBoundingClientRect(), x = (event.clientX - rect.left) / rect.width, y = (event.clientY - rect.top) / rect.height;
-    cancelAnimationFrame(frame);
-    frame = requestAnimationFrame(() => {
-      if (canAnimate()) element.style.transform = `perspective(650px) rotateX(${(y - .5) * -10}deg) rotateY(${(x - .5) * 10}deg)`;
-      frame = 0;
-    });
+    // Use the stationary parent, so tilt does not move its own measurement plane.
+    const rect = element.offsetParent.getBoundingClientRect();
+    const px = (event.clientX - rect.left - element.offsetLeft) / element.offsetWidth;
+    const py = (event.clientY - rect.top - element.offsetTop) / element.offsetHeight;
+    tx = Math.max(-1, Math.min(1, (px - .5) * 2)) * 5;
+    ty = Math.max(-1, Math.min(1, (py - .5) * 2)) * -5;
+    start();
   }, { signal });
-  for (const event of ['pointerleave', 'pointercancel', 'blur']) element.addEventListener(event, reset, { signal });
+  for (const event of ['pointerleave', 'pointercancel', 'blur']) element.addEventListener(event, () => {
+    tx = ty = 0;
+    if (canAnimate()) start(); else reset();
+  }, { signal });
   return { reset, destroy: reset };
 }
 

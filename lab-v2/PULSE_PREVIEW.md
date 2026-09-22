@@ -7,12 +7,12 @@ This is an independent, interactive PULSE visual prototype built inside the lab,
 ## Source boundaries
 
 - `liquid-glass.js`, `liquid-glass.css`, `visual.css`, `optics.js` and `motion.js` are unchanged from the reference commit. The new page directly imports the first four; there is no copied or adapted optical implementation.
-- Every `[data-glass]` surface uses strength **50**, yielding SVG displacement scale **100**. No per-layer strength attenuation is applied.
+- PULSE now uses the role-based presets in `pulse-glass.js`: balanced defaults to hero 50, panel 40, navigation 30 and independent control 22. Controls inside glass share the parent optics and add translucent highlights instead of stacking SVG filters. See [GLASS_SYSTEM.md](GLASS_SYSTEM.md); the fixed-50 statements below are historical verification of earlier revisions.
 - `pulse-site.css` defines the new PULSE layout, responsive arrangement and text/buttons. It does not replace the shared liquid pseudo-element styles. Aurora, dune and blueprint use the lab's landscape classes; their positioning is adapted to the page layout.
 - `pulse-site.js` contains demo UI state, pointer highlights, three-tab spring navigation, shape switching, the expandable capsule, native dialogs and pause/reduced-motion behavior. `pulse-interactions.js` reuses the lab's `glide` integration for draggable-lens inertia, adds pointer-card tilt and provides a persistent system/dark/light theme control.
 - Dialogs center the scene in view and temporarily hide underlying activity copy. The real scene remains behind the glass; no opaque modal reading panel is added.
 - The lab homepage gains a PULSE link. Its original page and interactions remain available at `index.html`.
-- Static publication uses the explicit asset allowlist in `prepare-static.mjs`, including the PULSE page and its four assets. Documentation, evidence, tests and server scripts are not published.
+- Static publication uses the explicit 17-asset allowlist in `prepare-static.mjs`, including the PULSE page and its material, motion and layout modules. Documentation, evidence, tests and server scripts are not published.
 
 ## Verified on 2026-09-22
 
@@ -53,4 +53,4 @@ The subsequent review keeps all five reference files and strength 50 unchanged. 
 
 ## Spring disclosure follow-up
 
-The capsule now uses `spring-disclosure.js` and `spring-disclosure.css` for continuous width/height transitions with mild overshoot and velocity-preserving interruption. It is also used by the lab homepage's breathing capsule. See [SPRING_TRANSITIONS.md](SPRING_TRANSITIONS.md). The latest test command runs fourteen tests and the publication allowlist includes fifteen assets; the previous counts above describe earlier verification passes.
+The capsule now uses `spring-disclosure.js` and `spring-disclosure.css` for continuous width/height transitions with mild overshoot and velocity-preserving interruption. It is also used by the lab homepage's breathing capsule. See [SPRING_TRANSITIONS.md](SPRING_TRANSITIONS.md). The test command runs fourteen tests. The spring release included fifteen assets; the current glass-system release adds two PULSE assets, for seventeen total.

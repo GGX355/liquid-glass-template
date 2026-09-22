@@ -1,4 +1,4 @@
-import { createLiquidGlass } from './liquid-glass.js';
+import { configurePulseGlass } from './pulse-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
 
@@ -10,8 +10,9 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const abort = new AbortController();
 const on = (element, event, callback) => element.addEventListener(event, callback, { signal: abort.signal });
 themeControl({ button: $('#pulse-theme'), signal: abort.signal });
-// All surfaces share Liquid / 02's unmodified engine and material, at strength 50.
-const surfaces = new Map($$('[data-glass]').map(element => [element, createLiquidGlass(element, { strength: 50, radius: Number(element.dataset.glass) })]));
+// Keep the optical engine; tune displacement to the scale of each control.
+const glass = configurePulseGlass({ signal: abort.signal });
+const { surfaces } = glass;
 const animations = new Set();
 const lights = new Map();
 let lightFrame = 0;
@@ -197,5 +198,5 @@ on(window, 'pagehide', event => {
   lensMotion.destroy(); cardTilt.destroy();
   islandMotion.destroy();
   for (const animation of animations) animation.cancel();
-  for (const surface of surfaces.values()) surface.destroy();
+  glass.destroy();
 });

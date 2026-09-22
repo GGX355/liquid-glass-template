@@ -1,0 +1,62 @@
+/* One glass vocabulary across navigation, actions, choices and settings. */
+.pulse-site{background:radial-gradient(ellipse 700px 360px at 85% 0,#c1d4c440,transparent 75%),radial-gradient(ellipse 800px 470px at 8% 70%,#cedce536,transparent 75%),var(--page)}
+.pulse-site.dark{background:radial-gradient(ellipse 700px 360px at 85% 0,#45665a24,transparent 75%),radial-gradient(ellipse 800px 470px at 8% 70%,#405b6926,transparent 75%),var(--page)}
+.pulse-site .glass-control{--control-tint:#ffffff14;background:transparent!important;color:inherit;isolation:isolate;text-decoration:none;transition:translate .22s,box-shadow .22s}
+.pulse-site .glass-control::before{background:var(--control-tint);box-shadow:inset 0 1.5px 1px #ffffffe0,inset 1px 0 2px #ffffff50,inset 0 -1px 1px #193c3d60,0 5px 12px #122c2914}
+.pulse-site .glass-control::after{border-color:#ffffff70;background:radial-gradient(ellipse at var(--light-x,20%) var(--light-y,0%),#ffffff30,transparent 65%)}
+.pulse-site .glass-overlay::before{backdrop-filter:none;-webkit-backdrop-filter:none}
+.pulse-site .glass-control:hover:not(:disabled){--control-tint:#ffffff25}
+.pulse-site .glass-control:active:not(:disabled){translate:0 1px;--control-tint:#ffffff35}
+.pulse-site .glass-control:disabled{--control-tint:#ffffff08;opacity:.5;cursor:not-allowed}
+.pulse-site .glass-control:focus-visible{outline:2px solid currentColor;outline-offset:4px}
+.pulse-site .action-button.glass-control{--control-tint:#d4f0ec21;color:inherit;border:1px solid #ffffff5c;text-shadow:0 1px 3px #102738b3;box-shadow:0 6px 15px #13273d14;font-weight:600}
+.pulse-site .action-button.glass-control:hover:not(:disabled){--control-tint:#d4f0ec38;translate:0 -2px}
+.pulse-site .action-button.glass-control:active:not(:disabled){translate:0 1px}
+.pulse-site .action-button.glass-control:disabled{text-shadow:inherit}
+.pulse-site .poll-option.glass-control{border:1px solid #ffffff26}
+.pulse-site .poll-option.glass-control:has(input:checked){--control-tint:#d6f4ef30;border-color:#fff;box-shadow:0 0 0 1px #ffffff30}
+.pulse-site .poll-option.glass-control .choice-dot{border-color:currentColor}
+.pulse-site .poll-option.glass-control:has(input:checked) .choice-dot{background:transparent;box-shadow:none}
+.pulse-site .poll-option.glass-control:has(input:checked) .choice-dot:after{content:"";display:block;width:6px;height:6px;background:currentColor;border-radius:50%;margin:3px}
+.pulse-site .pulse-nav.liquid-surface{background:transparent;border-color:#ffffff35}
+.pulse-site .pulse-nav.liquid-surface::before{background:#ffffff0b;box-shadow:inset 0 1px 1px #ffffff60,inset 0 -1px 1px #18392b40}
+.pulse-site .nav-indicator::before{background:#ffffff21}
+.pulse-site .pulse-stage[data-palette=dune] .glass-control,.pulse-site[data-palette=dune] .dialog-glass .glass-control{color:#462b22;text-shadow:0 1px 3px #fff6}
+.pulse-site .pulse-stage[data-palette=dune] .action-button.glass-control,.pulse-site[data-palette=dune] .dialog-glass .action-button.glass-control{--control-tint:#fff0dc24;border-color:#ffffff85}
+.pulse-site .stage-story .story-link.glass-control{position:relative;top:auto;right:auto;padding:10px 17px;border-bottom:0;min-height:44px;width:158px;text-shadow:inherit}
+.pulse-site .dialog-close.glass-control{border:0}
+.pulse-site .island-actions .glass-control{color:#203d34;border-color:#ffffff60;--control-tint:#f0fffa18}
+.pulse-site .theme-control.glass-control{border-color:var(--line);--control-tint:#ffffff12}
+.pulse-site .lab-link.glass-control{padding:11px 16px;min-height:44px;gap:12px}
+.pulse-site .pulse-controls{padding:18px 14px;border-radius:24px;background:radial-gradient(ellipse at 12% 50%,#bed4c64a,transparent 44%),radial-gradient(ellipse at 90% 80%,#c2d0e348,transparent 50%);border-bottom:0;margin-top:14px;gap:14px}
+.pulse-site .pulse-controls .control-group{gap:10px}
+.pulse-site .pulse-controls .glass-control{border:1px solid var(--line);color:var(--ink);font-weight:500}
+.pulse-site .pulse-controls .glass-control[aria-pressed=true]{--control-tint:#a9c9b634;box-shadow:inset 0 0 0 1px #4f766552}
+.pulse-site.dark .pulse-controls .glass-control[aria-pressed=true]{--control-tint:#b9e4cc20;box-shadow:inset 0 0 0 1px #b3d3c78c}
+.pulse-site .glass-profiles{display:flex;gap:6px}
+.pulse-site .glass-profiles button{font-size:12px;min-height:44px;padding:8px 12px;white-space:nowrap}
+.pulse-site .pulse-controls .quiet.glass-control,.pulse-site .pulse-motion-note .quiet.glass-control{padding:10px 14px;min-height:44px}
+.pulse-site .pulse-motion-note{padding-top:12px}
+.pulse-site .manifesto-items .glass-control{min-width:148px;justify-content:space-between;padding:12px 18px;gap:24px;border:1px solid var(--line)}
+.pulse-site .footer-links>a.glass-control{display:inline-flex;align-items:center;min-height:44px;padding:10px 16px;border:1px solid var(--line)}
+.pulse-site.dark .glass-control::before{box-shadow:inset 0 1.5px 1px #ffffffa3,inset 1px 0 2px #ffffff30,inset 0 -1px 1px #001e2666,0 5px 12px #0002}
+@media(max-width:850px){.pulse-site .pulse-controls .control-group:last-child{margin-left:0}.pulse-site .site-header{gap:12px}}
+@media(max-width:640px){
+  .pulse-site .lab-link.glass-control{padding:9px 11px;font-size:10px}
+  .pulse-site .pulse-controls{padding:16px 10px;gap:14px}
+  .pulse-site .pulse-controls .control-group:last-child{width:100%;align-self:stretch;justify-content:space-between;flex-wrap:wrap}
+  .pulse-site .glass-profiles button{padding:8px 11px;font-size:11px}
+  .pulse-site .pulse-controls .control-label{font-size:11px}
+  .pulse-site .pulse-controls .control-group{gap:6px}
+  .pulse-site .scenes button,.pulse-site .shapes button{padding:8px 9px}
+  .pulse-site .pulse-controls .quiet.glass-control{margin-left:auto}
+  .pulse-site .footer-links>a.glass-control{font-size:11px;padding:10px 12px}
+}
+@media(max-width:360px){
+  .pulse-site .lab-link.glass-control{padding:9px 8px;font-size:9px}
+  .pulse-site .site-header{gap:7px}
+  .pulse-site .pulse-controls{padding:14px 8px}
+  .pulse-site .scenes button,.pulse-site .shapes button{padding:8px 7px;font-size:10px}
+  .pulse-site .glass-profiles button{padding:8px 10px}
+}
+@media(prefers-contrast:more){.pulse-site .glass-control::after{border:1.5px solid currentColor}.pulse-site .glass-control{--control-tint:#ffffff28}}

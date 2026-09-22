@@ -19,7 +19,7 @@
 
 参考 Apple 的 [Animate with springs](https://developer.apple.com/videos/play/wwdc2023/10158/) 和 [Designing Fluid Interfaces](https://developer.apple.com/videos/play/wwdc2018/803/)，采用连续位置、连续速度与可中断的交互原则。参数为本项目自行调整，并不声称复刻某一款 Apple 产品的具体动画。
 
-`spring-disclosure.css` 仅控制容器尺寸和内容显现。原始光学引擎与材质文件保持不变，PULSE 的八个玻璃表面仍为 strength 50 / displacement scale 100。
+`spring-disclosure.css` 仅控制容器尺寸和内容显现。该次发布的原始光学引擎与材质文件保持不变，PULSE 当时的八个玻璃表面为 strength 50 / displacement scale 100。后续全局玻璃版本按控件角色设置强度，见 [GLASS_SYSTEM.md](GLASS_SYSTEM.md)；弹簧模型不变。
 
 ## 验证
 

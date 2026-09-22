@@ -6,7 +6,7 @@
 
 ## 可复用接口
 
-PULSE 的独立视觉体验位于 `pulse.html`（本地 http://127.0.0.1:8092/pulse.html），直接加载第二章的 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 和 `visual.css`，全部玻璃表面固定强度 50。默认进入光感探索，可拖动回弹并切换圆角/圆形/胶囊；还提供弹性导航、倾斜邀请卡、可展开活动胶囊、三态主题、投票确认与灵感抽签。只使用示例内容，不连接真实 PULSE 数据。实现与验证范围见 [PULSE_PREVIEW.md](PULSE_PREVIEW.md)，与 GitHub 原版的比较见 [VERSION_COMPARISON.md](VERSION_COMPARISON.md)。
+PULSE 的独立视觉体验位于 `pulse.html`（本地 http://127.0.0.1:8092/pulse.html），直接加载第二章的 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 和 `visual.css`。当前默认“均衡”光感：主透镜 50、面板 40、导航 30、独立小控件 22；玻璃内的按钮使用共享折射的透明覆盖层。可切换轻柔/均衡/鲜明，参数定义及官方设计依据见 [GLASS_SYSTEM.md](GLASS_SYSTEM.md)。默认进入光感探索，可拖动回弹并切换圆角/圆形/胶囊；还提供弹性导航、倾斜邀请卡、可展开活动胶囊、三态主题、投票确认与灵感抽签。只使用示例内容，不连接真实 PULSE 数据。实现与验证范围见 [PULSE_PREVIEW.md](PULSE_PREVIEW.md)，与 GitHub 原版的比较见 [VERSION_COMPARISON.md](VERSION_COMPARISON.md)。
 
 复制 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 及 `THIRD-PARTY-LICENSE.txt` 至项目，加载 CSS：
 

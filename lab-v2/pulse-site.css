@@ -45,6 +45,7 @@ html:has(.pulse-site){scrollbar-gutter:stable}
 .pulse-site .pulse-stage[data-view=explore] .stage-story{align-self:start;padding-top:55px;max-width:375px}
 .pulse-site #lens{left:60%;top:230px;width:280px;height:240px;border-radius:var(--radius,66px)}
 .pulse-site #lens[data-shape=circle]{width:240px;height:240px}
+.pulse-site #lens[data-shape=circle] .lens-middle{font-size:18px;letter-spacing:0}
 .pulse-site #lens[data-shape=pill]{width:340px;height:174px}
 .pulse-site #lens.held .lens-bottom{opacity:1}
 .pulse-site #lens:focus-visible{outline:2px solid #ffffffb0;outline-offset:6px}

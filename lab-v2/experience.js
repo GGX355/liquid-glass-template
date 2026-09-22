@@ -1,5 +1,6 @@
 import { createLiquidGlass } from './liquid-glass.js';
 import { glide } from './motion.js';
+import { springDisclosure } from './spring-disclosure.js';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const lens = $('#lens'), scene = $('#scene'), pill = $('#nav-pill'), prize = $('#prize'), island = $('#island');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -7,6 +8,7 @@ const surfaces = [createLiquidGlass(lens,{radius:66,strength:38}),createLiquidGl
 const abort = new AbortController(), animations = new Set();
 const on = (el,type,fn) => el.addEventListener(type,fn,{signal:abort.signal});
 let paused=false, sceneVisible=true, drag=null, flight=0, highlightFrame=0;
+let islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
 function animate(el,frames,options) {
   if(!active()) return;
@@ -23,6 +25,7 @@ function updateMotion() {
   $('#motion').textContent=paused?'播放动效':'暂停动效';$('#motion').setAttribute('aria-pressed',String(paused));
   $('#motion-note').textContent=reduced.matches?'已遵循系统减少动态效果设置':paused?'动效已暂停，仍可拖动与切换':'拖动后松手，感受惯性与回弹';
   if(!active()){cancelAnimationFrame(flight);flight=0;for(const a of animations)a.cancel();prize.style.transform='';}
+  islandMotion?.syncMotion();
 }
 on($('#motion'),'click',()=>{paused=!paused;updateMotion();});
 on(reduced,'change',updateMotion);on(document,'visibilitychange',updateMotion);
@@ -91,7 +94,8 @@ on(prize,'click',()=>{
   $('#prize-title').textContent=drawn?'今天，灵感满格':'一点小惊喜';$('#prize-status').textContent=drawn?'已揭晓 · 再点一次可复位':'轻触卡片，接住今天的好运';
   const symbol=$('.prize-symbol');animate(symbol,[{rotate:'0deg',scale:'.8'},{rotate:'180deg',scale:'1.15',offset:.65},{rotate:'180deg',scale:'1'}],{duration:700,easing:'cubic-bezier(.2,.8,.2,1)'});
 });
-on($('#island-toggle'),'click',()=>{
-  const open=island.classList.toggle('expanded');$('#island-toggle').setAttribute('aria-expanded',String(open));$('#island-label').textContent=open?'收起灵感':'展开灵感';$('#island-content').inert=!open;
+islandMotion = springDisclosure({
+  element:island, toggle:$('#island-toggle'), content:$('#island-content'), canAnimate:active, signal:abort.signal,
+  onChange:open=>{$('#island-label').textContent=open?'收起灵感':'展开灵感';},
 });
-on(window,'pagehide',e=>{if(!e.persisted){abort.abort();observer.disconnect();cancelAnimationFrame(flight);cancelAnimationFrame(highlightFrame);for(const a of animations)a.cancel();surfaces.forEach(s=>s.destroy());}});
+on(window,'pagehide',e=>{if(!e.persisted){abort.abort();observer.disconnect();islandMotion.destroy();cancelAnimationFrame(flight);cancelAnimationFrame(highlightFrame);for(const a of animations)a.cancel();surfaces.forEach(s=>s.destroy());}});

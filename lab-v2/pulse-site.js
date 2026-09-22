@@ -1,5 +1,6 @@
 import { createLiquidGlass } from './liquid-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
+import { springDisclosure } from './spring-disclosure.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -15,7 +16,7 @@ const animations = new Set();
 const lights = new Map();
 let lightFrame = 0;
 let mode = 'explore', paused = false, visible = true, confirmed = false, selected = '', dialogAction = null;
-let lensMotion = null, cardTilt = null;
+let lensMotion = null, cardTilt = null, islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
 
 function spring(element, amount = .04) {
@@ -35,6 +36,7 @@ function updateMotion() {
   $('#lens-instructions').textContent = reduced.matches ? '已遵循系统减少动态效果设置。仍可拖动、切换形状与操作所有功能。' : paused ? '动效已暂停。仍可拖动透镜、切换形状与体验交互。' : '拖动后松手，感受惯性与回弹。聚焦透镜后，也可用方向键移动。';
   if (!active()) { for (const animation of animations) animation.cancel(); lensMotion?.stop(); cardTilt?.reset(); cancelAnimationFrame(lightFrame); lightFrame = 0; lights.clear(); }
   if (!visible) lensMotion?.stop();
+  islandMotion?.syncMotion();
 }
 on($('#motion'), 'click', () => { paused = !paused; updateMotion(); });
 on(document, 'visibilitychange', updateMotion);
@@ -119,11 +121,10 @@ for (const button of $$('.shapes button')) on(button, 'click', () => {
   spring($('#lens'), .045);
 });
 on($('#reset-lens'), 'click', () => { if (mode !== 'explore') setMode('explore'); lensMotion.home(); spring($('#lens')); });
-on($('#island-toggle'), 'click', () => {
-  const open = $('#island').classList.toggle('expanded');
-  $('#island-toggle').setAttribute('aria-expanded', String(open));
-  $('#island-label').textContent = open ? '让心意展开' : '你的心动清单';
-  $('#island-content').inert = !open;
+islandMotion = springDisclosure({
+  element: $('#island'), toggle: $('#island-toggle'), content: $('#island-content'),
+  canAnimate: active, signal: abort.signal,
+  onChange: open => { $('#island-label').textContent = open ? '让心意展开' : '你的心动清单'; },
 });
 
 function showDialog({ kicker, title, description, detail, action, callback }) {
@@ -194,6 +195,7 @@ on(window, 'pagehide', event => {
   abort.abort(); observer.disconnect();
   cancelAnimationFrame(lightFrame); lights.clear();
   lensMotion.destroy(); cardTilt.destroy();
+  islandMotion.destroy();
   for (const animation of animations) animation.cancel();
   for (const surface of surfaces.values()) surface.destroy();
 });

@@ -50,3 +50,7 @@ This verifies the prototype in Chromium, not acceptance of a new PULSE product d
 ## Readability and motion refinement
 
 The subsequent review keeps all five reference files and strength 50 unchanged. `pulse-polish.css` adjusts only PULSE typography, layout and landscape illumination. Release velocity now averages a short pointer path; invitation-card tilt follows a critically damped spring with an untransformed measurement plane. Pointer highlights batch reads/writes once per frame. See [VISUAL_REVIEW.md](VISUAL_REVIEW.md) for the findings, verification and remaining limits. The current test command runs ten tests.
+
+## Spring disclosure follow-up
+
+The capsule now uses `spring-disclosure.js` and `spring-disclosure.css` for continuous width/height transitions with mild overshoot and velocity-preserving interruption. It is also used by the lab homepage's breathing capsule. See [SPRING_TRANSITIONS.md](SPRING_TRANSITIONS.md). The latest test command runs fourteen tests and the publication allowlist includes fifteen assets; the previous counts above describe earlier verification passes.

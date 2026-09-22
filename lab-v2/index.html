@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="一场关于光、曲面与弹性的交互实验。拖动透镜，在极光、沙丘与蓝图之间，体验液态玻璃。">
+<meta name="theme-color" content="#f7f7f2"><title>Liquid / 02 — 让光，有了形状</title>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="liquid-glass.css"><link rel="stylesheet" href="visual.css">
+</head>
+<body data-material="liquid">
+<header class="site-header"><a class="brand" href="#">liquid<span>/</span>02<span class="brand-dot"></span></a><span class="edition">A STUDY IN LIGHT & MOTION</span><a class="quiet" href="pulse.html">PULSE 体验 ↗</a><button id="theme" class="quiet">深色模式 ◐</button></header>
+<main>
+<section class="intro"><div><p class="eyebrow"><span></span> 交互材质实验室 · 第二章</p><h1>让光，<br>有了<em>形状。</em></h1></div><div class="lead"><span class="intro-mark" aria-hidden="true">↳</span><p>一点折射，一点弹性。<br>让界面不止被看见，<br>也能被感受到。</p><a href="#experiment">进入实验 <span>↘</span></a></div></section>
+<section class="experiment" id="experiment" aria-label="交互折射实验">
+<div class="toolbar"><div class="segmented material" role="group" aria-label="玻璃材质"><button data-material="liquid" aria-pressed="true">液态玻璃</button><button data-material="frost" aria-pressed="false">磨砂对照</button><button data-material="plain" aria-pressed="false">透明对照</button></div><label class="strength">折射强度 <input id="strength" type="range" min="0" max="80" value="38"><output id="strength-value">38</output></label><button class="quiet" id="motion" aria-pressed="false">暂停动效</button></div>
+<div class="scene flowing" id="scene" data-palette="aurora">
+<div class="landscape" aria-hidden="true"><div class="ribbon ribbon-one"></div><div class="ribbon ribbon-two"></div><div class="sun"></div><div class="horizon"></div><div class="grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="scene-word">liquid.</div><div class="ruler">00 ───── 10 ───── 20 ───── 30 ───── 40 ───── 50</div></div>
+<div class="scene-caption"><span id="scene-name">01 — AURORA</span><span class="scene-hint">光线流动，曲面回应。</span></div>
+<div id="lens" data-shape="rounded" tabindex="0" role="group" aria-label="可拖动透镜，聚焦后使用方向键移动" aria-describedby="motion-note"><span class="lens-top">LIQUID LENS <span>↗</span></span><span class="lens-middle">触碰光的形状<span>REFRACTION IN MOTION</span></span><span class="lens-bottom">拖动探索 <b>⠿</b></span></div>
+<div class="scene-foot"><span>折射 · 高光 · 惯性</span><span>MOVE SLOWLY. LOOK CLOSER.</span></div></div>
+<div class="scene-controls"><div class="control-group"><span class="control-label">光的风景</span><div class="scenes" role="group" aria-label="选择背景"><button data-palette="aurora" aria-pressed="true"><i class="swatch aurora"></i>极光</button><button data-palette="dune" aria-pressed="false"><i class="swatch dune"></i>沙丘</button><button data-palette="blueprint" aria-pressed="false"><i class="swatch blueprint"></i>蓝图</button></div></div><div class="control-group"><span class="control-label">透镜形状</span><div class="shapes" role="group" aria-label="透镜形状"><button data-shape="rounded" aria-pressed="true">圆角</button><button data-shape="circle" aria-pressed="false">圆形</button><button data-shape="pill" aria-pressed="false">胶囊</button></div></div></div>
+<div class="notes"><span id="motion-note">拖动后松手，感受惯性与回弹</span><span>也可聚焦透镜后使用方向键 ↔</span></div>
+</section>
+<section class="components" id="components"><div class="section-title"><div><p class="eyebrow">从光学实验，到日常界面</p><h2>一点灵动，<em>恰到好处。</em></h2></div><span>02 / LITTLE INTERACTIONS</span></div>
+<div class="samples">
+<article class="sample nav-sample"><div class="sample-head"><span>01 — 流动导航</span><span>选择 ↗</span></div><div class="sample-bg" aria-hidden="true"><span>in flow.</span></div><nav class="glass-nav" aria-label="演示导航"><div id="nav-pill"></div><button aria-current="page">发现</button><button>投票</button><button>抽签</button></nav><div class="sample-footer" id="nav-caption" aria-live="polite">发现 · 好点子，从这里开始。</div></article>
+<article class="sample card-sample"><div class="sample-head"><span>02 — 灵感卡片</span><span>轻触 ↗</span></div><div class="sample-bg" aria-hidden="true"></div><button id="prize" class="prize"><span class="prize-label">A LITTLE SERENDIPITY</span><span class="prize-symbol" aria-hidden="true">✳</span><strong id="prize-title">一点小惊喜</strong><span class="prize-tip">每一天，都值得期待 ↗</span></button><div class="sample-footer" aria-live="polite" id="prize-status">轻触卡片，接住今天的好运</div></article>
+<article class="sample island-sample"><div class="sample-head"><span>03 — 呼吸胶囊</span><span>展开 ↗</span></div><div class="island-backdrop" aria-hidden="true"><span>make space.</span></div><div id="island"><button id="island-toggle" aria-expanded="false" aria-controls="island-content"><span class="island-icon" aria-hidden="true">✺</span><span><b id="island-label">展开灵感</b><small>留一点空间，给新的想法。</small></span><span class="island-chevron" aria-hidden="true">+</span></button><div id="island-content" inert><div><p>好的设计，是让细节自然发生。</p><div class="island-tags"><span>光感</span><span>曲面</span><span>弹性</span></div><span class="island-fine">TAKE A BREATH. LET IDEAS IN.</span></div></div></div><div class="sample-footer">从一枚胶囊，到一处灵感空间。</div></article>
+</div></section>
+<section class="design-note"><span class="note-star" aria-hidden="true">✳</span><div><h2>玻璃有分寸，内容有呼吸。</h2><p>让材质留在需要触碰的地方，让其余部分保持安静。<br>这是一份可移植到下一张网页的视觉实验。</p></div><span class="note-index">LESS SURFACE.<br>MORE FEELING.</span></section>
+<footer><div><b>liquid / 02</b><p>原生 JavaScript · 可复用材质 · 无运行时依赖</p></div><div class="footer-links"><a href="https://github.com/shuding/liquid-glass" target="_blank" rel="noreferrer">Inspired by Shu Ding ↗</a><span>折射效果优先在 Chrome / Edge 体验<br>也可切换磨砂或透明对照</span></div></footer>
+</main><script type="module" src="experience.js"></script></body></html>

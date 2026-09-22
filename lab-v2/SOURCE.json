@@ -1,0 +1,26 @@
+{
+  "source_commit": "0523858e4887a18a3b77bfe80c3e742e166947d1",
+  "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
+  "files": {
+    "index.html": "ed50a632b838094b43b2b31b920c48350d351621da21abdfec8cd0258bea293a",
+    "experience.js": "fcb47553432eff976f4f6200414b03f00d480a09693fb2cf859597f7fffb14c4",
+    "visual.css": "7b96287d525ff5e5de06f86ebee90ea7b148500c5363056104f70092ed5f4fed",
+    "motion.js": "b2262fac112eb3965fd1ec9e42bb4b77df360ecfc39fb6e809b558e97158cce1",
+    "liquid-glass.js": "faea9f0f3d46ba11579d1804f935d86fc9f37af0fc0acc8c246daa4bd9fc818b",
+    "liquid-glass.css": "ed7708049cbeded283053438a7e8a7f40b6160b76d17ed06daa72a3bec358137",
+    "optics.js": "f6b9333c27d86781cfbfd4e08a3734a5517088ceb00eeaf9c4a0af391a3f09c8",
+    "THIRD-PARTY-LICENSE.txt": "30677f167845a6aa93e5f8a239a9de7d62f63f2b7fd351466e8fe25fe54ed0ec",
+    "pulse.html": "749d6cc6c7cc1e8ca8516102fe39acb0614a71a501a5760e44cb85138fbdca9c",
+    "pulse-site.css": "9a023f4554b85279a4ce35279f074a7d791586131d93a2eab5d6e253fe2e836a",
+    "pulse-site.js": "15b9c63a4c26aaf6e9caa3991cd964a2cb11d70e1620b1d5eb02896ba3b7adcf",
+    "pulse-interactions.js": "071b1c36ac1881b2d149cf458676ef46ec36214a1fd95d66b21566a88391b773",
+    "README.md": "f2f8a8ba4a6d8888e17c9157b8bd1f88d67ba203611c535a932de2a000fc5bd3",
+    "PULSE_PREVIEW.md": "5ec5319ae9e3e0cbcdc3134aad436b6d079a51f12788d48a26f09e40b4bb7859",
+    "VERSION_COMPARISON.md": "f3a2e7e08ba43d2a0c9c49ae44f04a5776b5b02f62824479d1a60670ade9fc02",
+    "package.json": "57d02a606af1bfabdbf744574f7418019c4e1b453f3a0c2131d374365f7fe772",
+    "prepare-static.mjs": "c8661c347852d11ed1026d4091893d05634cf2b0da9cb2ce91b6b3d7cf817910",
+    "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
+    "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
+    "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af"
+  }
+}

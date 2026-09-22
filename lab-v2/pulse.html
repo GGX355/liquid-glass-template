@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PULSE · 让每个选择都有回响。基于 Liquid / 02 的可交互视觉体验。">
+  <meta name="theme-color" content="#f7f7f2">
+  <title>PULSE — 让选择，有了回响</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="liquid-glass.css">
+  <link rel="stylesheet" href="visual.css">
+  <link rel="stylesheet" href="pulse-site.css">
+</head>
+<body class="pulse-site" data-material="liquid">
+  <a class="skip-link" href="#pulse-stage">进入活动</a>
+  <header class="site-header">
+    <a class="pulse-brand" href="pulse.html" aria-label="PULSE 首页">pulse<span aria-hidden="true">✳</span></a>
+    <span class="edition">SMALL CHOICES. SHARED MOMENTS.</span>
+    <a class="lab-link" href="index.html">Liquid / 02 实验室 <span>↗</span></a>
+    <button class="theme-control" id="pulse-theme" type="button" aria-label="主题：跟随系统"><span aria-hidden="true">◐</span><span class="theme-label">随系统</span></button>
+  </header>
+  <main>
+    <section class="pulse-intro">
+      <div><p class="eyebrow"><span></span> 每一次选择，都是一次相遇</p><h1>让选择，<em>有了回响。</em></h1></div>
+      <div class="pulse-lead"><p>把想法聚在一起，<br>让日常多一点心动。</p><span class="preview-tag">视觉体验版 · 示例活动</span></div>
+    </section>
+
+    <section class="scene flowing pulse-stage" id="pulse-stage" data-palette="aurora" data-view="explore" aria-label="PULSE 活动体验">
+      <div class="landscape" aria-hidden="true"><div class="ribbon ribbon-one"></div><div class="ribbon ribbon-two"></div><div class="sun"></div><div class="horizon"></div><div class="grid"></div><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="scene-word">pulse.</div><div class="ruler">00 ───── 10 ───── 20 ───── 30 ───── 40 ───── 50</div></div>
+      <div class="stage-top">
+        <span class="stage-index" id="scene-name">01 / AURORA</span>
+        <div class="pulse-nav" data-active="explore" role="tablist" aria-label="活动类型">
+          <span class="nav-indicator" data-glass="28" aria-hidden="true"></span>
+          <button id="explore-tab" type="button" role="tab" aria-selected="true" aria-controls="explore-panel" tabindex="0"><span aria-hidden="true">◌</span> 光感探索</button>
+          <button id="poll-tab" type="button" role="tab" aria-selected="false" aria-controls="poll-panel" tabindex="-1"><span aria-hidden="true">◉</span> 一起投票</button>
+          <button id="draw-tab" type="button" role="tab" aria-selected="false" aria-controls="draw-panel" tabindex="-1"><span aria-hidden="true">✳</span> 遇见好运</button>
+        </div>
+        <button class="help-button" data-glass="26" type="button" aria-label="查看参与规则">?</button>
+      </div>
+
+      <div class="stage-layout">
+        <div class="stage-story">
+          <p class="story-kicker"><span class="live-dot"></span><span id="story-kicker">PULSE / LIGHT & PLAY</span></p>
+          <h2 id="story-title">让心意，<br>轻盈地流动。</h2>
+          <p class="story-copy" id="story-copy">拖动一片光，换一种形状。<br>从轻轻触碰开始，遇见不一样的日常。</p>
+          <button class="story-link" type="button" id="about-activity">看看怎么玩 <span aria-hidden="true">↗</span></button>
+          <span class="story-note">A LITTLE CONNECTION GOES A LONG WAY.</span>
+        </div>
+
+        <section class="activity-card" data-glass="66" id="poll-panel" role="tabpanel" aria-labelledby="poll-tab" hidden>
+          <div class="card-eyebrow"><span>THE WEEKEND EDIT</span><span>01 / 投票</span></div>
+          <div id="poll-form-state">
+            <h3>这周末，我们去哪儿？</h3>
+            <p class="card-subtitle">选一个此刻最想去的地方。</p>
+            <form id="poll-form">
+              <fieldset><legend class="sr-only">选择周末目的地</legend>
+                <label class="poll-option"><input type="radio" name="destination" value="山野徒步" required><span class="option-number">01</span><span class="option-copy"><b>山野徒步</b><small>去绿色里，深呼吸。</small></span><span class="choice-dot" aria-hidden="true"></span></label>
+                <label class="poll-option"><input type="radio" name="destination" value="海边日落"><span class="option-number">02</span><span class="option-copy"><b>海边日落</b><small>等一场，橘色的浪漫。</small></span><span class="choice-dot" aria-hidden="true"></span></label>
+                <label class="poll-option"><input type="radio" name="destination" value="城市漫游"><span class="option-number">03</span><span class="option-copy"><b>城市漫游</b><small>在熟悉的街，偶遇新鲜。</small></span><span class="choice-dot" aria-hidden="true"></span></label>
+              </fieldset>
+              <button class="action-button" id="vote-button" type="submit" disabled><span>选好，投出这一票</span><span aria-hidden="true">↗</span></button>
+            </form>
+          </div>
+          <div id="poll-result" class="poll-result" hidden>
+            <span class="result-symbol" aria-hidden="true">✳</span><p class="result-kicker">YOUR VOICE, IN THE MIX.</p><h3>你的心意，已点亮。</h3><p>这一票，送给 <strong id="chosen-destination"></strong>。</p><span class="result-fine">这是体验投票，不计入真实活动。</span><button type="button" class="action-button" id="reset-poll">再体验一次 <span aria-hidden="true">↺</span></button>
+          </div>
+          <div class="card-bottom"><span>一人一份心意</span><span>MAKE IT A GOOD ONE.</span></div>
+        </section>
+
+        <section class="activity-card draw-card" data-glass="66" id="draw-panel" role="tabpanel" aria-labelledby="draw-tab" hidden>
+          <div class="card-eyebrow"><span>A LITTLE SERENDIPITY</span><span>02 / 抽签</span></div>
+          <div class="draw-orbit" aria-hidden="true"><span class="draw-star">✳</span><span class="draw-satellite"></span></div>
+          <p class="draw-kicker">SOMETHING GOOD IS ON ITS WAY.</p><h3>给今天，一点未知的惊喜。</h3><p class="card-subtitle">不用想太多，好运就在下一次轻触。</p>
+          <button type="button" class="action-button" id="draw-button">接住我的小幸运 <span aria-hidden="true">↗</span></button>
+          <div class="card-bottom"><span>每次相遇，都有可能</span><span>JUST FOR THE JOY OF IT.</span></div>
+        </section>
+      </div>
+      <section id="explore-panel" role="tabpanel" aria-labelledby="explore-tab">
+        <div id="lens" data-glass="66" data-shape="rounded" tabindex="0" role="group" aria-label="可拖动玻璃透镜" aria-describedby="lens-instructions"><span class="lens-top">A TOUCH OF PULSE <span>↗</span></span><span class="lens-middle">把心意，轻轻托起。<span>MOVE. MORPH. FEEL.</span></span><span class="lens-bottom">拖动后松手 <b>⠿</b></span></div>
+      </section>
+      <div class="stage-bottom"><span>让心意流动，让好运发生。</span><span>POWERED BY A LITTLE CURIOSITY <i aria-hidden="true">↗</i></span></div>
+    </section>
+
+    <div class="pulse-controls" aria-label="外观设置">
+      <div class="control-group"><span class="control-label">换一种心情</span><div class="scenes" role="group" aria-label="选择背景"><button type="button" data-palette="aurora" aria-pressed="true"><i class="swatch aurora"></i>极光</button><button type="button" data-palette="dune" aria-pressed="false"><i class="swatch dune"></i>沙丘</button><button type="button" data-palette="blueprint" aria-pressed="false"><i class="swatch blueprint"></i>蓝图</button></div></div>
+      <div class="control-group"><span class="control-label">光的形状</span><div class="shapes" role="group" aria-label="透镜形状"><button type="button" data-shape="rounded" aria-pressed="true">圆角</button><button type="button" data-shape="circle" aria-pressed="false">圆形</button><button type="button" data-shape="pill" aria-pressed="false">胶囊</button></div></div>
+      <div class="control-group"><span class="refraction-note">折射 <b>50</b></span><button type="button" class="quiet" id="motion" aria-pressed="false">暂停动效</button></div>
+    </div>
+    <div class="pulse-motion-note"><span id="lens-instructions">拖动后松手，感受惯性与回弹。聚焦透镜后，也可用方向键移动。</span><button type="button" class="quiet" id="reset-lens">透镜归位 ↺</button></div>
+
+    <section class="pulse-interactions" aria-labelledby="interactions-title">
+      <div class="section-title"><div><p class="eyebrow">SMALL TOUCHES. BIG FEELINGS.</p><h2 id="interactions-title">轻触之间，<em>自有回响。</em></h2></div><span>02 / TOUCH & RESPONSE</span></div>
+      <div class="samples pulse-samples">
+        <article class="sample card-sample"><div class="sample-head"><span>01 / 一张好运邀请</span><span>轻移鼠标 · 轻触揭晓 ↗</span></div><div class="sample-bg" aria-hidden="true"></div><button id="prize" class="prize" data-glass="38" type="button"><span class="prize-label">AN INVITATION TO THE UNEXPECTED</span><span class="prize-symbol" aria-hidden="true">✳</span><strong>向好运，靠近一点。</strong><span class="prize-tip">接住今天的小惊喜 ↗</span></button><div class="sample-footer">随着指尖倾斜，松开后轻轻回到原处。</div></article>
+        <article class="sample island-sample"><div class="sample-head"><span>02 / 让灵感，慢慢展开</span><span>点一下，留一点空间 ↗</span></div><div class="island-backdrop" aria-hidden="true"><span>make space.</span></div><div id="island" data-glass="34"><button id="island-toggle" type="button" aria-expanded="false" aria-controls="island-content"><span class="island-icon" aria-hidden="true">✺</span><span><b id="island-label">你的心动清单</b><small>把下一次相遇，放进期待里。</small></span><span class="island-chevron" aria-hidden="true">+</span></button><div id="island-content" inert><div><p>今天，想和大家做点什么？</p><div class="island-actions"><button type="button" data-go="poll">一起做决定 <span>↗</span></button><button type="button" data-go="draw">给偶然一个机会 <span>✳</span></button></div><span class="island-fine">GOOD THINGS START WITH A LITTLE SPACE.</span></div></div></div><div class="sample-footer">从一枚胶囊，到一处刚刚好的心意空间。</div></article>
+      </div>
+    </section>
+
+    <section class="pulse-manifesto">
+      <div class="manifesto-heading"><p class="eyebrow">LESS FRICTION. MORE CONNECTION.</p><h2>小小的选择，<br><em>连起我们。</em></h2><span class="manifesto-flower" aria-hidden="true">✳</span></div>
+      <div class="manifesto-items"><article><span>01</span><div><h3>让每个想法，都被看见。</h3><p>一次轻松的投票，把「随便」变成「就这么定了」。</p><button type="button" data-go="poll">去投一票 <span aria-hidden="true">↗</span></button></div></article><article><span>02</span><div><h3>给平凡的一天，一点惊喜。</h3><p>把决定交给偶然，也许会遇见意料之外的好心情。</p><button type="button" data-go="draw">抽一份好运 <span aria-hidden="true">↗</span></button></div></article></div>
+    </section>
+    <footer><div><b class="pulse-footer-brand">pulse<span>✳</span></b><p>每个选择，都有回响。</p></div><div class="footer-links"><a href="index.html">回到 Liquid / 02 材质实验室 ↗</a><span>独立视觉体验 · 不连接真实活动数据<br>页面刷新后，体验记录会重置。</span></div></footer>
+  </main>
+
+  <dialog class="pulse-dialog" id="activity-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-description">
+    <section class="dialog-glass" data-glass="66">
+      <button type="button" class="dialog-close" aria-label="关闭弹窗" autofocus>×</button>
+      <p class="dialog-kicker" id="dialog-kicker"></p><span class="dialog-symbol" aria-hidden="true">✳</span>
+      <h2 id="dialog-title"></h2><p id="dialog-description"></p>
+      <div id="dialog-detail" class="dialog-detail"></div>
+      <button type="button" class="action-button" id="dialog-action"></button>
+      <span class="dialog-fine">PULSE · A MOMENT TO CONNECT.</span>
+    </section>
+  </dialog>
+  <div class="sr-only" id="announcement" role="status"></div>
+  <noscript><p class="no-script">请启用 JavaScript，体验投票、抽签与液态玻璃。</p></noscript>
+  <script type="module" src="pulse-site.js"></script>
+</body>
+</html>

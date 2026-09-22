@@ -1,5 +1,19 @@
 # Liquid Glass Template · 苹果液态玻璃 Web 模板
 
+## 推荐体验：Liquid / 02
+
+第二版液态玻璃实验室与完整交互版 PULSE 预览已收录在 [`lab-v2/`](lab-v2/)。针对通透折射、三套动态场景、惯性与形变的目标，推荐从第二版开始；根目录原版完整保留，适合对照业务界面与控件规范。
+
+- **[打开第二版实验室](https://ggx355.github.io/liquid-glass-template/lab-v2/)**：极光/沙丘/蓝图，拖动回弹，圆角/圆形/胶囊，弹性导航、倾斜卡片与展开胶囊。
+- **[打开 PULSE 完整交互预览](https://ggx355.github.io/liquid-glass-template/lab-v2/pulse.html)**：固定折射强度 50，三态主题、窄屏布局，以及可操作的示例投票和抽签。
+- [版本对比与选择依据](lab-v2/VERSION_COMPARISON.md) · [实现与验证范围](lab-v2/PULSE_PREVIEW.md) · [源码提交与文件校验记录](lab-v2/SOURCE.json)
+
+第二版零运行时依赖。进入 `lab-v2` 后运行 `npm run dev`，本地端口为 8092；`npm test` 检查位移与惯性数学，`npm run build` 生成静态资源。材质验证以 Chromium 为主，尚未承诺 Safari/Firefox 或真实触摸设备表现一致。
+
+---
+
+## 原版说明
+
 依照 **Apple HIG**（Typography / Materials）与 **WWDC25 Liquid Glass** 三层模型（highlight / shadow / illumination）实现的通用 Web 设计规范模板。纯 HTML + CSS + 原生 JS，零依赖，复制即用。
 
 ## 在线演示

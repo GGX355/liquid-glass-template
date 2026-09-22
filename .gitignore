@@ -1,0 +1,5 @@
+/lab-v2/dist/
+/lab-v2/node_modules/
+/lab-v2/evidence/
+/lab-v2/.openai/
+*.tar.gz

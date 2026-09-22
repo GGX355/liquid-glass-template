@@ -1,5 +1,5 @@
 {
-  "source_commit": "dca69bfabb4c584c62ae072f4f02d330491a3751",
+  "source_commit": "98dc1ff030183de0b39cf25770440c07dff8e87e",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "54f64e87739dae0d2f9e0eb07a102789212221c3d0f596201fc1f9d49c68c821",
@@ -10,15 +10,15 @@
     "liquid-glass.css": "ed7708049cbeded283053438a7e8a7f40b6160b76d17ed06daa72a3bec358137",
     "optics.js": "f6b9333c27d86781cfbfd4e08a3734a5517088ceb00eeaf9c4a0af391a3f09c8",
     "THIRD-PARTY-LICENSE.txt": "30677f167845a6aa93e5f8a239a9de7d62f63f2b7fd351466e8fe25fe54ed0ec",
-    "pulse.html": "55afab6594b2dfb3c19c2316f73626be6f5de4147aea48bde2b4866eb4696408",
+    "pulse.html": "e5140d91e82290c415e64d6010f259b7ddcbabd9bfbe0b0ce615bdc3dac1c790",
     "pulse-site.css": "d16543e85a3c4a368223d816a2f304a94f189e4378bab4a8a6f4dcde17547e43",
-    "pulse-site.js": "9de8870efc0aa516e603a67a4271c7242890a0e2e6b2a28a87c8fea929cf56a0",
+    "pulse-site.js": "96400ccc2e59a2e48ff2768514229c3124cd99af17deae60a3482a1403029c1b",
     "pulse-interactions.js": "b171ed4f013f1b5787a48be9bac147755085842f42daa35c217d6b2f9e771542",
-    "README.md": "090ef01fa1a9303e579f0377bc37f18feb3b2c64488d50d51e60034f3fff052f",
-    "PULSE_PREVIEW.md": "71609691cadcd876584647bdb1cd94a70e0b545ae79766badba98bf6f44297f9",
+    "README.md": "68eb5afbad9111019cb158ddc4b7e94e1f6262b8c827474a73a6ec3056ee0842",
+    "PULSE_PREVIEW.md": "a36c9ac539c3eec6d1f6ca66698a8750218f97ee9b30bfd45e528aec82eaa711",
     "VERSION_COMPARISON.md": "44c00a07f8ec9e378abf9271246c7491018457474c5f7d6250bc82ec36d73e9d",
-    "package.json": "e6a548696774cece03b6f764dca0c5673610d003e9b07b11839fa4114fa2ea97",
-    "prepare-static.mjs": "c7b636972975cfa81d3182900da86baad9c2e656704546ba30bb3e2126fe2d8e",
+    "package.json": "f0a4eb95f91f2b5e4ca2c1b912e32003b92c68398ed5fb4e8154eb3f5716b239",
+    "prepare-static.mjs": "57189a893c3c4d2b5c41f9317db88345f2c02d2924b3302eb9150f63b88d565b",
     "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
     "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
     "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af",
@@ -31,6 +31,10 @@
     "SPRING_TRANSITIONS.md": "bfb8f66b12211c214b8136cae180cd7d5f0dc1c6f23a60647925afaa371fe69a",
     "pulse-glass.js": "46295e54f3e269ea77f2ed8f26dcb1b9e4544fd2a281fa616578f60e045ed502",
     "pulse-glass.css": "11954e0fdda2be369b5d966aa3a6043ddce8e49b84e60b0fd31015318761c9df",
-    "GLASS_SYSTEM.md": "39978fe4a2f269018b0633ecb3e4755eae3f990c7133eed5192979e48c31e682"
+    "GLASS_SYSTEM.md": "39978fe4a2f269018b0633ecb3e4755eae3f990c7133eed5192979e48c31e682",
+    "pulse-transitions.js": "3f9e67a888d90d4cee94e55704518f40a7cff2d878a0c29bae2a6f8815756983",
+    "pulse-transitions.css": "c19a05cf5cb26fb06befb9bf73ca0a093376e533f0c506d72aef27a287d9271e",
+    "pulse-transitions.test.mjs": "d94a52ef2929385e93953a78361da4df0e7a4d359e030b1c1f1eef141f89cf04",
+    "PANEL_TRANSITIONS.md": "42989469db49a3e8060125152b890db5eb5efa7aa83839b9f55469a33b9c93e0"
   }
 }

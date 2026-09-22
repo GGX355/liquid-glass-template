@@ -1,6 +1,7 @@
 import { configurePulseGlass } from './pulse-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
+import { panelTransitions, dialogTransitions } from './pulse-transitions.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -19,6 +20,7 @@ let lightFrame = 0;
 let mode = 'explore', paused = false, visible = true, confirmed = false, selected = '', dialogAction = null;
 let lensMotion = null, cardTilt = null, islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
+const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abort.signal });
 
 function spring(element, amount = .04) {
   if (!active()) return;
@@ -38,6 +40,7 @@ function updateMotion() {
   if (!active()) { for (const animation of animations) animation.cancel(); lensMotion?.stop(); cardTilt?.reset(); cancelAnimationFrame(lightFrame); lightFrame = 0; lights.clear(); }
   if (!visible) lensMotion?.stop();
   islandMotion?.syncMotion();
+  modalMotion.syncMotion();
 }
 on($('#motion'), 'click', () => { paused = !paused; updateMotion(); });
 on(document, 'visibilitychange', updateMotion);
@@ -51,21 +54,20 @@ const story = {
   poll: { kicker: '周末灵感局 / VOL. 01', title: ['好时光，', '由我们决定。'], copy: '山野的风，海边的晚霞，或是街角的咖啡。\n这一站，听听大家的心意。' },
   draw: { kicker: '日常好运局 / VOL. 02', title: ['小惊喜，', '让偶然发生。'], copy: '给忙碌按下暂停，把期待交给未知。\n或许，下一份好运正朝你走来。' },
 };
+const panels = panelTransitions({ stage, stories: story });
 function setMode(next, focusTab = false) {
   if (!story[next]) return;
+  if (next === mode) { if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true }); return; }
   lensMotion?.cancel();
   mode = next;
   for (const name of ['explore', 'poll', 'draw']) {
     const current = name === mode, tab = $(`#${name}-tab`);
     tab.setAttribute('aria-selected', String(current));
     tab.tabIndex = current ? 0 : -1;
-    $(`#${name}-panel`).hidden = !current;
   }
   $('.pulse-nav').dataset.active = mode;
   stage.dataset.view = mode;
-  $('#story-kicker').textContent = story[mode].kicker;
-  $('#story-title').replaceChildren(document.createTextNode(story[mode].title[0]), document.createElement('br'), document.createTextNode(story[mode].title[1]));
-  $('#story-copy').replaceChildren(document.createTextNode(story[mode].copy.split('\n')[0]), document.createElement('br'), document.createTextNode(story[mode].copy.split('\n')[1]));
+  panels.setMode(mode);
   spring($('.nav-indicator'), .1);
   if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true });
 }
@@ -134,18 +136,19 @@ function showDialog({ kicker, title, description, detail, action, callback }) {
   $('#dialog-description').textContent = description;
   $('#dialog-detail').textContent = detail;
   $('#dialog-action').textContent = action;
-  dialogAction = callback || (() => dialog.close());
-  stage.scrollIntoView({ block: 'center', behavior: 'instant' });
-  dialog.showModal();
+  dialogAction = callback || (() => modalMotion.close());
+  modalMotion.open();
+  const sceneBounds = stage.getBoundingClientRect(), modalBounds = dialog.getBoundingClientRect();
+  dialog.dataset.surround = sceneBounds.top <= modalBounds.top && sceneBounds.bottom >= modalBounds.bottom ? 'scene' : 'page';
   spring($('.dialog-symbol'), .12);
 }
-on($('.dialog-close'), 'click', () => dialog.close());
+on($('.dialog-close'), 'click', () => modalMotion.close());
 on($('#dialog-action'), 'click', () => dialogAction?.());
 on(dialog, 'close', () => { dialogAction = null; });
 // Native dialog supplies Escape dismissal, focus trapping and focus restoration.
 let backdropStart = false;
 on(dialog, 'pointerdown', event => { backdropStart = event.target === dialog; });
-on(dialog, 'click', event => { if (backdropStart && event.target === dialog) dialog.close(); backdropStart = false; });
+on(dialog, 'click', event => { if (backdropStart && event.target === dialog) modalMotion.close(); backdropStart = false; });
 
 function showRules() {
   showDialog({ kicker: 'A FEW LITTLE NOTES', title: '轻松参与，尽兴而归。', description: mode === 'explore' ? '拖动玻璃再松手，感受回弹；试试不同形状，或向下探索倾斜卡片与展开胶囊。' : mode === 'poll' ? '选择你喜欢的目的地，确认后就能点亮这一票。' : '轻触抽签按钮，揭开一份属于今天的小灵感。', detail: '这是 PULSE 的独立视觉体验。\n所有选项和结果都是示例，不会提交到真实活动。\n无需登录，刷新页面即可重新开始。', action: '知道了，开始体验 ↗' });
@@ -163,19 +166,17 @@ on($('#poll-form'), 'submit', event => {
     if (confirmed) return;
     confirmed = true;
     $('#chosen-destination').textContent = selected;
-    $('#poll-form-state').hidden = true;
-    $('#poll-result').hidden = false;
-    dialog.close();
-    $('#reset-poll').focus({ preventScroll: true });
-    $('#announcement').textContent = `体验投票完成，你选择了${selected}。`;
-    spring($('.result-symbol'), .12);
+    modalMotion.close(() => {
+      panels.setResult(true);
+      $('#announcement').textContent = `体验投票完成，你选择了${selected}。`;
+      spring($('.result-symbol'), .12);
+    });
   } });
 });
 on($('#reset-poll'), 'click', () => {
   confirmed = false; selected = '';
   $('#poll-form').reset(); $('#vote-button').disabled = true;
-  $('#poll-result').hidden = true; $('#poll-form-state').hidden = false;
-  $('#poll-form input').focus({ preventScroll: true });
+  panels.setResult(false);
   $('#announcement').textContent = '已重置，可以重新选择。';
 });
 const fortunes = [
@@ -197,6 +198,7 @@ on(window, 'pagehide', event => {
   cancelAnimationFrame(lightFrame); lights.clear();
   lensMotion.destroy(); cardTilt.destroy();
   islandMotion.destroy();
+  modalMotion.destroy();
   for (const animation of animations) animation.cancel();
   glass.destroy();
 });

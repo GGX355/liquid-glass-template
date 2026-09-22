@@ -1,0 +1,41 @@
+/* Inactive grid layers retain their natural size, never affecting page height
+   on selection. Text keeps its native size; no scaling or blur is used. */
+.pulse-site .pulse-stage.mode-ready{height:auto;min-height:680px;overflow-anchor:none}
+.pulse-site .pulse-stage.mode-ready .stage-layout{display:grid;align-items:center;min-height:520px}
+.pulse-site .pulse-stage.mode-ready .stage-story{grid-area:1 / 1;align-self:center;max-width:none;padding:0;min-width:0}
+.pulse-site .pulse-stage.mode-ready .activity-card{grid-area:1 / 2;align-self:stretch;min-width:0;max-width:none;width:100%;display:flex;flex-direction:column}
+.pulse-site .pulse-stage.mode-ready .activity-card>.card-bottom{margin-top:auto;padding-top:22px}
+.pulse-site .story-stack,.pulse-site .poll-state-stack{display:grid;min-width:0}
+.pulse-site .story-slide,.pulse-site .poll-state-stack>div{grid-area:1 / 1;min-width:0}
+.pulse-site .story-slide .story-copy{margin-bottom:0}
+.pulse-site .poll-state-stack{flex:1}
+.pulse-site .poll-state-stack>#poll-result{align-self:center}
+.pulse-site .mode-layer{opacity:0;visibility:hidden;pointer-events:none;translate:18px 0;transition:opacity .24s ease,translate .6s cubic-bezier(.22,1.12,.36,1),visibility 0s linear .24s}
+.pulse-site .mode-layer.is-current{opacity:1;visibility:visible;pointer-events:auto;translate:0 0;transition:opacity .36s ease .07s,translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s}
+.pulse-site:has(.pulse-dialog[open]) .pulse-stage .mode-layer{visibility:hidden!important}
+.pulse-site .pulse-dialog[data-surround=page]::backdrop{background:#092331b8}
+.pulse-site[data-palette=dune] .pulse-dialog[data-surround=page]::backdrop{background:#f5e4cadb}
+.pulse-site .story-slide.mode-layer{translate:0 10px}
+.pulse-site .story-slide.mode-layer.is-current{translate:0 0}
+.pulse-site .pulse-stage.mode-ready #explore-panel{position:absolute;inset:0;pointer-events:none}
+.pulse-site .pulse-stage.mode-ready #explore-panel #lens{pointer-events:auto}
+.pulse-site .pulse-stage.mode-ready #explore-panel:not(.is-current) #lens{pointer-events:none}
+.pulse-site .pulse-stage.mode-ready .stage-bottom{position:relative;inset:auto}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button:focus-visible{outline:2px solid currentColor;outline-offset:-5px}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button:active{translate:0 1px}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button{min-height:44px;transition:color .2s,translate .15s}
+.pulse-site .pulse-stage.mode-ready .poll-option:has(input:checked){box-shadow:inset 0 0 0 1px currentColor,0 0 0 1px #ffffff30}
+.pulse-site .pulse-stage.mode-ready .action-button:disabled{opacity:.65}
+.pulse-site .pulse-stage.mode-ready:not([data-view=explore]) .draw-star{animation-play-state:paused}
+.pulse-site .pulse-stage.mode-ready[data-view=draw].flowing .draw-star{animation-play-state:running}
+@media(max-width:640px){
+  .pulse-site .pulse-stage.mode-ready{height:auto;min-height:0}
+  .pulse-site .pulse-stage.mode-ready .stage-layout{grid-template-columns:minmax(0,1fr);min-height:0;gap:26px}
+  .pulse-site .pulse-stage.mode-ready .stage-story{grid-area:1 / 1;max-width:none;padding:0 8px}
+  .pulse-site .pulse-stage.mode-ready .activity-card{grid-area:2 / 1;justify-self:center;max-width:440px}
+  .pulse-site .pulse-stage.mode-ready .stage-bottom{padding-top:6px}
+  .pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:12px;font-weight:600}
+}
+@media(max-width:360px){.pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:11px}}
+.pulse-site.motion-off .mode-layer{transition:none;translate:none}
+@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none}}

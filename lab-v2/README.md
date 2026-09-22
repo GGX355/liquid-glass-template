@@ -26,6 +26,8 @@ React 中在 useEffect 内对 ref.current 初始化，返回 destroy；服务端
 
 ## 已知范围
 
+活动页签、投票结果和弹窗现有稳定占位与连续过渡，避免不同内容推动整页上下跳动。交互与流畅度验证见 [PANEL_TRANSITIONS.md](PANEL_TRANSITIONS.md)；当前 `npm test` 运行 18 项测试。
+
 真实 DOM 背景折射依赖浏览器支持 SVG backdrop-filter，优先在 Chromium 验证。CSS.supports 不能证明实际折射像素正确；Safari/Firefox 未实测，不承诺一致效果。磨砂与透明对照由 body 的 data-material=frost/plain 控制，可供降级；目前未自动检测实际滤镜渲染失败。
 
 这不是完整物理光线追踪，没有实现真实色散或多界面光学。折射使用圆角曲面的有界位移近似，强调边缘和清晰中心。不要无节制铺满整页；接入前应对目标设备做性能测量。

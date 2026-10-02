@@ -14,7 +14,6 @@ html:has(.pulse-site){scrollbar-gutter:stable}
 .pulse-dialog{padding:0;border:0;background:none;color:#f7fffe;width:min(450px,calc(100% - 32px));max-width:none;max-height:calc(100dvh - 36px);overflow:visible;outline:none}.pulse-dialog::backdrop{background:#0c172426}.dialog-glass{padding:39px 38px 27px;color:inherit;background:none;text-align:center;max-height:calc(100dvh - 36px);overflow:auto;text-shadow:0 1px 3px #13243bd9,0 0 14px #13243b90}.dialog-close{position:absolute;top:20px;right:21px;width:36px;height:36px;border-radius:50%;font-size:23px;font-weight:300;background:#ffffff19;color:inherit;line-height:1}.dialog-kicker{font-size:8px;letter-spacing:1.8px;margin:4px 35px 26px;line-height:1.6}.dialog-symbol{font:72px Georgia,serif;line-height:1;display:block;margin-bottom:23px}.dialog-glass h2{font-size:29px;line-height:1.4;letter-spacing:-1px}.dialog-glass>p:not(.dialog-kicker){font-size:12px;line-height:1.9;margin:16px 0}.dialog-detail{font-size:11px;line-height:1.9;border-top:1px solid #ffffff40;border-bottom:1px solid #ffffff40;padding:15px 0;margin-top:20px;white-space:pre-line}.dialog-fine{display:block;font-size:6px;letter-spacing:1.8px;margin-top:22px;opacity:.8}.dialog-glass .action-button{margin-top:24px}.pulse-site:has(.pulse-dialog[open]){overflow:hidden}.pulse-site[data-palette=dune] .pulse-dialog{color:#54372b}.scene[data-palette=dune] .activity-card,.scene[data-palette=dune] .stage-story,.pulse-site[data-palette=dune] .dialog-glass{text-shadow:0 1px 5px #fff7}.scene[data-palette=dune] .choice-dot{border-color:#68463280}.no-script{padding:20px;text-align:center}
 @keyframes pulse-star{to{rotate:180deg}}
 /* Let the landscape carry the modal, so two sets of copy never compete. */
-.pulse-site:has(.pulse-dialog[open]) .stage-layout{visibility:hidden}
 @media(min-width:641px){.pulse-stage .scene-word{top:49%}.story-note{visibility:hidden}.story-link{position:absolute;right:0;top:16px;width:auto;gap:12px;border:0}}
 @media(max-width:640px){.pulse-site .stage-story h2 br{display:block}.pulse-site .pulse-stage .scene-word{top:74%;font-size:180px}}
 @media(min-width:1600px){.pulse-intro h1{font-size:64px}}
@@ -49,7 +48,6 @@ html:has(.pulse-site){scrollbar-gutter:stable}
 .pulse-site #lens[data-shape=pill]{width:340px;height:174px}
 .pulse-site #lens.held .lens-bottom{opacity:1}
 .pulse-site #lens:focus-visible{outline:2px solid #ffffffb0;outline-offset:6px}
-.pulse-site:has(.pulse-dialog[open]) #explore-panel{visibility:hidden}
 .pulse-site .pulse-controls{flex-wrap:wrap;gap:12px;padding-bottom:15px}
 .pulse-site .pulse-controls .control-group{gap:12px}
 .pulse-site .scenes button,.pulse-site .shapes button{min-height:44px;font-size:11px;padding:8px 13px}

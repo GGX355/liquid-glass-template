@@ -12,7 +12,19 @@
 .pulse-site .poll-state-stack>#poll-result{align-self:center}
 .pulse-site .mode-layer{opacity:0;visibility:hidden;pointer-events:none;translate:18px 0;transition:opacity .24s ease,translate .6s cubic-bezier(.22,1.12,.36,1),visibility 0s linear .24s}
 .pulse-site .mode-layer.is-current{opacity:1;visibility:visible;pointer-events:auto;translate:0 0;transition:opacity .36s ease .07s,translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s}
-.pulse-site:has(.pulse-dialog[open]) .pulse-stage .mode-layer{visibility:hidden!important}
+.pulse-site .elastic-nav .nav-indicator{transition:none}
+/* A restrained body deformation follows the same damped response as the lab.
+   The grid keeps its dimensions while the visible surface settles inside it. */
+.pulse-site{--surface-spring:linear(0,.054,.181,.34,.507,.664,.8,.908,.988,1.04,1.069,1.081,1.08,1.071,1.058,1.044,1.03,1.018,1.008,1.001,.996,.994,.993,.994,.995,.996,.998,1)}
+.pulse-site .activity-card.mode-layer{scale:.94 .88;transform-origin:50% 48%;transition:opacity .2s ease,translate .88s var(--surface-spring),scale .88s var(--surface-spring),visibility 0s linear .2s}
+.pulse-site .activity-card.mode-layer.is-current{scale:1;transition:opacity .22s ease .04s,translate .88s var(--surface-spring),scale .88s var(--surface-spring),visibility 0s}
+.pulse-site #prize .prize-symbol{rotate:0deg;transition:rotate .85s var(--surface-spring),color .4s}
+.pulse-site #prize.revealed .prize-symbol{rotate:180deg}
+.pulse-site #prize strong,.pulse-site #prize .prize-tip{transition:translate .65s var(--surface-spring)}
+.pulse-site #prize.revealed strong,.pulse-site #prize.revealed .prize-tip{translate:0 -2px}
+.pulse-site .stage-layout{transition:opacity .3s ease}
+.pulse-site:has(.pulse-dialog[open]) .stage-layout,
+.pulse-site:has(.pulse-dialog[open]) #explore-panel.is-current{opacity:.06}
 .pulse-site .pulse-dialog[data-surround=page]::backdrop{background:#092331b8}
 .pulse-site[data-palette=dune] .pulse-dialog[data-surround=page]::backdrop{background:#f5e4cadb}
 .pulse-site .story-slide.mode-layer{translate:0 10px}
@@ -37,5 +49,7 @@
   .pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:12px;font-weight:600}
 }
 @media(max-width:360px){.pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:11px}}
-.pulse-site.motion-off .mode-layer{transition:none;translate:none}
-@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none}}
+.pulse-site.motion-off .mode-layer{transition:none;translate:none;scale:none}
+.pulse-site.motion-off #prize .prize-symbol,.pulse-site.motion-off #prize strong,.pulse-site.motion-off #prize .prize-tip{transition:none}
+.pulse-site.motion-off .stage-layout{transition:none}
+@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none;scale:none}.pulse-site #prize .prize-symbol,.pulse-site #prize strong,.pulse-site #prize .prize-tip,.pulse-site .stage-layout{transition:none}}

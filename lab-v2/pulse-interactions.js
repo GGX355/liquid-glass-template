@@ -1,4 +1,5 @@
 import { glide } from './motion.js';
+import { springStep } from './pulse-motion.js';
 
 // Average a short path instead of magnifying the last, possibly noisy, event.
 export function releaseVelocity(samples, now) {
@@ -20,13 +21,6 @@ export function releaseVelocity(samples, now) {
   let x = (last.x - first.x) / elapsed, y = (last.y - first.y) / elapsed;
   const gain = Math.min(1, 1100 / Math.max(1, Math.hypot(x, y))) * Math.exp(-age / 45);
   return { x: x * gain, y: y * gain };
-}
-
-// Exact critically damped response: stable across display refresh rates.
-export function settle(position, velocity, target, dt) {
-  dt = Math.max(0, Math.min(.06, dt));
-  const omega = 17, offset = position - target, impulse = velocity + omega * offset, decay = Math.exp(-omega * dt);
-  return { position: target + (offset + impulse * dt) * decay, velocity: (velocity - omega * impulse * dt) * decay };
 }
 
 // Pointer capture keeps drags continuous beyond the lens, without blocking page
@@ -127,7 +121,7 @@ export function tiltCard({ element, canAnimate, signal }) {
     frame = 0;
     if (!canAnimate()) { reset(); return; }
     const dt = last ? (now - last) / 1000 : 1 / 60; last = now;
-    const ax = settle(x, vx, tx, dt), ay = settle(y, vy, ty, dt);
+    const ax = springStep(x, vx, tx, dt, 17, .68), ay = springStep(y, vy, ty, dt, 17, .68);
     x = ax.position; vx = ax.velocity; y = ay.position; vy = ay.velocity;
     element.style.transform = `perspective(650px) rotateX(${y}deg) rotateY(${x}deg)`;
     if (Math.abs(x - tx) + Math.abs(y - ty) + Math.abs(vx) + Math.abs(vy) > .015) frame = requestAnimationFrame(tick);

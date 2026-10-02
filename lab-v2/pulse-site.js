@@ -2,6 +2,7 @@ import { configurePulseGlass } from './pulse-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
 import { panelTransitions, dialogTransitions } from './pulse-transitions.js';
+import { elasticFeedback, elasticNavigation } from './pulse-motion.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -14,21 +15,15 @@ themeControl({ button: $('#pulse-theme'), signal: abort.signal });
 // Keep the optical engine; tune displacement to the scale of each control.
 const glass = configurePulseGlass({ signal: abort.signal });
 const { surfaces } = glass;
-const animations = new Set();
 const lights = new Map();
 let lightFrame = 0;
 let mode = 'explore', paused = false, visible = true, confirmed = false, selected = '', dialogAction = null;
 let lensMotion = null, cardTilt = null, islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
 const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abort.signal });
-
-function spring(element, amount = .04) {
-  if (!active()) return;
-  for (const animation of animations) if (animation.effect?.target === element) animation.cancel();
-  const animation = element.animate([{ scale: `${1 + amount} ${1 - amount}` }, { scale: `${1 - amount * .35} ${1 + amount * .35}`, offset: .65 }, { scale: '1 1' }], { duration: 560, easing: 'cubic-bezier(.2,.8,.2,1)' });
-  animations.add(animation);
-  animation.finished.catch(() => {}).finally(() => animations.delete(animation));
-}
+const feedback = elasticFeedback({ canAnimate: active });
+const navigation = elasticNavigation({ rail: $('.pulse-nav'), canAnimate: active });
+const spring = (element, amount) => feedback.pulse(element, amount);
 
 function updateMotion() {
   document.body.classList.toggle('motion-off', !active());
@@ -37,10 +32,12 @@ function updateMotion() {
   $('#motion').setAttribute('aria-pressed', String(paused));
   $('#motion').disabled = reduced.matches;
   $('#lens-instructions').textContent = reduced.matches ? '已遵循系统减少动态效果设置。仍可拖动、切换形状与操作所有功能。' : paused ? '动效已暂停。仍可拖动透镜、切换形状与体验交互。' : '拖动后松手，感受惯性与回弹。聚焦透镜后，也可用方向键移动。';
-  if (!active()) { for (const animation of animations) animation.cancel(); lensMotion?.stop(); cardTilt?.reset(); cancelAnimationFrame(lightFrame); lightFrame = 0; lights.clear(); }
+  if (!active()) { lensMotion?.stop(); cardTilt?.reset(); cancelAnimationFrame(lightFrame); lightFrame = 0; lights.clear(); }
   if (!visible) lensMotion?.stop();
   islandMotion?.syncMotion();
   modalMotion.syncMotion();
+  navigation.syncMotion();
+  if (!active()) feedback.stop();
 }
 on($('#motion'), 'click', () => { paused = !paused; updateMotion(); });
 on(document, 'visibilitychange', updateMotion);
@@ -68,7 +65,7 @@ function setMode(next, focusTab = false) {
   $('.pulse-nav').dataset.active = mode;
   stage.dataset.view = mode;
   panels.setMode(mode);
-  spring($('.nav-indicator'), .1);
+  navigation.select(['explore', 'poll', 'draw'].indexOf(mode));
   if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true });
 }
 for (const name of ['explore', 'poll', 'draw']) on($(`#${name}-tab`), 'click', () => setMode(name));
@@ -190,7 +187,16 @@ function revealFortune() {
   showDialog({ kicker: 'A LITTLE LUCK, JUST FOR YOU', title: item.title, description: item.copy, detail: item.detail, action: '收下这份小幸运 ✳' });
 }
 on($('#draw-button'), 'click', revealFortune);
-on($('#prize'), 'click', revealFortune);
+// The lab's card responds where it was touched. A modal broke that physical
+// connection; the main draw activity still offers the full fortune dialog.
+on($('#prize'), 'click', () => {
+  const card = $('#prize'), revealed = card.classList.toggle('revealed');
+  card.setAttribute('aria-pressed', String(revealed));
+  card.querySelector('strong').textContent = revealed ? '今天，灵感满格。' : '向好运，靠近一点。';
+  card.querySelector('.prize-tip').textContent = revealed ? '留一点空白，让好事发生。↗' : '接住今天的小惊喜 ↗';
+  $('#announcement').textContent = revealed ? '今天，灵感满格。留一点空白，让好事发生。' : '好运卡片已收起。';
+  spring(card, .09);
+});
 
 on(window, 'pagehide', event => {
   if (event.persisted) return;
@@ -199,6 +205,6 @@ on(window, 'pagehide', event => {
   lensMotion.destroy(); cardTilt.destroy();
   islandMotion.destroy();
   modalMotion.destroy();
-  for (const animation of animations) animation.cancel();
+  navigation.destroy(); feedback.stop();
   glass.destroy();
 });

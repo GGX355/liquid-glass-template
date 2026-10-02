@@ -1,3 +1,5 @@
+import { surfaceFrames } from './pulse-motion.js';
+
 // Keep natural layout space for every state; only visual layers move/fade.
 // CSS transitions retarget from their current presentation on rapid input.
 export function panelTransitions({ stage, stories }) {
@@ -62,15 +64,15 @@ export function dialogTransitions({ dialog, canAnimate, signal }) {
     callback?.();
   }
   function open() {
+    const current = dialog.open ? getComputedStyle(surface) : null;
+    const scales = current?.scale?.split(' ').map(Number);
+    const start = current ? { opacity: Number(current.opacity), x: scales?.[0] || 1,
+      y: scales?.[1] || scales?.[0] || 1, offset: parseFloat(current.translate.split(' ')[1]) || 0 } : undefined;
     if (!dialog.open) opener = document.activeElement;
     cancelAnimation(); closing = false; afterClose = null;
     if (!dialog.open) dialog.showModal();
     if (canAnimate()) {
-      animation = surface.animate([
-        { opacity: 0, translate: '0 22px' },
-        { opacity: 1, translate: '0 -2px', offset: .72 },
-        { opacity: 1, translate: '0 0' },
-      ], { duration: 520, easing: 'cubic-bezier(.2,.75,.25,1)' });
+      animation = surface.animate(surfaceFrames(start), { duration: 1067, easing: 'linear' });
       animation.finished.catch(() => {});
     }
   }
@@ -78,10 +80,10 @@ export function dialogTransitions({ dialog, canAnimate, signal }) {
     if (!dialog.open || closing) return;
     afterClose = callback; closing = true;
     const current = getComputedStyle(surface);
-    const start = { opacity: current.opacity, translate: current.translate };
+    const start = { opacity: current.opacity, translate: current.translate, scale: current.scale || '1' };
     cancelAnimation();
     if (!canAnimate()) { finishClose(); return; }
-    animation = surface.animate([start, { opacity: 0, translate: '0 14px' }], { duration: 190, easing: 'ease-in', fill: 'forwards' });
+    animation = surface.animate([start, { opacity: 0, translate: '0 14px', scale: '.94 .88' }], { duration: 240, easing: 'cubic-bezier(.4,0,.7,.3)', fill: 'forwards' });
     animation.finished.then(finishClose).catch(() => {});
   }
   dialog.addEventListener('cancel', event => { event.preventDefault(); close(); }, { signal });

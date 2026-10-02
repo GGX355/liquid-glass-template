@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { releaseVelocity, settle } from './pulse-interactions.js';
+import { releaseVelocity } from './pulse-interactions.js';
+import { springStep } from './pulse-motion.js';
 
 test('release speed is consistent at 30, 60 and 120 pointer samples per second', () => {
   for (const hz of [30, 60, 120]) {
@@ -22,17 +23,17 @@ test('diagonal flicks are capped as a vector and isolated jitter is averaged', (
   const noisy = releaseVelocity([{x:0,y:0,t:0},{x:40,y:0,t:80},{x:47,y:0,t:81}], 81);
   assert.ok(noisy.x < 600);
 });
-test('card spring converges without overshooting across refresh rates', () => {
+test('card tilt has a bounded elastic return across refresh rates', () => {
   for (const hz of [30, 60, 120]) {
     let p = 0, v = 0;
     for (let i = 0; i < hz; i++) {
-      const next = settle(p, v, 5, 1 / hz);
-      assert.ok(next.position >= p && next.position <= 5);
+      const next = springStep(p, v, 5, 1 / hz, 17, .68);
+      assert.ok(next.position >= 0 && next.position < 5.4);
       p = next.position; v = next.velocity;
     }
-    assert.ok(Math.abs(p - 5) < .00001);
-    assert.ok(Math.abs(v) < .0001);
-    const stalled = settle(p, v, 0, 20);
+    assert.ok(Math.abs(p - 5) < .001);
+    assert.ok(Math.abs(v) < .002);
+    const stalled = springStep(p, v, 0, 20, 17, .68);
     assert.ok(Number.isFinite(stalled.position));
     assert.ok(stalled.position > 3);
   }

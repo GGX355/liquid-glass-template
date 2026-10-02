@@ -1,5 +1,4 @@
 import { configurePulseGlass } from './pulse-glass.js';
-import { revealGlassPage } from './liquid-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
 import { panelTransitions, dialogTransitions } from './pulse-transitions.js';
@@ -21,7 +20,12 @@ let lightFrame = 0;
 let mode = 'explore', paused = false, visible = true, confirmed = false, selected = '', dialogAction = null;
 let lensMotion = null, cardTilt = null, islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
-const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abort.signal });
+const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abort.signal,
+  prepare: async () => {
+    await surfaces.get($('.dialog-glass')).refresh();
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  },
+});
 const feedback = elasticFeedback({ canAnimate: active });
 const navigations = $$('.pulse-nav, #flow-nav').map(rail => labNavigation({ rail, canAnimate: active }));
 function selectNavigation(next) {
@@ -216,4 +220,3 @@ on(window, 'pagehide', event => {
   feedback.stop();
   glass.destroy();
 });
-revealGlassPage(surfaces.values());

@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { dialogTransitions } from './pulse-transitions.js';
 
-function fixture(t) {
+function fixture(t, prepare) {
   const oldDocument = globalThis.document, oldStyle = globalThis.getComputedStyle;
   const opener = { isConnected: true, focused: 0, focus() { this.focused++; } };
   globalThis.document = { activeElement: opener };
@@ -12,17 +12,17 @@ function fixture(t) {
     if (oldStyle === undefined) delete globalThis.getComputedStyle; else globalThis.getComputedStyle = oldStyle;
   });
   const animations = [];
-  const surface = { animate() {
+  const surface = { children: [], animate(frames, options) {
     let resolve, reject;
     const finished = new Promise((yes, no) => { resolve = yes; reject = no; });
-    const animation = { finished, finish: resolve, cancel: () => reject(new Error('cancelled')) };
+    const animation = { frames, options, finished, finish: resolve, cancel: () => reject(new Error('cancelled')) };
     animations.push(animation); return animation;
   } };
   const dialog = new EventTarget();
-  Object.assign(dialog, { open: false, closes: 0, querySelector: () => surface,
+  Object.assign(dialog, { open: false, closes: 0, classList: { add() {}, remove() {}, toggle() {} }, querySelector: selector => selector === '.dialog-glass' ? surface : null,
     showModal() { this.open = true; }, close() { this.open = false; this.closes++; } });
   let motion = true;
-  const controller = dialogTransitions({ dialog, canAnimate: () => motion, signal: new AbortController().signal });
+  const controller = dialogTransitions({ dialog, prepare, canAnimate: () => motion, signal: new AbortController().signal });
   t.after(() => controller.destroy());
   return { dialog, animations, controller, opener, reduce: () => { motion = false; controller.syncMotion(); } };
 }
@@ -51,4 +51,38 @@ test('Escape uses the same exit and reduced motion skips animations', t => {
   const escape = new Event('cancel', { cancelable: true }); f.dialog.dispatchEvent(escape);
   assert.equal(escape.defaultPrevented, true); assert.equal(f.dialog.open, false);
   assert.equal(f.animations.length, 0); assert.equal(f.opener.focused, 1);
+});
+
+test('dialog decodes its sized glass before entering, with opacity confined to pseudo layers', async t => {
+  let ready;
+  const f = fixture(t, () => new Promise(resolve => { ready = resolve; }));
+  f.controller.open();
+  await Promise.resolve();
+  assert.equal(f.dialog.open, true, 'native modal layout is available for sizing');
+  assert.equal(f.animations.length, 0, 'entrance cannot start before decoding');
+  ready(); await new Promise(resolve => setImmediate(resolve));
+  const geometry = f.animations.filter(a => !a.options.pseudoElement);
+  assert.ok(geometry.length > 0);
+  assert.ok(geometry.every(a => a.frames.every(frame => !Object.hasOwn(frame, 'opacity'))));
+  assert.deepEqual(f.animations.filter(a => a.options.pseudoElement).map(a => a.options.pseudoElement), ['::before', '::after']);
+});
+
+test('closing during decoding cannot reopen the dialog on a stale completion', async t => {
+  let ready;
+  const f = fixture(t, () => new Promise(resolve => { ready = resolve; }));
+  f.controller.open(); await Promise.resolve();
+  f.controller.close(); ready();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(f.dialog.open, false);
+  assert.equal(f.animations.length, 0);
+  assert.equal(f.opener.focused, 1);
+});
+
+test('failed material preparation leaves an operable dialog rather than a hidden modal', async t => {
+  const f = fixture(t, () => Promise.reject(new Error('decode failure')));
+  f.controller.open();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.ok(f.animations.length > 0);
+  f.reduce(); f.controller.close();
+  assert.equal(f.dialog.open, false);
 });

@@ -19,7 +19,7 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
   const oldFilter = element.style.getPropertyValue('--liquid-filter');
   element.style.setProperty('--liquid-filter', `url(#${id})`);
   element.classList.add('liquid-surface');
-  let timer = 0, destroyed = false, lastSize = '';
+  let timer = 0, destroyed = false, lastSize = '', lastReady = Promise.resolve();
   const oldRadius = element.style.getPropertyValue('--radius');
   element.style.setProperty('--radius', `${radius}px`);
   const render = () => {
@@ -27,7 +27,7 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
     const width = element.offsetWidth, height = element.offsetHeight;
     if (!width || !height) return;
     const key = `${width}:${height}:${radius}`;
-    if (key === lastSize) return;
+    if (key === lastSize) return lastReady;
     lastSize = key;
     // Bound map size; dragging reuses the same map without per-frame encoding.
     const ratio = Math.min(1, 600 / Math.max(width, height), Math.sqrt(120000 / (width * height)));
@@ -47,11 +47,11 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
     map.setAttribute('width', width); map.setAttribute('height', height);
     const source = canvas.toDataURL();
     map.setAttribute('href', source);
-    // SVG images decode asynchronously even when their pixels come from a
-    // local canvas. The first page reveal must wait for that decode too.
+    // A newly opened dialog can explicitly wait for its current-size map.
     const image = new Image();
     image.src = source;
-    return image.decode().catch(() => {});
+    lastReady = image.decode().catch(() => {});
+    return lastReady;
   };
   const observer = new ResizeObserver(() => {
     // Stretch the cached map during morphs; regenerate once dimensions settle.
@@ -66,6 +66,7 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
   const ready = render() || Promise.resolve();
   return {
     ready,
+    refresh() { clearTimeout(timer); return render() || lastReady; },
     setStrength(value) { strength = Math.max(0, Math.min(90, Number(value) || 0)); warp.setAttribute('scale', strength * 2); },
     setRadius(value) {
       radius = Math.max(0, Math.min(999, Number(value) || 0));
@@ -81,11 +82,4 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
       else element.style.removeProperty('--liquid-filter');
     },
   };
-}
-
-export async function revealGlassPage(surfaces) {
-  await Promise.allSettled([...surfaces].map(surface => surface.ready));
-  // Give layout observers and the SVG compositor a frame before the reveal.
-  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-  document.dispatchEvent(new Event('glass-ready'));
 }

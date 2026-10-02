@@ -1,4 +1,4 @@
-import { createLiquidGlass, revealGlassPage } from './liquid-glass.js';
+import { createLiquidGlass } from './liquid-glass.js';
 import { glide } from './motion.js';
 import { springDisclosure } from './spring-disclosure.js';
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
@@ -99,4 +99,3 @@ islandMotion = springDisclosure({
   onChange:open=>{$('#island-label').textContent=open?'收起灵感':'展开灵感';},
 });
 on(window,'pagehide',e=>{if(!e.persisted){abort.abort();observer.disconnect();islandMotion.destroy();cancelAnimationFrame(flight);cancelAnimationFrame(highlightFrame);for(const a of animations)a.cancel();surfaces.forEach(s=>s.destroy());}});
-revealGlassPage(surfaces);

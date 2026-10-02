@@ -28,13 +28,13 @@ test('mid-flight retargeting carries momentum and converges on the new choice', 
   for (let i = 0; i < 180; i++) state = springStep(state.position, state.velocity, 0, 1 / 60);
   assert.ok(Math.abs(state.position) < .001);
 });
-test('dialog has an actual elastic body transition and no overshoot in opacity', () => {
+test('dialog keeps elastic geometry without creating an opacity backdrop root', () => {
   const frames = surfaceFrames();
   assert.equal(frames[0].scale, '0.84 0.72');
   assert.ok(frames.some(frame => Number(frame.scale.split(' ')[1]) > 1.02));
-  assert.ok(frames.every(frame => frame.opacity >= 0 && frame.opacity <= 1));
+  assert.ok(frames.every(frame => !Object.hasOwn(frame, 'opacity')));
   assert.equal(frames.at(-1).scale, '1 1');
   const reversed = surfaceFrames({ opacity: .7, x: .95, y: .92, offset: 4 });
   assert.equal(reversed[0].scale, '0.95 0.92');
-  assert.equal(reversed[0].opacity, .7);
+  assert.ok(!Object.hasOwn(reversed[0], 'opacity'));
 });

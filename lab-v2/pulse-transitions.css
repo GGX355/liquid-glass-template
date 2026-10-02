@@ -33,6 +33,8 @@
 .pulse-site:has(.pulse-dialog[open]) .stage-layout,
 .pulse-site:has(.pulse-dialog[open]) #explore-panel.is-current{opacity:.06}
 .pulse-site .pulse-dialog[data-surround=page]::backdrop{background:#092331b8}
+.pulse-site .pulse-dialog.glass-preparing{visibility:hidden}
+.pulse-site .pulse-dialog.glass-preparing::backdrop{background:transparent}
 .pulse-site[data-palette=dune] .pulse-dialog[data-surround=page]::backdrop{background:#f5e4cadb}
 .pulse-site .story-slide.mode-layer{translate:0 10px}
 .pulse-site .story-slide.mode-layer.is-current{translate:0 0}

@@ -9,14 +9,16 @@ export function springStep(position, velocity, target, dt, omega = 14, damping =
     velocity: decay * (-decayRate * (offset * c + b * s) - offset * frequency * s + b * frequency * c) };
 }
 
-export function surfaceFrames(start = { opacity: 0, x: .84, y: .72, offset: 28 }) {
+export function surfaceFrames(start = { x: .84, y: .72, offset: 28 }) {
   const frames = [];
   let progress = 0, velocity = 0;
   for (let i = 0; i <= 64; i++) {
     if (i) ({ position: progress, velocity } = springStep(progress, velocity, 1, 1 / 60, 11, .58));
     if (i === 64) progress = 1;
     const mix = value => value + (1 - value) * progress;
-    frames.push({ offset: i / 64, opacity: Math.min(1, start.opacity + i / 9),
+    // Opacity on this parent creates a backdrop root for its glass pseudo.
+    // Animate geometry here; fade the material and text on their own layers.
+    frames.push({ offset: i / 64,
       scale: `${mix(start.x)} ${mix(start.y)}`, translate: `0 ${start.offset * (1 - progress)}px` });
   }
   return frames;

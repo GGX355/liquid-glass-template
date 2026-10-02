@@ -52,44 +52,75 @@ export function panelTransitions({ stage, stories }) {
 }
 
 // Keep the native dialog (focus trap/Escape/return), with an interruptible exit.
-export function dialogTransitions({ dialog, canAnimate, signal }) {
+export function dialogTransitions({ dialog, canAnimate, signal, prepare }) {
   const surface = dialog.querySelector('.dialog-glass');
   let animation = null, closing = false, afterClose = null, opener = null;
-  function cancelAnimation() { animation?.cancel(); animation = null; }
+  let accents = [], generation = 0, preparing = false;
+  function cancelAnimation() {
+    animation?.cancel(); animation = null;
+    for (const item of accents) item.cancel();
+    accents = [];
+  }
+  function fade(from, to, duration) {
+    const frames = [{ opacity: from }, { opacity: to }];
+    // The filter lives on ::before. Never fade its parent: Chromium then
+    // samples an empty backdrop until that parent's animation finishes.
+    for (const pseudoElement of ['::before', '::after']) {
+      accents.push(surface.animate(frames, { duration, fill: 'both', pseudoElement }));
+    }
+    for (const child of surface.children) accents.push(child.animate(frames, { duration, fill: 'both' }));
+    for (const item of accents) item.finished.catch(() => {});
+  }
   function finishClose() {
-    cancelAnimation(); closing = false;
+    cancelAnimation(); closing = false; preparing = false;
+    dialog.classList.remove('glass-preparing');
     const callback = afterClose; afterClose = null;
     dialog.close();
     if (opener?.isConnected) opener.focus({ preventScroll: true });
     callback?.();
   }
   function open() {
+    const ticket = ++generation;
     const current = dialog.open ? getComputedStyle(surface) : null;
     const scales = current?.scale?.split(' ').map(Number);
-    const start = current ? { opacity: Number(current.opacity), x: scales?.[0] || 1,
+    const start = current ? { x: scales?.[0] || 1,
       y: scales?.[1] || scales?.[0] || 1, offset: parseFloat(current.translate.split(' ')[1]) || 0 } : undefined;
     if (!dialog.open) opener = document.activeElement;
     cancelAnimation(); closing = false; afterClose = null;
+    preparing = Boolean(prepare);
+    dialog.classList.toggle('glass-preparing', preparing);
     if (!dialog.open) dialog.showModal();
-    if (canAnimate()) {
-      animation = surface.animate(surfaceFrames(start), { duration: 1067, easing: 'linear' });
-      animation.finished.catch(() => {});
+    function enter() {
+      if (ticket !== generation || !dialog.open || closing) return;
+      preparing = false;
+      dialog.classList.remove('glass-preparing');
+      if (prepare) dialog.querySelector('[autofocus]')?.focus({ preventScroll: true });
+      if (canAnimate()) {
+        animation = surface.animate(surfaceFrames(start), { duration: 1067, easing: 'linear' });
+        animation.finished.catch(() => {});
+        fade(current ? 1 : 0, 1, 150);
+      }
     }
+    if (prepare) Promise.resolve().then(prepare).then(enter, enter);
+    else enter();
   }
   function close(callback) {
     if (!dialog.open || closing) return;
+    ++generation;
     afterClose = callback; closing = true;
+    if (preparing) { finishClose(); return; }
     const current = getComputedStyle(surface);
-    const start = { opacity: current.opacity, translate: current.translate, scale: current.scale || '1' };
+    const start = { translate: current.translate, scale: current.scale || '1' };
     cancelAnimation();
     if (!canAnimate()) { finishClose(); return; }
-    animation = surface.animate([start, { opacity: 0, translate: '0 14px', scale: '.94 .88' }], { duration: 240, easing: 'cubic-bezier(.4,0,.7,.3)', fill: 'forwards' });
+    fade(1, 0, 240);
+    animation = surface.animate([start, { translate: '0 14px', scale: '.94 .88' }], { duration: 240, easing: 'cubic-bezier(.4,0,.7,.3)', fill: 'forwards' });
     animation.finished.then(finishClose).catch(() => {});
   }
   dialog.addEventListener('cancel', event => { event.preventDefault(); close(); }, { signal });
   return {
     open, close,
     syncMotion() { if (!canAnimate()) { if (closing) finishClose(); else cancelAnimation(); } },
-    destroy: cancelAnimation,
+    destroy() { ++generation; cancelAnimation(); dialog.classList.remove('glass-preparing'); },
   };
 }

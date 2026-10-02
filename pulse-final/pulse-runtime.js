@@ -6,7 +6,7 @@ import { elasticFeedback, labNavigation } from './pulse-motion.js';
 import { pointerLight } from './pointer-light.js';
 
 import { bindPulseBusiness } from './pulse-business.js';
-export function mountPulse({ business = null } = {}) {
+export function mountPulse({ business = null, embedded = false } = {}) {
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const stage = $('#pulse-stage');
@@ -73,6 +73,11 @@ function setMode(next, focusTab = false) {
   $('.pulse-nav').dataset.active = mode;
   stage.dataset.view = mode;
   panels.setMode(mode);
+  if (embedded && mode !== 'explore') {
+    const featurePanel = $('#poll-panel');
+    featurePanel.inert = false; featurePanel.setAttribute('aria-hidden', 'false');
+    featurePanel.setAttribute('aria-labelledby', `${mode}-tab`);
+  }
   selectNavigation(mode);
   if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true });
 }
@@ -154,7 +159,7 @@ function showRules() {
 on($('.help-button'), 'click', showRules);
 on($('#about-activity'), 'click', showRules);
 if (business) businessView = bindPulseBusiness({ api: business, showDialog, modalMotion, panels, setMode, signal: abort.signal, refreshGlass: () => { glass.refresh(); lights.refresh($$('[data-glass]')); } });
-if (!business) {
+if (!business && !embedded) {
 on($('#poll-form'), 'change', () => {
   selected = new FormData($('#poll-form')).get('destination') || '';
   $('#vote-button').disabled = !selected;
@@ -209,5 +214,5 @@ function destroy() {
   feedback.stop(); glass.destroy(); businessView?.destroy();
 }
 on(window, 'pagehide', event => { if (!event.persisted) destroy(); });
-return { destroy, setMode };
+return { destroy, setMode, refreshGlass: () => { glass.refresh(); lights.refresh($$('[data-glass]')); } };
 }

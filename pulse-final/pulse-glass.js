@@ -65,7 +65,7 @@ export function configurePulseGlass({ root = document, signal }) {
     refresh() {
       for (const [element, surface] of surfaces) if (!element.isConnected) { surface.destroy(); surfaces.delete(element); }
       for (let i = overlays.length - 1; i >= 0; i--) if (!overlays[i].isConnected) overlays.splice(i, 1);
-      for (const element of find('.business-content button, .business-content .glass-control, #poll-form .poll-option, .business-tools button')) {
+      for (const element of find('.business-content button, .business-content .glass-control, #poll-form .poll-option, .business-tools button, .pulse-business-host button, .pulse-business-host .poll-option, .pulse-route-nav a')) {
         if (!element.hasAttribute('data-glass')) element.dataset.glass = '22';
         element.dataset.glassRole = 'control'; element.classList.add('glass-control');
         if (surfaces.has(element) || overlays.includes(element)) continue;

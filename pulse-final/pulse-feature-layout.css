@@ -1,0 +1,1243 @@
+/* Functional layout/animation styles from GGX355/pulse dev, scoped to original route content. */
+/* ── 自托管 Inter(苹果 SF 的开源近似形):Latin 全局一致,CJK 走系统栈 ──
+   之前依赖 fonts.cdnfonts/google 外链,弱网/被墙环境直接卡首屏;
+   现在打包进 public/fonts,离线也可用。 */
+@font-face {
+  font-family: "Inter";
+  src: url("/fonts/InterVariable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Pulse 设计系统 · Liquid Glass（苹果液态玻璃）
+   依据：Apple HIG（字阶/间距/触控）+ WWDC25 三层模型
+   （highlight / shadow / illumination）。通用模板见
+   github.com/GGX355/liquid-glass-template
+   ─────────────────────────────────────────────────────────────
+   机制：Tailwind v4 工具类引用 --color-* 变量，因此双主题只需
+   在 html[data-theme="dark"] 下重定义这些变量，全站自动换肤。
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── HIG 设计令牌 ── */
+.pulse-business-host {
+  /* 字阶：Large Title 34 / Title 22 / Headline 17 / Body 17 /
+     Subhead 15 / Footnote 13 / Caption 12 */
+  --fs-large-title: 34px;
+  --fs-title: 22px;
+  --fs-headline: 17px;
+  --fs-body: 17px;
+  --fs-subhead: 15px;
+  --fs-footnote: 13px;
+  --fs-caption: 12px;
+  /* 间距：8pt 网格；圆角三档；触控目标 */
+  --sp-1: 8px; --sp-2: 12px; --sp-3: 16px; --sp-4: 20px; --sp-5: 24px;
+  --r-sm: 12px; --r-md: 20px; --r-lg: 28px; --r-pill: 999px;
+  --touch: 44px;
+}
+
+@theme {
+  /* 亮色（默认）— 玻璃调色板 */
+  --color-bg: #f2f6ff;
+  --color-surface: rgba(255, 255, 255, 0.42);
+  --color-surface-2: rgba(255, 255, 255, 0.6);
+  --color-foreground: #191a1f;
+  --color-muted: #565966;
+  --color-subtle: #9ba0af;
+  --color-primary: #0a84ff;
+  --color-primary-foreground: #ffffff;
+  --color-accent: #0066ff;
+  --color-border: rgba(19, 29, 60, 0.14);
+  --color-ring: #0066ff;
+  --color-fill: rgba(0, 102, 255, 0.14);
+  --radius: 1rem;
+  --font-sans: "SF Pro Display", "Inter", -apple-system, "PingFang SC",
+    "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", "Segoe UI",
+    system-ui, sans-serif;
+  --font-display: var(--font-sans);
+
+  /* Motion tokens — one vocabulary for every transition in the app. */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── 玻璃材质令牌（亮色默认） ── */
+.pulse-business-host {
+  --glass-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.28));
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-bf: blur(10px) saturate(195%) brightness(1.02);
+  --rim: 0 1px 2px rgba(20, 30, 60, 0.08), 0 8px 24px rgba(36, 46, 90, 0.14),
+    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.35),
+    inset 0 -14px 22px -18px rgba(30, 40, 80, 0.1),
+    inset 1.5px 1.5px 2px rgba(255, 3, 3, 0.05),
+    inset -1.5px -1.5px 2px rgba(0, 22, 255, 0.06);
+  --rim-sm: 0 1px 2px rgba(20, 30, 60, 0.06), 0 6px 18px rgba(36, 46, 90, 0.1),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.92),
+    inset 0 -10px 16px -14px rgba(30, 40, 80, 0.08);
+  --mover-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.74));
+  --mover-shadow: 0 3px 14px rgba(38, 48, 92, 0.18), inset 0 1px 1px #fff;
+  --glare: rgba(255, 255, 255, 0.38);
+  --bg-grad: linear-gradient(180deg, #f2f6ff 0%, #fff4fa 100%);
+  --o1: rgba(96, 140, 255, 0.6); --o2: rgba(255, 120, 185, 0.52);
+  --o3: rgba(80, 210, 175, 0.5); --o4: rgba(255, 168, 105, 0.55);
+  --o5: rgba(150, 110, 255, 0.5);
+  --grain-opacity: 0.5;
+}
+
+/* ── 暗色主题：近黑底 + 一主两辅柔光 + 白雾霜玻璃 ── */
+.pulse-business-host :scope[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #04050a;
+  --color-surface: rgba(52, 55, 74, 0.4);
+  --color-surface-2: rgba(74, 77, 100, 0.5);
+  --color-foreground: #e8e6df;
+  --color-muted: #bcbfd0;
+  --color-subtle: #71737f;
+  --color-primary: #6d9dff;
+  --color-primary-foreground: #061018;
+  --color-accent: #7fb3ff;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-ring: #7fb3ff;
+  --color-fill: rgba(127, 179, 255, 0.22);
+  --glass-bg: linear-gradient(180deg, rgba(52, 55, 74, 0.5), rgba(30, 31, 46, 0.42));
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-bf: blur(10px) saturate(150%) brightness(1.12);
+  --rim: 0 1px 2px rgba(0, 0, 0, 0.4), 0 10px 28px rgba(0, 0, 0, 0.45),
+    inset 0 1.5px 0.5px rgba(255, 255, 255, 0.24),
+    inset 0 -1px 1px rgba(255, 255, 255, 0.07),
+    inset 0 -14px 22px -18px rgba(0, 0, 0, 0.4),
+    inset 1.5px 1.5px 2px rgba(255, 3, 3, 0.03),
+    inset -1.5px -1.5px 2px rgba(0, 22, 255, 0.04);
+  --rim-sm: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 18px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0.5px rgba(255, 255, 255, 0.2),
+    inset 0 -10px 16px -14px rgba(0, 0, 0, 0.35);
+  --mover-bg: linear-gradient(135deg, rgba(74, 77, 100, 0.95), rgba(48, 50, 68, 0.82));
+  --mover-shadow: 0 3px 14px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --glare: rgba(255, 255, 255, 0.13);
+  --bg-grad: linear-gradient(180deg, #07080d 0%, #040509 100%);
+  --o1: rgba(88, 96, 255, 0.26); --o2: rgba(160, 84, 255, 0.2);
+  --o3: rgba(40, 170, 240, 0.18); --o4: rgba(255, 150, 90, 0.1);
+  --o5: rgba(120, 80, 255, 0.24);
+  --grain-opacity: 0.32;
+}
+
+@layer base {
+  .pulse-business-host :scope,
+.pulse-business-host :scope {
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+  }
+
+  /* 背景交给 Aurora 层与垂直底色；玻璃的颜色来自这里 */
+  .pulse-business-host :scope {
+    background: var(--bg-grad);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    font-size: var(--fs-body);
+  }
+
+  .pulse-business-host button:not(:disabled),
+.pulse-business-host [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /* 中文排版:标题多行时断行均衡;段落行高放宽、避免孤字尾行。 */
+  .pulse-business-host h1,
+.pulse-business-host h2,
+.pulse-business-host h3 {
+    text-wrap: balance;
+  }
+
+  .pulse-business-host p {
+    line-height: 1.75;
+    text-wrap: pretty;
+  }
+
+  .pulse-business-host ::selection {
+    background: color-mix(in oklab, var(--color-accent) 22%, transparent);
+  }
+
+  .pulse-business-host * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-surface-2) transparent;
+  }
+
+  .pulse-business-host .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* ── Aurora 流动色块层（玻璃的「内容」） ─────────────────────────── */
+
+.pulse-business-host .orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  animation: hueflow 18s ease-in-out infinite alternate;
+}
+.pulse-business-host .orbs i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  transition: background 0.45s ease;
+}
+.pulse-business-host .o1 { width: 46vw; height: 46vw; background: var(--o1); top: -12%; left: -8%; animation: drift1 11s ease-in-out infinite alternate; }
+.pulse-business-host .o2 { width: 40vw; height: 40vw; background: var(--o2); top: -14%; right: -6%; animation: drift2 9s ease-in-out infinite alternate; }
+.pulse-business-host .o3 { width: 44vw; height: 44vw; background: var(--o3); bottom: -16%; left: 30%; animation: drift3 13s ease-in-out infinite alternate; }
+.pulse-business-host .o4 { width: 36vw; height: 36vw; background: var(--o4); bottom: -12%; left: -8%; animation: drift2 10s ease-in-out infinite alternate-reverse; }
+.pulse-business-host .o5 { width: 38vw; height: 38vw; background: var(--o5); top: 30%; right: -10%; animation: drift1 12s ease-in-out infinite alternate-reverse; }
+@keyframes drift1 { to { transform: translate(12vw, 9vh) scale(1.24); } }
+@keyframes drift2 { to { transform: translate(-11vw, 11vh) scale(0.82); } }
+@keyframes drift3 { to { transform: translate(9vw, -12vh) scale(1.16); } }
+@keyframes hueflow { from { filter: hue-rotate(-26deg); } to { filter: hue-rotate(26deg); } }
+.pulse-business-host :scope[data-theme="dark"] .orbs { animation-name: hueflowDark; }
+@keyframes hueflowDark { from { filter: hue-rotate(-9deg); } to { filter: hue-rotate(13deg); } }
+
+/* ── 颗粒（消除色带 + 胶片感） ── */
+.pulse-business-host .grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+}
+
+/* ── 液态玻璃材质 ─────────────────────────────────────────────── */
+
+.pulse-business-host .glass {
+  position: relative;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--rim);
+}
+.pulse-business-host .glass::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    320px circle at var(--gx, 28%) var(--gy, 18%),
+    var(--glare),
+    transparent 65%
+  );
+}
+
+/* 所有用 bg-surface/2 的面板 = 完整液态玻璃（膜+棱边+眩光），全局覆盖 */
+.pulse-business-host .bg-surface,
+.pulse-business-host .bg-surface-2 {
+  position: relative;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  border-color: var(--glass-border);
+  box-shadow: var(--rim-sm);
+}
+.pulse-business-host .bg-surface::after,
+.pulse-business-host .bg-surface-2::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    320px circle at var(--gx, 28%) var(--gy, 18%),
+    var(--glare),
+    transparent 65%
+  );
+}
+
+/* 输入框圆角走 HIG 小件档 */
+.pulse-business-host input.bg-surface {
+  border-radius: var(--r-sm);
+}
+
+/* 页面主标题:HIG Large Title 34,平板 40,桌面 46 */
+.pulse-business-host main h1 {
+  font-size: var(--fs-large-title) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.4px !important;
+}
+@media (min-width: 768px) {
+  .pulse-business-host main h1 {
+    font-size: 40px !important;
+    letter-spacing: -0.5px !important;
+  }
+}
+@media (min-width: 1024px) {
+  .pulse-business-host main h1 {
+    font-size: 46px !important;
+    letter-spacing: -0.6px !important;
+  }
+}
+
+/* 盲选卡揭晓演出：未中卡模糊淡化（Smooth 档） */
+.pulse-business-host .draw-blind-card.dim-others {
+  opacity: 0.5;
+  filter: blur(2.5px);
+}
+
+/* ── 顶部悬浮玻璃药丸导航 ── */
+.pulse-business-host .nav-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--r-pill);
+  padding: 5px;
+}
+.pulse-business-host .navmover {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: var(--r-pill);
+  z-index: 0;
+  opacity: 0;
+  background: var(--mover-bg);
+  box-shadow: var(--mover-shadow);
+  transition:
+    opacity 0.2s ease 0.05s,
+    
+    left 0.42s cubic-bezier(0.3, 1.35, 0.4, 1),
+    width 0.42s cubic-bezier(0.3, 1.35, 0.4, 1);
+}
+.pulse-business-host .nav-link {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--r-pill);
+  font-size: var(--fs-subhead);
+  padding: 8px 14px;
+  transition: color 0.25s ease, transform 0.5s cubic-bezier(0.28, 1.7, 0.4, 1);
+}
+.pulse-business-host .nav-link:active {
+  transform: scale(0.92);
+  transition-duration: 0.08s;
+}
+.pulse-business-host .theme-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: none;
+  border-radius: var(--r-pill);
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  cursor: pointer;
+  background: var(--mover-bg);
+  box-shadow: var(--mover-shadow);
+  color: var(--ink, var(--color-foreground));
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  font-family: var(--font-sans);
+  line-height: 1.4;
+  transition: transform 0.5s cubic-bezier(0.28, 1.7, 0.4, 1);
+}
+.pulse-business-host .theme-btn:active {
+  transform: scale(0.92);
+  transition-duration: 0.08s;
+}
+
+/* ── Poll option: the product's money shot ─────────────────────── */
+
+.pulse-business-host .poll-option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  overflow: hidden;
+  border: 1px solid
+    color-mix(in oklab, var(--glass-border) 62%, transparent);
+  border-radius: var(--r-md);
+  background-image:
+    linear-gradient(
+      155deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.02) 38%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    linear-gradient(var(--color-fill), var(--color-fill)),
+    var(--glass-bg);
+  background-repeat: no-repeat;
+  background-size:
+    100% 100%,
+    calc(var(--fill, 0) * 100%) 100%,
+    100% 100%;
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22),
+    var(--rim-sm);
+  padding: 14px 16px;
+  transform: translateX(var(--magx, 0));
+  transition:
+    background-size 400ms var(--ease-out-expo),
+    border-color 150ms ease,
+    opacity 150ms ease,
+    transform 0.6s cubic-bezier(0.28, 1.7, 0.4, 1),
+    box-shadow 250ms ease;
+}
+
+/* 指针眩光：跟随鼠标的高光斑（option-row 写入 --mx/--my） */
+.pulse-business-host .poll-option::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    140px circle at var(--mx, 50%) var(--my, 50%),
+    var(--glare),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.pulse-business-host .poll-option:hover::before {
+  opacity: 1;
+}
+
+.pulse-business-host .poll-option:hover {
+  border-color: color-mix(in oklab, var(--color-accent) 35%, var(--glass-border));
+}
+
+.pulse-business-host .poll-option:active:not(.is-locked) {
+  transform: translateX(var(--magx, 0)) scale(0.965);
+  transition-duration: 0.08s;
+}
+
+.pulse-business-host .poll-option.is-mine,
+.pulse-business-host .poll-option:has(input:checked) {
+  border-color: color-mix(in oklab, var(--color-accent) 55%, var(--glass-border));
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--color-accent) 16%, transparent),
+    var(--rim-sm);
+}
+
+/* One highlight sweep the moment this row becomes your pick. */
+.pulse-business-host .poll-option.is-mine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in oklab, var(--color-foreground) 13%, transparent) 50%,
+    transparent 58%
+  );
+  background-size: 260% 100%;
+  animation: sweep 700ms var(--ease-out-expo) 1 both;
+  pointer-events: none;
+}
+
+.pulse-business-host .poll-option.is-locked:not(.is-mine) {
+  opacity: 0.72;
+}
+
+.pulse-business-host .poll-option.is-locked {
+  cursor: default;
+}
+
+.pulse-business-host .poll-closed .poll-option {
+  opacity: 0.55;
+}
+
+.pulse-business-host .poll-picked {
+  display: none;
+}
+
+.pulse-business-host .poll-option.is-mine .poll-picked,
+.pulse-business-host .poll-option:has(input:checked) .poll-picked {
+  display: inline;
+  animation: pop-in 350ms var(--ease-spring) both;
+}
+
+/* A floating "+1" when live polling brings this row new votes. */
+.pulse-business-host .vote-float {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: var(--fs-caption);
+  line-height: 1;
+  color: var(--color-accent);
+  pointer-events: none;
+  animation: float-up 700ms var(--ease-out-expo) both;
+}
+
+/* "已结束" — a stamp, set down once and left there. */
+.pulse-business-host .stamp {
+  display: inline-block;
+  border: 1.5px solid color-mix(in oklab, var(--color-foreground) 45%, transparent);
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  letter-spacing: 0.35em;
+  text-indent: 0.35em;
+  color: color-mix(in oklab, var(--color-foreground) 70%, transparent);
+  transform: rotate(-4deg);
+  animation: stamp-in 420ms var(--ease-spring) both;
+}
+
+/* Breathing dot for LIVE / 现场中 badges. */
+.pulse-business-host .live-dot {
+  animation: breathe 2.2s ease-in-out infinite;
+}
+
+/* Form errors: arrive, then admit the shake. */
+.pulse-business-host .form-error {
+  animation:
+    fade-in 200ms ease both,
+    shake-x 380ms 200ms var(--ease-out-expo);
+}
+
+/* Page body only — header stays put. */
+.pulse-business-host .page-enter {
+  animation: page-in 320ms var(--ease-out-expo) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sweep {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float-up {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    opacity: 0;
+    transform: rotate(-4deg) scale(1.6);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-4deg) scale(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes shake-x {
+  from,
+  to {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  60% {
+    transform: translateX(4px);
+  }
+  85% {
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ── Draw: blind cards（双面玻璃卡，可翻面揭晓） ─────────────────────
+   抽之前人人平等:只有签位名字,没有任何数字。自己抽中后卡面翻面。 */
+
+.pulse-business-host .draw-blind-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .pulse-business-host .draw-blind-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pulse-business-host .draw-blind-card {
+  position: relative;
+  min-height: 68px;
+  border-radius: var(--r-md);
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.25, 0.7, 0.18, 1);
+  animation: pop-in 420ms var(--ease-spring) both;
+}
+
+/* 缓缓扫过的一道高光,给"背面朝上"的卡一点质感 */
+.pulse-business-host .draw-blind-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 42%,
+    color-mix(in oklab, var(--color-foreground) 7%, transparent) 50%,
+    transparent 58%
+  );
+  background-size: 240% 100%;
+  animation: sweep 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.pulse-business-host .draw-blind-card.is-flipping::after {
+  animation: none;
+  opacity: 0;
+}
+
+/* 玻璃材质在面上而非卡上：backdrop-filter 会压平 preserve-3d，
+   翻面就会穿帮（front 的背面以镜像漏出）。 */
+.pulse-business-host .dc-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: inherit;
+  padding: 16px 14px;
+  text-align: center;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--rim-sm);
+}
+.pulse-business-host .dc-face.dc-back {
+  transform: rotateY(180deg);
+  flex-direction: column;
+  gap: 2px;
+  background: var(--mover-bg);
+}
+
+/* 自己抽中后的翻面:注意 fill-mode 会压平 3D,翻面态必须清掉入场动画 */
+.pulse-business-host .draw-blind-card.is-flipping {
+  animation: none;
+  transform: rotateY(180deg);
+}
+
+.pulse-business-host .dc-face.dc-back .dc-back-label {
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+}
+.pulse-business-host .dc-face.dc-back .dc-back-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  background: linear-gradient(120deg, var(--color-accent), #7d5aff 60%, #ff5f8f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Draw: 揭晓舞台（三模式切换 · seg 药丸 + 舞台显隐） ────────────
+   翻牌 / 刮奖 / 九宫格共用一个舞台容器，.stage.on 控制显隐，
+   .seg 是档位切换的玻璃药丸（mover 滑到当前档位下面）。 */
+
+.pulse-business-host .stage {
+  display: none;
+}
+.pulse-business-host .stage.on {
+  display: block;
+  animation: fade-in 240ms ease both;
+}
+
+.pulse-business-host .seg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: max-content;
+  margin-inline: auto;
+  border-radius: var(--r-pill);
+  padding: 4px;
+}
+.pulse-business-host .seg-mover {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: 0;
+  border-radius: var(--r-pill);
+  background: var(--mover-bg);
+  box-shadow: var(--mover-shadow);
+  transition:
+    left 0.38s var(--ease-out-expo),
+    width 0.38s var(--ease-out-expo);
+}
+.pulse-business-host .seg-item {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  background: transparent;
+  padding: 8px 14px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-sans);
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    transform 0.4s cubic-bezier(0.28, 1.7, 0.4, 1);
+}
+.pulse-business-host .seg-item:hover {
+  color: var(--color-foreground);
+}
+.pulse-business-host .seg-item.on {
+  color: var(--color-foreground);
+}
+.pulse-business-host .seg-item:active {
+  transform: scale(0.94);
+  transition-duration: 0.08s;
+}
+.pulse-business-host .seg-item:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+.pulse-business-host .stage-panel {
+  border-radius: var(--r-lg);
+}
+
+.pulse-business-host .tip {
+  margin-top: 14px;
+  text-align: center;
+  font-size: var(--fs-footnote);
+  color: var(--color-muted);
+}
+
+/* 翻牌：3D 透视容器（卡翻转由 .is-flipping 的 transition 驱动） */
+.pulse-business-host .draw-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  perspective: 900px;
+}
+@media (max-width: 480px) {
+  .pulse-business-host .draw-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 刮奖：牌堆 → 选中上涂层 → 刮开 */
+.pulse-business-host .scratch-deck {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 8px 0 4px;
+}
+.pulse-business-host .scratch-pick {
+  position: relative;
+  width: 96px;
+  height: 128px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  box-shadow: var(--rim-sm);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  animation: pop-in 420ms var(--ease-spring) both;
+  transition:
+    transform 0.45s cubic-bezier(0.28, 1.7, 0.4, 1),
+    box-shadow 0.25s ease;
+}
+.pulse-business-host .scratch-pick:nth-child(2) {
+  animation-delay: 80ms;
+}
+.pulse-business-host .scratch-pick:nth-child(3) {
+  animation-delay: 160ms;
+}
+.pulse-business-host .scratch-pick:hover {
+  transform: translateY(-4px) rotate(-1.5deg);
+  box-shadow: var(--rim);
+}
+.pulse-business-host .scratch-pick:active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
+.pulse-business-host .scratch-pick:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+.pulse-business-host .scratch-seal {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+.pulse-business-host .scratch-cap {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-indent: 0.22em;
+  color: var(--color-subtle);
+}
+.pulse-business-host .scratch-stage {
+  animation: fade-in 240ms ease both;
+}
+.pulse-business-host .scratch-card {
+  position: relative;
+  max-width: 380px;
+  aspect-ratio: 16 / 10;
+  margin-inline: auto;
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.pulse-business-host .prize-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+}
+.pulse-business-host .prize-lb {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  color: var(--color-subtle);
+}
+.pulse-business-host .prize-big {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--color-accent), #7d5aff 60%, #ff5f8f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.pulse-business-host #draw-foil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+  transition: opacity 0.35s ease;
+}
+.pulse-business-host #draw-foil.clear {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 九宫格：3×3 跑灯，中格是开始键 */
+.pulse-business-host .grid9 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 340px;
+  margin-inline: auto;
+}
+.pulse-business-host .cell9 {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  box-shadow: var(--rim-sm);
+  overflow: hidden;
+  transition:
+    transform 0.08s var(--ease-out-expo),
+    border-color 0.08s ease,
+    box-shadow 0.08s ease;
+}
+.pulse-business-host .cell9 > span:first-child {
+  font-size: var(--fs-footnote);
+  font-weight: 600;
+  text-align: center;
+}
+.pulse-business-host .cell9 .s {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--color-subtle);
+}
+.pulse-business-host .cell9.lit {
+  border-color: color-mix(in oklab, var(--color-accent) 55%, var(--glass-border));
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--color-accent) 16%, transparent),
+    var(--rim-sm);
+  transform: translateY(-3px) scale(1.07);
+}
+.pulse-business-host .cell9.lit > span:first-child {
+  color: var(--color-accent);
+}
+.pulse-business-host .cell9.win {
+  border-color: color-mix(in oklab, var(--color-accent) 70%, var(--glass-border));
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--color-accent) 24%, transparent),
+    var(--rim);
+  animation: pop-in 450ms var(--ease-spring) both;
+}
+.pulse-business-host .cell9.win .s {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.pulse-business-host .go9 {
+  aspect-ratio: 1;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-sm);
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: var(--glass-bf);
+  backdrop-filter: var(--glass-bf);
+  box-shadow: none;
+  font-family: var(--font-sans);
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  transition:
+    transform 0.35s cubic-bezier(0.28, 1.7, 0.4, 1),
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.pulse-business-host .go9:hover:not(:disabled) {
+  color: var(--color-accent);
+  border-color: color-mix(in oklab, var(--color-accent) 45%, var(--glass-border));
+  transform: translateY(-2px);
+}
+.pulse-business-host .go9:active:not(:disabled) {
+  transform: scale(0.94);
+  transition-duration: 0.08s;
+}
+.pulse-business-host .go9:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.pulse-business-host .band {
+  min-height: 64px;
+  margin-top: 14px;
+  text-align: center;
+}
+.pulse-business-host .band-lb {
+  font-size: var(--fs-caption);
+  color: var(--color-muted);
+}
+.pulse-business-host .band-big {
+  font-family: var(--font-display);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  background: linear-gradient(120deg, var(--color-accent), #7d5aff 60%, #ff5f8f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── 分段切换滑块（登录/注册、投票/抽签的滑动高亮） ──
+   必须用专用类而不是 bg-surface-2:下方玻璃化覆盖会给 .bg-surface-2
+   强制 position:relative,把 absolute 滑块顶进网格流,造成文字错位。 */
+.pulse-business-host .tab-slider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 5px);
+  border-radius: var(--r-pill);
+  background: var(--mover-bg);
+  box-shadow: var(--mover-shadow);
+  /* 与导航药丸同款弹性滑动(过冲回弹),所有切换场景统一动效 */
+  transition: translate 0.42s cubic-bezier(0.3, 1.35, 0.4, 1);
+  pointer-events: none;
+}
+
+
+
+/* 平板/桌面:头部整体放大(导航字/框、主题钮、登录钮),按钮群更舒展 */
+@media (min-width: 768px) {
+  .pulse-business-host .nav-shell {
+    height: 68px !important;
+    padding-inline: 14px;
+  }
+  .pulse-business-host .nav-shell .logo {
+    font-size: 1.35rem;
+  }
+  .pulse-business-host .nav-shell .nav-link {
+    font-size: 17px;
+    padding: 11px 20px;
+  }
+  /* 登录:更突出的玻璃药丸;主题:紧凑方形图标钮(常见网站范式) */
+  .pulse-business-host .nav-shell .btn {
+    font-size: 16px;
+    height: 44px;
+    padding-inline: 24px;
+  }
+  .pulse-business-host .nav-shell .theme-btn {
+    font-size: 18px;
+    width: 48px;
+    height: 44px;
+    padding: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .pulse-business-host .nav-shell {
+    height: 80px !important;
+    padding-inline: 20px;
+  }
+  .pulse-business-host .nav-shell .logo {
+    font-size: 1.6rem;
+  }
+  .pulse-business-host .nav-shell .nav-link {
+    font-size: 18px;
+    padding: 12px 26px;
+  }
+  .pulse-business-host .nav-shell .btn {
+    font-size: 17px;
+    height: 50px;
+    padding-inline: 30px;
+  }
+  .pulse-business-host .nav-shell .theme-btn {
+    font-size: 20px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* 主题按钮全平台纯图标;窄屏导航更紧凑 */
+@media (max-width: 480px) {
+  .pulse-business-host .nav-shell .nav-link {
+    padding-inline: 8px;
+  }
+}
+
+/* The system asks, the app obeys. */
+@media (prefers-reduced-motion: reduce) {
+  .pulse-business-host *,
+.pulse-business-host *::before,
+.pulse-business-host *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .pulse-business-host ::view-transition-group(*),
+.pulse-business-host ::view-transition-old(*),
+.pulse-business-host ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* 未填登记信息就点击的引导:输入框抖动 + 提示语点亮 */
+.pulse-business-host .input-nudge {
+  border-color: var(--color-accent) !important;
+  animation: shake-x 0.38s ease 2;
+}
+.pulse-business-host .hint-nudge {
+  color: var(--color-accent);
+  animation: shake-x 0.38s ease;
+}
+
+/* 标题下的可选备注:比标题小一档的说明行 */
+.pulse-business-host .content-desc {
+  font-size: var(--fs-subhead);
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
+/* 按钮按下轻缩:全站按钮统一的「推拉」手感 */
+.pulse-business-host .btn:active:not(:disabled) {
+  transform: scale(0.96);
+}
+.pulse-business-host .btn {
+  transition:
+    transform 0.4s cubic-bezier(0.28, 1.7, 0.4, 1),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.pulse-business-host .btn:active:not(:disabled) {
+  transition-duration: 0.08s;
+}
+
+/* 玻璃面板内按钮:按压缩放反馈(推拉手感) */
+.pulse-business-host .glass button:not(:disabled):active {
+  transform: scale(0.94);
+}
+.pulse-business-host .glass button {
+  transition:
+    transform 0.3s cubic-bezier(0.28, 1.7, 0.4, 1),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* 表单子项错峰入场(推拉动效) */
+.pulse-business-host form.glass > * {
+  animation:
+    fade-in 0.35s var(--ease-out-expo) both,
+    pop-in 0.45s var(--ease-spring) both;
+}
+.pulse-business-host form.glass > *:nth-child(2) { animation-delay: 0.05s; }
+.pulse-business-host form.glass > *:nth-child(3) { animation-delay: 0.1s; }
+.pulse-business-host form.glass > *:nth-child(4) { animation-delay: 0.15s; }
+.pulse-business-host form.glass > *:nth-child(5) { animation-delay: 0.2s; }
+.pulse-business-host form.glass > *:nth-child(6) { animation-delay: 0.25s; }
+.pulse-business-host form.glass > *:nth-child(7) { animation-delay: 0.3s; }
+.pulse-business-host form.glass > *:nth-child(8) { animation-delay: 0.35s; }
+
+/* 分段切换(表单内的玻璃药丸):滑块与导航药丸同材质同动效 */
+.pulse-business-host .segment-toggle-mover {
+  background: var(--mover-bg);
+  box-shadow: var(--mover-shadow);
+  transition: transform 0.42s cubic-bezier(0.3, 1.35, 0.4, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   美化系统:按 html[data-beaut-items] 分项启用,总开关关时全部回落。
+   美化1 渐变描边 / 美化3 空状态插画占位 / 美化5 光斑微动 / v6 丝滑强化
+   ═══════════════════════════════════════════════════════════════ */
+
+/* 美化1 渐变描边:选项卡外圈 1px 渐变环(双层背景,内层遮出内容区) */
+.pulse-business-host [data-beaut-items] .poll-option {
+  border: 1px solid transparent;
+  background-origin: border-box, border-box, padding-box, padding-box, padding-box;
+  background-clip: border-box, padding-box, padding-box, padding-box, padding-box;
+}
+.pulse-business-host [data-beaut-items] .poll-option {
+  background-image:
+    linear-gradient(var(--color-bg), var(--color-bg)),
+    linear-gradient(135deg, #67c2d4, #7d5aff 50%, #ff5f8f),
+    linear-gradient(155deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02) 38%, rgba(255, 255, 255, 0.06) 100%),
+    linear-gradient(var(--color-fill), var(--color-fill)),
+    var(--glass-bg);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    calc(var(--fill, 0) * 100%) 100%,
+    100% 100%;
+}
+.pulse-business-host [data-beaut-items] .poll-option:hover {
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    calc((var(--fill, 0) + 0.03) * 100%) 100%,
+    100% 100%;
+}
+
+/* 美化5 背景光斑微动:极缓漂移(尊重 reduced-motion) */
+.pulse-business-host [data-b5="1"] .orbs i {
+  animation:
+    drift 26s ease-in-out infinite alternate,
+    hueflow 32s ease-in-out infinite alternate;
+}
+.pulse-business-host [data-b5="1"] .orbs i:nth-child(2n) {
+  animation-duration: 34s, 28s;
+}
+
+/* v6 丝滑强化:全局过渡曲线更弹(仅 transform/opacity 类安全属性) */
+.pulse-business-host [data-beautify="v6"] .glass,
+.pulse-business-host [data-beautify="v6"] .btn,
+.pulse-business-host [data-beautify="v6"] .nav-link {
+  transition-timing-function: cubic-bezier(0.22, 1.35, 0.36, 1);
+}
+
+/* 美化3 空状态插画容器(组件内 SVG,此处只管显隐与入场) */
+.pulse-business-host [data-b3="1"] .empty-illustration {
+  display: block;
+  animation: fade-in 0.5s var(--ease-out-expo) both;
+}
+.pulse-business-host .empty-illustration {
+  display: none;
+}
+
+/* 美化4 倒计时胶囊(组件内渲染,样式统一) */
+.pulse-business-host .deadline-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 3px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 35%, transparent);
+  background: var(--color-accent-quiet);
+  font-size: var(--fs-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}
+.pulse-business-host .deadline-capsule .urgent {
+  color: #ff5f8f;
+  font-weight: 700;
+}

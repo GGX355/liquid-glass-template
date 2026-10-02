@@ -14,6 +14,36 @@
   <link rel="stylesheet" href="spring-disclosure.css">
   <link rel="stylesheet" href="pulse-glass.css">
   <link rel="stylesheet" href="pulse-transitions.css">
+<script>
+// Run before the body exists; with JavaScript disabled the page stays visible.
+(() => {
+  const root = document.documentElement;
+  root.classList.add('glass-booting');
+  let finished = false;
+  const reveal = state => {
+    if (finished) return;
+    finished = true;
+    clearTimeout(timeout);
+    root.dataset.glassStartup = state;
+    root.classList.remove('glass-booting');
+    root.classList.add('glass-entering');
+    setTimeout(() => root.classList.remove('glass-entering'), 220);
+    document.removeEventListener('glass-ready', ready);
+  };
+  const ready = () => reveal('ready');
+  const timeout = setTimeout(() => reveal('fallback'), 1800);
+  document.addEventListener('glass-ready', ready, { once: true });
+})();
+</script>
+<link rel="modulepreload" href="pulse-site.js">
+<link rel="modulepreload" href="liquid-glass.js">
+<link rel="modulepreload" href="optics.js">
+<link rel="modulepreload" href="pulse-glass.js">
+<link rel="modulepreload" href="pulse-interactions.js">
+<link rel="modulepreload" href="spring-disclosure.js">
+<link rel="modulepreload" href="pulse-transitions.js">
+<link rel="modulepreload" href="pulse-motion.js">
+<link rel="modulepreload" href="motion.js">
 </head>
 <body class="pulse-site" data-material="liquid">
   <a class="skip-link" href="#pulse-stage">进入活动</a>

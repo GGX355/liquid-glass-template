@@ -1,4 +1,5 @@
 import { configurePulseGlass } from './pulse-glass.js';
+import { revealGlassPage } from './liquid-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
 import { panelTransitions, dialogTransitions } from './pulse-transitions.js';
@@ -215,3 +216,4 @@ on(window, 'pagehide', event => {
   feedback.stop();
   glass.destroy();
 });
+revealGlassPage(surfaces.values());

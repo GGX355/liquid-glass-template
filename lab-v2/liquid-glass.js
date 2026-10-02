@@ -45,16 +45,27 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
     ctx.putImageData(data, 0, 0);
     filter.setAttribute('width', width); filter.setAttribute('height', height);
     map.setAttribute('width', width); map.setAttribute('height', height);
-    map.setAttribute('href', canvas.toDataURL());
+    const source = canvas.toDataURL();
+    map.setAttribute('href', source);
+    // SVG images decode asynchronously even when their pixels come from a
+    // local canvas. The first page reveal must wait for that decode too.
+    const image = new Image();
+    image.src = source;
+    return image.decode().catch(() => {});
   };
   const observer = new ResizeObserver(() => {
     // Stretch the cached map during morphs; regenerate once dimensions settle.
     const width = element.offsetWidth, height = element.offsetHeight;
     for (const node of [filter, map]) { node.setAttribute('width', width); node.setAttribute('height', height); }
-    clearTimeout(timer); timer = setTimeout(render, 100);
+    clearTimeout(timer);
+    if (!lastSize) render();
+    else timer = setTimeout(render, 100);
   });
-  observer.observe(element); render();
+  observer.observe(element);
+  // Hidden dialogs have no map yet and must not hold up the first viewport.
+  const ready = render() || Promise.resolve();
   return {
+    ready,
     setStrength(value) { strength = Math.max(0, Math.min(90, Number(value) || 0)); warp.setAttribute('scale', strength * 2); },
     setRadius(value) {
       radius = Math.max(0, Math.min(999, Number(value) || 0));
@@ -70,4 +81,11 @@ export function createLiquidGlass(element, { strength = 45, radius = 40 } = {}) 
       else element.style.removeProperty('--liquid-filter');
     },
   };
+}
+
+export async function revealGlassPage(surfaces) {
+  await Promise.allSettled([...surfaces].map(surface => surface.ready));
+  // Give layout observers and the SVG compositor a frame before the reveal.
+  await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  document.dispatchEvent(new Event('glass-ready'));
 }

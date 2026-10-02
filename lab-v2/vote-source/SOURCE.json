@@ -1,0 +1,17 @@
+{
+  "repository": "https://github.com/GGX355/pulse",
+  "base_commit": "3bc3a3f",
+  "scope": "UI sources and separate preview",
+  "files": {
+    "src/components/native-glass/shell.tsx": "f688118ef16cafd1d9c3a76a0850ae81afff5baef06095238d874b76ac716205",
+    "src/components/native-glass/native.css": "4462168c677ed40ec38fad7bfb04d41f9664b69cbfeca44505c0123256e34bd8",
+    "src/components/site-shell.tsx": "389fd04cf6fbea2cd7b0774f7e07cc8794df35123a8aeb34be7649fdf6bbcb29",
+    "ui-preview/api.js": "6b1426f4be3ef4b5d68e14936a7339399023848b3b80c899957582fe686e1145",
+    "ui-preview/auth.jsx": "9b49c6f22f6b358f91424db99c29e444be4056452b421421bbeddb299b1a51d2",
+    "ui-preview/main.jsx": "8a3adcfa79e1cb11df78feb141bd202b74d92aefd04b8ae0f32d66d6bf83e10f",
+    "ui-preview/preview.css": "5f362d1c3eb88fddbb35752ce7ca5227a878f3100e1c9858e9b53cd0d2118d81",
+    "ui-preview/vite.config.mjs": "575a6e912e6016caf51bfa656f4361daaac2539635e181de0e463d62ac40c0f5",
+    "ui-preview/index.html": "07ebdf630908a2da26b357bb09241a5828e2d210ea50b7b4e44726247708f71b",
+    "docs/native-vote-ui.md": "0cb803800bed24be21c85b2b8febd44dff1be9baec4e6620fe6c1d12c4088a93"
+  }
+}

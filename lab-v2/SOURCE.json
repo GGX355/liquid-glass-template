@@ -1,5 +1,5 @@
 {
-  "source_commit": "24c97bb9b5abbf1865e539dfba11f6a2f8a1113e",
+  "source_commit": "d32eb5411fe93a68a2064dc7aa1191eb3e30c65e",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "4a912c0bd9d13fd04fe4426d1b1762643821791dae479150e5d90b525c28df53",
@@ -18,7 +18,7 @@
     "PULSE_PREVIEW.md": "a36c9ac539c3eec6d1f6ca66698a8750218f97ee9b30bfd45e528aec82eaa711",
     "VERSION_COMPARISON.md": "44c00a07f8ec9e378abf9271246c7491018457474c5f7d6250bc82ec36d73e9d",
     "package.json": "7dcdecba551ace9e149708f3d9d0776d95b2edba456fa32f5d442d34176a25b2",
-    "prepare-static.mjs": "08ffac311a27b50acc7ece19f0d9ccd9742df53daba1b51626362c9b4c5d17d8",
+    "prepare-static.mjs": "cc7e610e217e08eabfe6e818760ce94f5ad67559bb3422a60f1fa7b400aa159c",
     "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
     "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
     "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af",
@@ -40,6 +40,21 @@
     "pulse-motion.test.mjs": "adb76f41ddccce0ccb77ebc5a476b1e74dec75cafc480ff9afbfb0a10a1e3e8a",
     "glass-startup.test.mjs": "d7ef2a093cd502e06846fe71ffba60ac52db5cbdbd3a72f533d3afd516861555",
     "pointer-light.js": "9953121615b549e956b1c333b02440696ad0941b161eabfeff0798777be0c019",
-    "pointer-light.test.mjs": "df8ea76dea1bb933021cf0ec326023e4b21a67dbeab4cfec25f49eef69e62c57"
+    "pointer-light.test.mjs": "df8ea76dea1bb933021cf0ec326023e4b21a67dbeab4cfec25f49eef69e62c57",
+    "vote-source/SOURCE.json": "bb6d10d77717bd40f6098676cff4a604df8194cd22cc8362f05f46801d25ce90",
+    "vote-source/docs/native-vote-ui.md": "0cb803800bed24be21c85b2b8febd44dff1be9baec4e6620fe6c1d12c4088a93",
+    "vote-source/src/components/native-glass/native.css": "4462168c677ed40ec38fad7bfb04d41f9664b69cbfeca44505c0123256e34bd8",
+    "vote-source/src/components/native-glass/shell.tsx": "f688118ef16cafd1d9c3a76a0850ae81afff5baef06095238d874b76ac716205",
+    "vote-source/src/components/site-shell.tsx": "389fd04cf6fbea2cd7b0774f7e07cc8794df35123a8aeb34be7649fdf6bbcb29",
+    "vote-source/ui-preview/api.js": "6b1426f4be3ef4b5d68e14936a7339399023848b3b80c899957582fe686e1145",
+    "vote-source/ui-preview/auth.jsx": "9b49c6f22f6b358f91424db99c29e444be4056452b421421bbeddb299b1a51d2",
+    "vote-source/ui-preview/index.html": "07ebdf630908a2da26b357bb09241a5828e2d210ea50b7b4e44726247708f71b",
+    "vote-source/ui-preview/main.jsx": "8a3adcfa79e1cb11df78feb141bd202b74d92aefd04b8ae0f32d66d6bf83e10f",
+    "vote-source/ui-preview/preview.css": "5f362d1c3eb88fddbb35752ce7ca5227a878f3100e1c9858e9b53cd0d2118d81",
+    "vote-source/ui-preview/vite.config.mjs": "575a6e912e6016caf51bfa656f4361daaac2539635e181de0e463d62ac40c0f5",
+    "vote/assets/index-BOpx_DMd.js": "a3289e05f354b109e0d19d7a75e82be85797737eecfec37eb006fba064dcf038",
+    "vote/assets/index-DVtTCylu.css": "64a18238c72708eaf95928a379733bcba589a93a0e34a966cdccfdda6926a814",
+    "vote/fonts/InterVariable.woff2": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3",
+    "vote/index.html": "f08a2b1dab171481837eeca0f4d72a26c93837125ab2b6858eb7f35753c7f69b"
   }
 }

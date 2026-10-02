@@ -1,5 +1,5 @@
 {
-  "source_commit": "d32eb5411fe93a68a2064dc7aa1191eb3e30c65e",
+  "source_commit": "99c8803961731f19d41f235cd49d063300a188d8",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "4a912c0bd9d13fd04fe4426d1b1762643821791dae479150e5d90b525c28df53",
@@ -18,7 +18,7 @@
     "PULSE_PREVIEW.md": "a36c9ac539c3eec6d1f6ca66698a8750218f97ee9b30bfd45e528aec82eaa711",
     "VERSION_COMPARISON.md": "44c00a07f8ec9e378abf9271246c7491018457474c5f7d6250bc82ec36d73e9d",
     "package.json": "7dcdecba551ace9e149708f3d9d0776d95b2edba456fa32f5d442d34176a25b2",
-    "prepare-static.mjs": "cc7e610e217e08eabfe6e818760ce94f5ad67559bb3422a60f1fa7b400aa159c",
+    "prepare-static.mjs": "984fb0fc92c900cee7ce308b5032d21eae15b25ed432bf6214e46c44f5ac023a",
     "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
     "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
     "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af",

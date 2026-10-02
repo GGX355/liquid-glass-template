@@ -4,3 +4,5 @@ await mkdir(new URL('./dist/', import.meta.url), { recursive: true });
 for (const name of files) await copyFile(new URL(name, import.meta.url), new URL(`dist/${name}`, import.meta.url));
 console.log(`Prepared ${files.length} public assets. Tests, evidence and local server are excluded.`);
 await cp(new URL('./vote/', import.meta.url), new URL('./dist/vote/', import.meta.url), { recursive: true });
+// Original application styles also request this absolute, self-hosted font URL.
+await cp(new URL('./vote/fonts/', import.meta.url), new URL('./dist/fonts/', import.meta.url), { recursive: true });

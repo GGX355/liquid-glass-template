@@ -12,7 +12,14 @@
 .pulse-site .poll-state-stack>#poll-result{align-self:center}
 .pulse-site .mode-layer{opacity:0;visibility:hidden;pointer-events:none;translate:18px 0;transition:opacity .24s ease,translate .6s cubic-bezier(.22,1.12,.36,1),visibility 0s linear .24s}
 .pulse-site .mode-layer.is-current{opacity:1;visibility:visible;pointer-events:auto;translate:0 0;transition:opacity .36s ease .07s,translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s}
-.pulse-site .elastic-nav .nav-indicator{transition:none}
+.pulse-site .pulse-nav.lab-nav{height:70px;padding:7px;border-radius:40px;background:#ffffff22;border:1px solid #fff5}
+.pulse-site .pulse-nav.lab-nav .nav-indicator,.pulse-site .glass-nav.lab-nav .nav-indicator{left:7px;top:7px;height:54px;width:calc((100% - 14px) / 3);border-radius:30px;translate:none;transition:left .52s cubic-bezier(.22,1,.36,1)}
+.pulse-site.motion-off .lab-nav .nav-indicator{transition:none}
+.pulse-site .pulse-interactions .nav-sample{height:370px}
+.pulse-site .pulse-interactions .nav-sample .glass-nav{top:143px}
+.pulse-site .pulse-interactions .nav-sample button{color:#23372e;font-size:13px}
+.pulse-site .pulse-interactions .nav-sample button[aria-pressed=true]{font-weight:600}
+.pulse-site .pulse-interactions .island-sample{grid-column:1 / -1}
 /* A restrained body deformation follows the same damped response as the lab.
    The grid keeps its dimensions while the visible surface settles inside it. */
 .pulse-site{--surface-spring:linear(0,.054,.181,.34,.507,.664,.8,.908,.988,1.04,1.069,1.081,1.08,1.071,1.058,1.044,1.03,1.018,1.008,1.001,.996,.994,.993,.994,.995,.996,.998,1)}

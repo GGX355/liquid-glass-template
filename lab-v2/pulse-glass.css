@@ -18,9 +18,6 @@
 .pulse-site .poll-option.glass-control .choice-dot{border-color:currentColor}
 .pulse-site .poll-option.glass-control:has(input:checked) .choice-dot{background:transparent;box-shadow:none}
 .pulse-site .poll-option.glass-control:has(input:checked) .choice-dot:after{content:"";display:block;width:6px;height:6px;background:currentColor;border-radius:50%;margin:3px}
-.pulse-site .pulse-nav.liquid-surface{background:transparent;border-color:#ffffff35}
-.pulse-site .pulse-nav.liquid-surface::before{background:#ffffff0b;box-shadow:inset 0 1px 1px #ffffff60,inset 0 -1px 1px #18392b40}
-.pulse-site .nav-indicator::before{background:#ffffff21}
 .pulse-site .pulse-stage[data-palette=dune] .glass-control,.pulse-site[data-palette=dune] .dialog-glass .glass-control{color:#462b22;text-shadow:0 1px 3px #fff6}
 .pulse-site .pulse-stage[data-palette=dune] .action-button.glass-control,.pulse-site[data-palette=dune] .dialog-glass .action-button.glass-control{--control-tint:#fff0dc24;border-color:#ffffff85}
 .pulse-site .stage-story .story-link.glass-control{position:relative;top:auto;right:auto;padding:10px 17px;border-bottom:0;min-height:44px;width:158px;text-shadow:inherit}

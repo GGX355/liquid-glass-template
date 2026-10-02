@@ -55,31 +55,27 @@ export function elasticFeedback({ canAnimate }) {
   };
 }
 
-export function elasticNavigation({ rail, canAnimate }) {
+// Exact motion recipe from experience.js / #nav-pill in visual.css. The left
+// transition retargets naturally; the 520ms squash is the original lab bounce.
+export function labNavigation({ rail, canAnimate }) {
   const indicator = rail.querySelector('.nav-indicator');
-  let position = 0, velocity = 0, target = 0, frame = 0, last = 0;
-  function paint() {
-    indicator.style.translate = `${position * 100}% 0`;
-    const stretch = Math.min(.18, Math.abs(velocity) * .027);
-    indicator.style.scale = `${1 + stretch} ${1 - stretch * .45}`;
-  }
-  function finish() {
-    cancelAnimationFrame(frame); frame = 0; last = 0;
-    position = target; velocity = 0; paint();
-  }
-  function tick(now) {
-    frame = 0;
-    if (!canAnimate()) { finish(); return; }
-    const dt = last ? (now - last) / 1000 : 1 / 60; last = now;
-    ({ position, velocity } = springStep(position, velocity, target, dt));
-    paint();
-    if (Math.abs(position - target) < .0002 && Math.abs(velocity) < .004) finish();
-    else frame = requestAnimationFrame(tick);
-  }
-  rail.classList.add('elastic-nav');
+  let animation = null;
+  const stop = () => { animation?.cancel(); animation = null; };
+  rail.classList.add('lab-nav');
   return {
-    select(index) { target = index; if (!canAnimate()) finish(); else if (!frame) frame = requestAnimationFrame(tick); },
-    syncMotion() { if (!canAnimate()) finish(); },
-    destroy() { finish(); rail.classList.remove('elastic-nav'); indicator.style.removeProperty('translate'); indicator.style.removeProperty('scale'); },
+    select(index) {
+      indicator.style.left = `calc(7px + (100% - 14px) * ${index}/3)`;
+      stop();
+      if (!canAnimate()) return;
+      const amount = .13;
+      animation = indicator.animate([
+        { scale: `${1 + amount} ${1 - amount}` },
+        { scale: `${1 - amount * .4} ${1 + amount * .4}`, offset: .6 },
+        { scale: '1 1' },
+      ], { duration: 520, easing: 'cubic-bezier(.2,.75,.3,1)' });
+      animation.finished.catch(() => {});
+    },
+    syncMotion() { if (!canAnimate()) stop(); },
+    destroy() { stop(); rail.classList.remove('lab-nav'); indicator.style.removeProperty('left'); },
   };
 }

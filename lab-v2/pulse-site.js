@@ -2,7 +2,7 @@ import { configurePulseGlass } from './pulse-glass.js';
 import { draggableLens, tiltCard, themeControl } from './pulse-interactions.js';
 import { springDisclosure } from './spring-disclosure.js';
 import { panelTransitions, dialogTransitions } from './pulse-transitions.js';
-import { elasticFeedback, elasticNavigation } from './pulse-motion.js';
+import { elasticFeedback, labNavigation } from './pulse-motion.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -22,7 +22,12 @@ let lensMotion = null, cardTilt = null, islandMotion = null;
 const active = () => !paused && !reduced.matches && !document.hidden;
 const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abort.signal });
 const feedback = elasticFeedback({ canAnimate: active });
-const navigation = elasticNavigation({ rail: $('.pulse-nav'), canAnimate: active });
+const navigations = $$('.pulse-nav, #flow-nav').map(rail => labNavigation({ rail, canAnimate: active }));
+function selectNavigation(next) {
+  for (const navigation of navigations) navigation.select(['explore', 'poll', 'draw'].indexOf(next));
+  for (const button of $$('[data-nav-mode]')) button.setAttribute('aria-pressed', String(button.dataset.navMode === next));
+  $('#flow-caption').textContent = { explore: '发现 · 好点子，从这里开始。', poll: '投票 · 让每一个选择被看见。', draw: '抽签 · 给日常一点随机的惊喜。' }[next];
+}
 const spring = (element, amount) => feedback.pulse(element, amount);
 
 function updateMotion() {
@@ -36,7 +41,7 @@ function updateMotion() {
   if (!visible) lensMotion?.stop();
   islandMotion?.syncMotion();
   modalMotion.syncMotion();
-  navigation.syncMotion();
+  for (const navigation of navigations) navigation.syncMotion();
   if (!active()) feedback.stop();
 }
 on($('#motion'), 'click', () => { paused = !paused; updateMotion(); });
@@ -54,7 +59,7 @@ const story = {
 const panels = panelTransitions({ stage, stories: story });
 function setMode(next, focusTab = false) {
   if (!story[next]) return;
-  if (next === mode) { if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true }); return; }
+  if (next === mode) { selectNavigation(mode); if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true }); return; }
   lensMotion?.cancel();
   mode = next;
   for (const name of ['explore', 'poll', 'draw']) {
@@ -65,10 +70,11 @@ function setMode(next, focusTab = false) {
   $('.pulse-nav').dataset.active = mode;
   stage.dataset.view = mode;
   panels.setMode(mode);
-  navigation.select(['explore', 'poll', 'draw'].indexOf(mode));
+  selectNavigation(mode);
   if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true });
 }
 for (const name of ['explore', 'poll', 'draw']) on($(`#${name}-tab`), 'click', () => setMode(name));
+for (const button of $$('[data-nav-mode]')) on(button, 'click', () => setMode(button.dataset.navMode));
 on($('.pulse-nav'), 'keydown', event => {
   if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
   event.preventDefault();
@@ -205,6 +211,7 @@ on(window, 'pagehide', event => {
   lensMotion.destroy(); cardTilt.destroy();
   islandMotion.destroy();
   modalMotion.destroy();
-  navigation.destroy(); feedback.stop();
+  for (const navigation of navigations) navigation.destroy();
+  feedback.stop();
   glass.destroy();
 });

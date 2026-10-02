@@ -6,7 +6,7 @@
 
 ## 可复用接口
 
-PULSE 的独立视觉体验位于 `pulse.html`（本地 http://127.0.0.1:8092/pulse.html），直接加载第二章的 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 和 `visual.css`。当前默认“均衡”光感：主透镜 50、面板 40、导航 30、独立小控件 22；玻璃内的按钮使用共享折射的透明覆盖层。可切换轻柔/均衡/鲜明，参数定义及官方设计依据见 [GLASS_SYSTEM.md](GLASS_SYSTEM.md)。默认进入光感探索，可拖动回弹并切换圆角/圆形/胶囊；还提供弹性导航、倾斜邀请卡、可展开活动胶囊、三态主题、投票确认与灵感抽签。只使用示例内容，不连接真实 PULSE 数据。实现与验证范围见 [PULSE_PREVIEW.md](PULSE_PREVIEW.md)，与 GitHub 原版的比较见 [VERSION_COMPARISON.md](VERSION_COMPARISON.md)。
+PULSE 的独立视觉体验位于 `pulse.html`（本地 http://127.0.0.1:8092/pulse.html），直接加载第二章的 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 和 `visual.css`。当前默认“均衡”光感：主透镜 50、面板 40、导航滑块固定 22（原版参数）、独立小控件 22；玻璃内的按钮使用共享折射的透明覆盖层。可切换轻柔/均衡/鲜明，参数定义及官方设计依据见 [GLASS_SYSTEM.md](GLASS_SYSTEM.md)。默认进入光感探索，可拖动回弹并切换圆角/圆形/胶囊；还提供弹性导航、倾斜邀请卡、可展开活动胶囊、三态主题、投票确认与灵感抽签。只使用示例内容，不连接真实 PULSE 数据。实现与验证范围见 [PULSE_PREVIEW.md](PULSE_PREVIEW.md)，与 GitHub 原版的比较见 [VERSION_COMPARISON.md](VERSION_COMPARISON.md)。
 
 复制 `liquid-glass.js`、`optics.js`、`liquid-glass.css` 及 `THIRD-PARTY-LICENSE.txt` 至项目，加载 CSS：
 
@@ -26,7 +26,7 @@ React 中在 useEffect 内对 ref.current 初始化，返回 destroy；服务端
 
 ## 已知范围
 
-活动页签、投票结果和弹窗保留稳定占位。导航滑块按弹簧位置与速度连续运动，倾斜卡片在原地形变、旋转和揭晓；弹窗舒展后轻微回弹，底层内容渐隐。交互与验证范围见 [PANEL_TRANSITIONS.md](PANEL_TRANSITIONS.md)；当前 `npm test` 运行 21 项测试。
+活动页签、投票结果和弹窗保留稳定占位。导航滑块恢复原版独立折射和 520ms 滑动、挤压回弹，交互区与顶部导航同步，倾斜卡片在原地形变、旋转和揭晓；弹窗舒展后轻微回弹，底层内容渐隐。交互与验证范围见 [PANEL_TRANSITIONS.md](PANEL_TRANSITIONS.md)；当前 `npm test` 运行 21 项测试。
 
 真实 DOM 背景折射依赖浏览器支持 SVG backdrop-filter，优先在 Chromium 验证。CSS.supports 不能证明实际折射像素正确；Safari/Firefox 未实测，不承诺一致效果。磨砂与透明对照由 body 的 data-material=frost/plain 控制，可供降级；目前未自动检测实际滤镜渲染失败。
 

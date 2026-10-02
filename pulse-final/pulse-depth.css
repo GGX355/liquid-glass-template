@@ -1,0 +1,37 @@
+/* The approved optical engine and motion stay intact. Convex edges add depth;
+   no opaque fill and no filtered ancestor around another refracting surface. */
+.pulse-site .glass-control::before {
+  background: linear-gradient(158deg,#ffffff32 0%,#ffffff08 36%,#082b3810 66%,#e3ffff20 100%),var(--control-tint);
+  box-shadow: inset 0 2px 1px #fffffff0,inset 2px 0 3px #ffffff55,inset -1px -3px 5px #06334650,inset 0 -1px 1px #ffffff85,0 8px 16px #092e3624,0 2px 3px #123f3524;
+}
+.pulse-site .glass-control::after {border-color:#ffffff7a;box-shadow:inset 0 0 0 .5px #eaffff24}
+.pulse-site .glass-control:hover:not(:disabled)::before {box-shadow:inset 0 2px 1px #fff,inset 2px 0 4px #ffffff70,inset -1px -3px 6px #06334655,inset 0 -1px 1px #ffffffa0,0 11px 22px #092e3630,0 3px 5px #123f3525}
+.pulse-site .glass-control:active:not(:disabled)::before {box-shadow:inset 0 1px 2px #fff9,inset 0 -1px 2px #082f384a,0 3px 7px #092e3626}
+.pulse-site .activity-card::before,.pulse-site .dialog-glass::before {box-shadow:inset 0 2px 2px #ffffffc9,inset 2px 0 5px #ffffff55,inset -2px -4px 8px #062b4440,inset 0 -1px 1px #ffffff80,0 22px 42px #062e3926}
+.pulse-site .pulse-nav #poll-tab {color:#fff;font-weight:750;text-shadow:0 1px 2px #063b47,0 2px 7px #063b47b3}
+.pulse-site .pulse-stage .action-button,.pulse-site .pulse-dialog .action-button {color:#fff;font-weight:750;text-shadow:0 1px 2px #06323fe6,0 2px 6px #06323f90;--control-tint:#063e4938}
+.pulse-site .poll-option:has(input:checked){--control-tint:#0b59632c;border-color:#fff;box-shadow:0 8px 18px #052c4324}
+.pulse-site.dark .glass-control::before {background:linear-gradient(158deg,#ffffff28,#ffffff03 38%,#06132130 68%,#d9fcff14),var(--control-tint);box-shadow:inset 0 2px 1px #ffffffb5,inset 2px 0 3px #ffffff35,inset -1px -3px 5px #00152d85,inset 0 -1px 1px #ffffff55,0 8px 18px #0005}
+.business-tools{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:14px 0 0}
+.business-tools button{border:1px solid var(--line);padding:11px 18px;min-height:44px;font:inherit;font-size:14px;color:var(--ink)}
+.business-content{display:grid;gap:16px;text-align:left;white-space:normal;font-size:15px;line-height:1.55;min-width:0}
+.business-content label{display:grid;gap:8px;font-weight:650}
+.business-content input:not([type=checkbox]):not([type=radio]),.business-content textarea,.business-content select{box-sizing:border-box;width:100%;min-width:0;padding:13px 16px;border-radius:20px;border:1px solid #ffffff75;background:#15404c16;color:inherit;font:inherit;box-shadow:inset 0 2px 5px #082f3830,0 1px 1px #fff9;outline-offset:3px}
+.business-content input:focus-visible,.business-content textarea:focus-visible,.business-content select:focus-visible{outline:2px solid currentColor}
+.business-content textarea{min-height:94px;resize:vertical}.business-content option{color:#173831;background:#ecf3f1}
+.business-content button{min-height:44px;padding:12px 16px;font:inherit;color:inherit;border:1px solid #fff6;text-align:left;cursor:pointer}
+.business-content .business-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.business-content .business-hint{font-size:13px;font-weight:400;opacity:.9;margin:0}
+.business-luck-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.business-scratch{position:relative;min-height:120px;touch-action:none;overflow:hidden}
+.business-scratch canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit;pointer-events:none}
+.business-content .business-check{display:flex;align-items:center;gap:10px}.business-check input{accent-color:#236153;width:18px;height:18px}
+.business-error{font-size:14px;line-height:1.5;font-weight:650;color:inherit;border-left:3px solid #fbbf84;padding-left:12px;text-align:left}
+.business-result{display:grid;gap:7px;padding:10px 0}.business-result progress{width:100%;height:8px;accent-color:#7ed2c9}
+.business-content [hidden]{display:none!important}.business-content .business-ticket{text-align:center;padding:24px;font-size:22px;font-weight:750}
+.pulse-site .dialog-glass:has(.business-content){max-height:min(86dvh,840px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#fff5 transparent}
+.pulse-site .dialog-detail:has(.business-content){padding:14px 0;background:transparent;box-shadow:none;border:0}
+.pulse-site #poll-form fieldset{max-height:355px;overflow-y:auto;padding:2px 6px 16px;margin-left:-6px;margin-right:-6px;scrollbar-width:thin}
+.pulse-site .poll-option:has(input[type=checkbox]) .choice-dot{border-radius:6px}
+.pulse-site #poll-result h3{overflow-wrap:anywhere}.pulse-site .card-subtitle{overflow-wrap:anywhere}
+@media(max-width:640px){.business-tools{gap:8px}.business-tools button{font-size:13px;padding:10px 14px}.business-content{font-size:16px}.pulse-site .dialog-glass:has(.business-content){max-height:88dvh}.business-content .business-row{align-items:stretch}}

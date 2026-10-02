@@ -62,6 +62,22 @@ export function configurePulseGlass({ root = document, signal }) {
   apply(profile, false);
   return {
     surfaces,
+    refresh() {
+      for (const [element, surface] of surfaces) if (!element.isConnected) { surface.destroy(); surfaces.delete(element); }
+      for (let i = overlays.length - 1; i >= 0; i--) if (!overlays[i].isConnected) overlays.splice(i, 1);
+      for (const element of find('.business-content button, .business-content .glass-control, #poll-form .poll-option, .business-tools button')) {
+        if (!element.hasAttribute('data-glass')) element.dataset.glass = '22';
+        element.dataset.glassRole = 'control'; element.classList.add('glass-control');
+        if (surfaces.has(element) || overlays.includes(element)) continue;
+        if (element.parentElement.closest('[data-glass]')) {
+          element.classList.add('liquid-surface', 'glass-overlay');
+          element.style.setProperty('--radius', `${element.dataset.glass}px`); overlays.push(element);
+        } else {
+          const strength = strengthFor(element); element.dataset.glassStrength = String(strength);
+          surfaces.set(element, createLiquidGlass(element, { radius: Number(element.dataset.glass), strength }));
+        }
+      }
+    },
     destroy() {
       for (const surface of surfaces.values()) surface.destroy();
       for (const element of overlays) { element.classList.remove('liquid-surface', 'glass-overlay'); element.style.removeProperty('--radius'); }

@@ -61,5 +61,10 @@ export function pointerLight({ elements, canAnimate = () => true, signal }) {
     for (const element of states.keys()) element.style.setProperty('--pointer-light', '0');
   };
   signal?.addEventListener('abort', destroy, { once: true });
-  return { clear, destroy };
+  return { clear, destroy, refresh(elements) {
+    const current = new Set(elements);
+    for (const element of states.keys()) if (!current.has(element)) states.delete(element);
+    for (const element of elements) if (!states.has(element)) states.set(element, { x: 50, y: 50, alpha: 0, inside: false });
+    schedule();
+  } };
 }

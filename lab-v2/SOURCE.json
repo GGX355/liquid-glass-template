@@ -1,5 +1,5 @@
 {
-  "source_commit": "e4aee7af8cf38bd788eaa5cfb8af1831775a5c6e",
+  "source_commit": "24c97bb9b5abbf1865e539dfba11f6a2f8a1113e",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "4a912c0bd9d13fd04fe4426d1b1762643821791dae479150e5d90b525c28df53",
@@ -12,13 +12,13 @@
     "THIRD-PARTY-LICENSE.txt": "30677f167845a6aa93e5f8a239a9de7d62f63f2b7fd351466e8fe25fe54ed0ec",
     "pulse.html": "17bbfb4870cbada4df5009d28562827d7c10a50ce44d6dee4669d0ec766f3cad",
     "pulse-site.css": "317711de08e10bde6ac7bce73c62628dfd4df62d8be54a9d08f16ab14ba7a302",
-    "pulse-site.js": "ed2c8db0b1bbfc3ddd69c4034f8e8636a74be12ad9ce04983a2a85e36fdc844c",
+    "pulse-site.js": "be11dc67ce12cab05e5e567266fcb74e594468aa7fcb010354b9664c8d681f67",
     "pulse-interactions.js": "76f88bae521d44363eac0648fd4a37eddd1797d0be702e76c2771b4f486c6665",
     "README.md": "25a13f4b0ad4af18a97e87306c80cf02c6bceb408aace2d346dd7b1f376117e2",
     "PULSE_PREVIEW.md": "a36c9ac539c3eec6d1f6ca66698a8750218f97ee9b30bfd45e528aec82eaa711",
     "VERSION_COMPARISON.md": "44c00a07f8ec9e378abf9271246c7491018457474c5f7d6250bc82ec36d73e9d",
-    "package.json": "5f22fa2521c0e50a2d62b4f9bc1e441620d2fa096c24881f747b7b2a0ea86656",
-    "prepare-static.mjs": "9aa10ff846cbe770fe328728fd665c03670fe439f5070f4a57695d9463add889",
+    "package.json": "7dcdecba551ace9e149708f3d9d0776d95b2edba456fa32f5d442d34176a25b2",
+    "prepare-static.mjs": "08ffac311a27b50acc7ece19f0d9ccd9742df53daba1b51626362c9b4c5d17d8",
     "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
     "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
     "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af",
@@ -30,7 +30,7 @@
     "spring-disclosure.test.mjs": "885b71587b1983087b19faf0f7c5875eaf5227f9c9c53d1866582b58ab77645f",
     "SPRING_TRANSITIONS.md": "bfb8f66b12211c214b8136cae180cd7d5f0dc1c6f23a60647925afaa371fe69a",
     "pulse-glass.js": "15d45337514678c43f1158200e604eefaf788e612ac1b261343e661eafbd59cd",
-    "pulse-glass.css": "6c619662f387893f0f42a21ad788b61a3402622ae14496f71974477435d1bbba",
+    "pulse-glass.css": "d3b50afed082f64a0a0367e771a5ea50b413eed75b444c5eb21f78679d2716ff",
     "GLASS_SYSTEM.md": "231760f0874eb19969ab947be893df3801b371f35c113fe81aa692f98df265fd",
     "pulse-transitions.js": "b2edf9cc1c33f73333437e42d649753858bf1cc3ae23637d2838669b68ea3c3b",
     "pulse-transitions.css": "9ba6dffcd9a1a07daa6bebf3ffffe3bf11bb3be8dd9fe11b47f157ab402ef31e",
@@ -38,6 +38,8 @@
     "PANEL_TRANSITIONS.md": "b62d9717e469f7901f50bc4d08b67aa547e6134370255d78d598c129edebe641",
     "pulse-motion.js": "174ddee52f66579c78ca6c66c3b7481ca698e00f96fe1218d890cf2b53527c5f",
     "pulse-motion.test.mjs": "adb76f41ddccce0ccb77ebc5a476b1e74dec75cafc480ff9afbfb0a10a1e3e8a",
-    "glass-startup.test.mjs": "d7ef2a093cd502e06846fe71ffba60ac52db5cbdbd3a72f533d3afd516861555"
+    "glass-startup.test.mjs": "d7ef2a093cd502e06846fe71ffba60ac52db5cbdbd3a72f533d3afd516861555",
+    "pointer-light.js": "9953121615b549e956b1c333b02440696ad0941b161eabfeff0798777be0c019",
+    "pointer-light.test.mjs": "df8ea76dea1bb933021cf0ec326023e4b21a67dbeab4cfec25f49eef69e62c57"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "source_commit": "1d143d15f538b12c146c2151f16c1d7617e76be6",
+  "source_commit": "ed954a6d0d0b305b8403a49a52c73f36ef31d8d7",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "4a912c0bd9d13fd04fe4426d1b1762643821791dae479150e5d90b525c28df53",
@@ -33,7 +33,7 @@
     "pulse-glass.css": "6c619662f387893f0f42a21ad788b61a3402622ae14496f71974477435d1bbba",
     "GLASS_SYSTEM.md": "231760f0874eb19969ab947be893df3801b371f35c113fe81aa692f98df265fd",
     "pulse-transitions.js": "e65b39e7e41893de9ff5b29110b27ee557617fa6bf48681e66b7bad7a6ff053a",
-    "pulse-transitions.css": "1e83141cf3631a020ca1ebf232add68e46848280290249b6f0b24c4dc06dd909",
+    "pulse-transitions.css": "24ca5f4a36e174c21deee728535d814344c013f2d0c1d93eee9c9edabfade401",
     "pulse-transitions.test.mjs": "1e5a9f6b0256f4c0d2a7e78e444c187477211ff7fc64201cf6ae5917562196e0",
     "PANEL_TRANSITIONS.md": "b62d9717e469f7901f50bc4d08b67aa547e6134370255d78d598c129edebe641",
     "pulse-motion.js": "174ddee52f66579c78ca6c66c3b7481ca698e00f96fe1218d890cf2b53527c5f",

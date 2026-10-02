@@ -56,14 +56,10 @@ const observer = new IntersectionObserver(entries => { visible = entries[0].isIn
 observer.observe(stage);
 updateMotion();
 
-const story = {
-  explore: { kicker: 'PULSE / LIGHT & PLAY', title: ['让心意，', '轻盈地流动。'], copy: '拖动一片光，换一种形状。\n从轻轻触碰开始，遇见不一样的日常。' },
-  poll: { kicker: '周末灵感局 / VOL. 01', title: ['好时光，', '由我们决定。'], copy: '山野的风，海边的晚霞，或是街角的咖啡。\n这一站，听听大家的心意。' },
-  draw: { kicker: '日常好运局 / VOL. 02', title: ['小惊喜，', '让偶然发生。'], copy: '给忙碌按下暂停，把期待交给未知。\n或许，下一份好运正朝你走来。' },
-};
-const panels = panelTransitions({ stage, stories: story });
+const modes = ['explore', 'poll', 'draw'];
+const panels = panelTransitions({ stage });
 function setMode(next, focusTab = false) {
-  if (!story[next]) return;
+  if (!modes.includes(next)) return;
   if (next === mode) { selectNavigation(mode); if (focusTab) $(`#${mode}-tab`).focus({ preventScroll: true }); return; }
   lensMotion?.cancel();
   mode = next;

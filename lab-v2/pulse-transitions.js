@@ -2,31 +2,13 @@ import { surfaceFrames } from './pulse-motion.js';
 
 // Keep natural layout space for every state; only visual layers move/fade.
 // CSS transitions retarget from their current presentation on rapid input.
-export function panelTransitions({ stage, stories }) {
+export function panelTransitions({ stage }) {
   const find = selector => stage.querySelector(selector);
-  const host = find('.stage-story');
-  const original = [find('.story-kicker'), find('#story-title'), find('#story-copy')];
-  const stack = document.createElement('div');
-  stack.className = 'story-stack';
-  host.prepend(stack);
-  const storyLayers = new Map();
-  for (const [name, story] of Object.entries(stories)) {
-    const layer = document.createElement('div');
-    layer.className = 'story-slide mode-layer';
-    const [kicker, title, copy] = original.map(element => element.cloneNode(true));
-    for (const node of [kicker, title, copy, ...kicker.querySelectorAll('[id]')]) node.removeAttribute('id');
-    kicker.lastElementChild.textContent = story.kicker;
-    title.replaceChildren(document.createTextNode(story.title[0]), document.createElement('br'), document.createTextNode(story.title[1]));
-    copy.replaceChildren(document.createTextNode(story.copy.split('\n')[0]), document.createElement('br'), document.createTextNode(story.copy.split('\n')[1]));
-    layer.append(kicker, title, copy); stack.append(layer); storyLayers.set(name, layer);
-  }
-  original.forEach(element => element.remove());
-  const panels = new Map(Object.keys(stories).map(name => [name, find(`#${name}-panel`)]));
+  // The initial HTML already reserves all states, so hydration does not
+  // change document height or the scrollbar thumb on the first visit.
+  const storyLayers = new Map([...stage.querySelectorAll('[data-story]')].map(layer => [layer.dataset.story, layer]));
+  const panels = new Map([...storyLayers.keys()].map(name => [name, find(`#${name}-panel`)]));
   const form = find('#poll-form-state'), result = find('#poll-result');
-  const pollStack = document.createElement('div');
-  pollStack.className = 'poll-state-stack'; form.before(pollStack); pollStack.append(form, result);
-  const layers = [...storyLayers.values(), ...panels.values(), form, result];
-  for (const layer of layers) { layer.hidden = false; layer.classList.add('mode-layer'); }
   function active(layer, current) {
     layer.classList.toggle('is-current', current);
     layer.inert = !current;

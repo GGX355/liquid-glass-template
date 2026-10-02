@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { dialogTransitions } from './pulse-transitions.js';
+import { dialogTransitions, panelTransitions } from './pulse-transitions.js';
 
 function fixture(t, prepare) {
   const oldDocument = globalThis.document, oldStyle = globalThis.getComputedStyle;
@@ -85,4 +85,39 @@ test('failed material preparation leaves an operable dialog rather than a hidden
   assert.ok(f.animations.length > 0);
   f.reduce(); f.controller.close();
   assert.equal(f.dialog.open, false);
+});
+
+test('pre-rendered panel nodes are reused and focus leaves a panel before it becomes inert', t => {
+  const oldDocument = globalThis.document;
+  globalThis.document = { activeElement: null };
+  t.after(() => { globalThis.document = oldDocument; });
+  function node() {
+    const classes = new Set(), attrs = new Map();
+    return { classes, attrs, inert: false,
+      classList: { add: value => classes.add(value), toggle: (value, active) => active ? classes.add(value) : classes.delete(value) },
+      setAttribute: (name, value) => attrs.set(name, value),
+      contains(element) { return element === this; },
+      focus() { document.activeElement = this; },
+      querySelector() { return this; },
+    };
+  }
+  const names = ['explore', 'poll', 'draw'];
+  const stories = names.map(name => Object.assign(node(), { dataset: { story: name } }));
+  const nodes = new Map(names.flatMap(name => [[`#${name}-panel`, node()], [`#${name}-tab`, node()]]));
+  nodes.set('#poll-form-state', node()); nodes.set('#poll-result', node());
+  const stage = Object.assign(node(), { dataset: { view: 'explore' },
+    querySelector: selector => nodes.get(selector), querySelectorAll: () => stories });
+  const controller = panelTransitions({ stage });
+  assert.equal(nodes.get('#explore-panel').inert, false);
+  assert.equal(nodes.get('#poll-panel').inert, true);
+  document.activeElement = nodes.get('#explore-panel');
+  controller.setMode('poll');
+  assert.equal(document.activeElement, nodes.get('#poll-tab'));
+  assert.equal(nodes.get('#poll-panel').inert, false);
+  assert.equal(nodes.get('#explore-panel').attrs.get('aria-hidden'), 'true');
+  controller.setResult(true);
+  assert.equal(nodes.get('#poll-form-state').inert, true);
+  assert.equal(nodes.get('#poll-result').inert, false);
+  assert.equal(document.activeElement, nodes.get('#poll-result'));
+  assert.ok(stories[1].classes.has('is-current'));
 });

@@ -82,6 +82,7 @@
 .pulse-site .dialog-glass>p:not(.dialog-kicker),.pulse-site .dialog-detail{font-size:14px;line-height:1.9}
 .pulse-site .dialog-fine{font-size:9px;letter-spacing:1px;opacity:1}
 .pulse-site .dialog-close{width:44px;height:44px;top:26px;right:26px;display:grid;place-items:center;padding:0;line-height:1}
+.pulse-site .dialog-close>svg{display:block;width:18px;height:18px;pointer-events:none}
 .pulse-site .pulse-dialog::backdrop{background:#0c17244d}
 .pulse-site[data-palette=dune] .pulse-dialog::backdrop{background:#e9ceaf26}
 

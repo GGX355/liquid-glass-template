@@ -36,7 +36,7 @@
 .pulse-site :is(.activity-card.mode-layer,#explore-panel.mode-layer #lens)>*{opacity:0;transition:opacity var(--glass-fade-out) ease}
 .pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)::before,
 .pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)::after,
-.pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)>*{opacity:1;transition:opacity var(--glass-fade-in) ease var(--glass-fade-delay)}
+.pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)>*{opacity:var(--stage-visibility,1);transition:opacity var(--glass-fade-in) ease var(--glass-fade-delay)}
 .pulse-site.motion-off{--glass-fade-out:0s;--glass-fade-in:0s;--glass-fade-delay:0s}
 .pulse-site.motion-off .activity-card.mode-layer,
 .pulse-site.motion-off #explore-panel.mode-layer{transition:none;translate:none;scale:none}
@@ -45,9 +45,8 @@
 .pulse-site #prize.revealed .prize-symbol{rotate:180deg}
 .pulse-site #prize strong,.pulse-site #prize .prize-tip{transition:translate .65s var(--surface-spring)}
 .pulse-site #prize.revealed strong,.pulse-site #prize.revealed .prize-tip{translate:0 -2px}
-.pulse-site .stage-layout{transition:opacity .3s ease}
-.pulse-site:has(.pulse-dialog[open]) .stage-layout,
-.pulse-site:has(.pulse-dialog[open]) #explore-panel.is-current{opacity:.06}
+.pulse-site .story-stack,.pulse-site .story-note{opacity:var(--stage-visibility,1);transition:opacity .3s ease}
+.pulse-site:has(.pulse-dialog[open]){--stage-visibility:.06}
 .pulse-site .pulse-dialog[data-surround=page]::backdrop{background:#092331b8}
 .pulse-site .pulse-dialog.glass-preparing{visibility:hidden}
 .pulse-site .pulse-dialog.glass-preparing::backdrop{background:transparent}
@@ -76,5 +75,5 @@
 @media(max-width:360px){.pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:11px}}
 .pulse-site.motion-off .mode-layer{transition:none;translate:none;scale:none}
 .pulse-site.motion-off #prize .prize-symbol,.pulse-site.motion-off #prize strong,.pulse-site.motion-off #prize .prize-tip{transition:none}
-.pulse-site.motion-off .stage-layout{transition:none}
-@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none;scale:none}.pulse-site #prize .prize-symbol,.pulse-site #prize strong,.pulse-site #prize .prize-tip,.pulse-site .stage-layout{transition:none}}
+.pulse-site.motion-off .story-stack,.pulse-site.motion-off .story-note{transition:none}
+@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none;scale:none}.pulse-site #prize .prize-symbol,.pulse-site #prize strong,.pulse-site #prize .prize-tip,.pulse-site .story-stack,.pulse-site .story-note{transition:none}}

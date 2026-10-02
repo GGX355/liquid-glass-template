@@ -1,0 +1,2 @@
+# Preserve the approved reference's source bytes on Windows.
+pulse-final/* -text

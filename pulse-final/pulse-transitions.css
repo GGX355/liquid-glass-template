@@ -1,0 +1,79 @@
+/* Inactive grid layers retain their natural size, never affecting page height
+   on selection. Text keeps its native size; no scaling or blur is used. */
+.pulse-site .pulse-stage.mode-ready{height:auto;min-height:680px;overflow-anchor:none}
+.pulse-site .pulse-stage.mode-ready .stage-layout{display:grid;align-items:center;min-height:520px}
+.pulse-site .pulse-stage.mode-ready .stage-story{grid-area:1 / 1;align-self:center;max-width:none;padding:0;min-width:0}
+.pulse-site .pulse-stage.mode-ready .activity-card{grid-area:1 / 2;align-self:stretch;min-width:0;max-width:none;width:100%;display:flex;flex-direction:column}
+.pulse-site .pulse-stage.mode-ready .activity-card>.card-bottom{margin-top:auto;padding-top:22px}
+.pulse-site .story-stack,.pulse-site .poll-state-stack{display:grid;min-width:0}
+.pulse-site .story-slide,.pulse-site .poll-state-stack>div{grid-area:1 / 1;min-width:0}
+.pulse-site .story-slide .story-copy{margin-bottom:0}
+.pulse-site .poll-state-stack{flex:1}
+.pulse-site .poll-state-stack>#poll-result{align-self:center}
+.pulse-site .mode-layer{opacity:0;visibility:hidden;pointer-events:none;translate:18px 0;transition:opacity .24s ease,translate .6s cubic-bezier(.22,1.12,.36,1),visibility 0s linear .24s}
+.pulse-site .mode-layer.is-current{opacity:1;visibility:visible;pointer-events:auto;translate:0 0;transition:opacity .36s ease .07s,translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s}
+.pulse-site .pulse-nav.lab-nav{height:70px;padding:7px;border-radius:40px;background:#ffffff22;border:1px solid #fff5}
+.pulse-site .pulse-nav.lab-nav .nav-indicator,.pulse-site .glass-nav.lab-nav .nav-indicator{left:7px;top:7px;height:54px;width:calc((100% - 14px) / 3);border-radius:30px;translate:none;transition:left .52s cubic-bezier(.22,1,.36,1)}
+.pulse-site.motion-off .lab-nav .nav-indicator{transition:none}
+.pulse-site .pulse-interactions .nav-sample{height:370px}
+.pulse-site .pulse-interactions .nav-sample .glass-nav{top:143px}
+.pulse-site .pulse-interactions .nav-sample button{color:#23372e;font-size:13px}
+.pulse-site .pulse-interactions .nav-sample button[aria-pressed=true]{font-weight:600}
+.pulse-site .pulse-interactions .island-sample{grid-column:1 / -1}
+/* A restrained body deformation follows the same damped response as the lab.
+   The grid keeps its dimensions while the visible surface settles inside it. */
+.pulse-site{--surface-spring:linear(0,.054,.181,.34,.507,.664,.8,.908,.988,1.04,1.069,1.081,1.08,1.071,1.058,1.044,1.03,1.018,1.008,1.001,.996,.994,.993,.994,.995,.996,.998,1)}
+.pulse-site .activity-card.mode-layer{opacity:1;scale:.94 .88;transform-origin:50% 48%;transition:translate .88s var(--surface-spring),scale .88s var(--surface-spring),visibility 0s linear .2s}
+.pulse-site .activity-card.mode-layer.is-current{scale:1;transition:translate .88s var(--surface-spring),scale .88s var(--surface-spring),visibility 0s}
+/* Keep glass ancestors opaque throughout the switch. Their own opacity
+   animation would isolate the backdrop until its final frame. Fade the
+   refracting pseudo itself and the content independently instead. */
+.pulse-site{--glass-fade-out:.2s;--glass-fade-in:.22s;--glass-fade-delay:.04s}
+.pulse-site #explore-panel.mode-layer{opacity:1;transition:translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s linear .2s}
+.pulse-site #explore-panel.mode-layer.is-current{transition:translate .66s cubic-bezier(.22,1.12,.36,1),visibility 0s}
+.pulse-site :is(.activity-card.mode-layer,#explore-panel.mode-layer #lens)::before,
+.pulse-site :is(.activity-card.mode-layer,#explore-panel.mode-layer #lens)::after,
+.pulse-site :is(.activity-card.mode-layer,#explore-panel.mode-layer #lens)>*{opacity:0;transition:opacity var(--glass-fade-out) ease}
+.pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)::before,
+.pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)::after,
+.pulse-site :is(.activity-card.mode-layer.is-current,#explore-panel.mode-layer.is-current #lens)>*{opacity:var(--stage-visibility,1);transition:opacity var(--glass-fade-in) ease var(--glass-fade-delay)}
+.pulse-site.motion-off{--glass-fade-out:0s;--glass-fade-in:0s;--glass-fade-delay:0s}
+.pulse-site.motion-off .activity-card.mode-layer,
+.pulse-site.motion-off #explore-panel.mode-layer{transition:none;translate:none;scale:none}
+@media(prefers-reduced-motion:reduce){.pulse-site{--glass-fade-out:0s;--glass-fade-in:0s;--glass-fade-delay:0s}.pulse-site #explore-panel.mode-layer{transition:none;translate:none}}
+.pulse-site #prize .prize-symbol{rotate:0deg;transition:rotate .85s var(--surface-spring),color .4s}
+.pulse-site #prize.revealed .prize-symbol{rotate:180deg}
+.pulse-site #prize strong,.pulse-site #prize .prize-tip{transition:translate .65s var(--surface-spring)}
+.pulse-site #prize.revealed strong,.pulse-site #prize.revealed .prize-tip{translate:0 -2px}
+.pulse-site .story-stack,.pulse-site .story-note{opacity:var(--stage-visibility,1);transition:opacity .3s ease}
+.pulse-site:has(.pulse-dialog[open]){--stage-visibility:.06}
+.pulse-site .pulse-dialog[data-surround=page]::backdrop{background:#092331b8}
+.pulse-site .pulse-dialog.glass-preparing{visibility:hidden}
+.pulse-site .pulse-dialog.glass-preparing::backdrop{background:transparent}
+.pulse-site[data-palette=dune] .pulse-dialog[data-surround=page]::backdrop{background:#f5e4cadb}
+.pulse-site .story-slide.mode-layer{translate:0 10px}
+.pulse-site .story-slide.mode-layer.is-current{translate:0 0}
+.pulse-site .pulse-stage.mode-ready #explore-panel{position:absolute;inset:0;pointer-events:none}
+.pulse-site .pulse-stage.mode-ready #explore-panel #lens{pointer-events:auto}
+.pulse-site .pulse-stage.mode-ready #explore-panel:not(.is-current) #lens{pointer-events:none}
+.pulse-site .pulse-stage.mode-ready .stage-bottom{position:relative;inset:auto}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button:focus-visible{outline:2px solid currentColor;outline-offset:-5px}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button:active{translate:0 1px}
+.pulse-site .pulse-stage.mode-ready .pulse-nav button{min-height:44px;transition:color .2s,translate .15s}
+.pulse-site .pulse-stage.mode-ready .poll-option:has(input:checked){box-shadow:inset 0 0 0 1px currentColor,0 0 0 1px #ffffff30}
+.pulse-site .pulse-stage.mode-ready .action-button:disabled{opacity:.65}
+.pulse-site .pulse-stage.mode-ready:not([data-view=explore]) .draw-star{animation-play-state:paused}
+.pulse-site .pulse-stage.mode-ready[data-view=draw].flowing .draw-star{animation-play-state:running}
+@media(max-width:640px){
+  .pulse-site .pulse-stage.mode-ready{height:auto;min-height:0}
+  .pulse-site .pulse-stage.mode-ready .stage-layout{grid-template-columns:minmax(0,1fr);min-height:0;gap:26px}
+  .pulse-site .pulse-stage.mode-ready .stage-story{grid-area:1 / 1;max-width:none;padding:0 8px}
+  .pulse-site .pulse-stage.mode-ready .activity-card{grid-area:2 / 1;justify-self:center;max-width:440px}
+  .pulse-site .pulse-stage.mode-ready .stage-bottom{padding-top:6px}
+  .pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:12px;font-weight:600}
+}
+@media(max-width:360px){.pulse-site .pulse-stage.mode-ready .pulse-nav button{font-size:11px}}
+.pulse-site.motion-off .mode-layer{transition:none;translate:none;scale:none}
+.pulse-site.motion-off #prize .prize-symbol,.pulse-site.motion-off #prize strong,.pulse-site.motion-off #prize .prize-tip{transition:none}
+.pulse-site.motion-off .story-stack,.pulse-site.motion-off .story-note{transition:none}
+@media(prefers-reduced-motion:reduce){.pulse-site .mode-layer{transition:none;translate:none;scale:none}.pulse-site #prize .prize-symbol,.pulse-site #prize strong,.pulse-site #prize .prize-tip,.pulse-site .story-stack,.pulse-site .story-note{transition:none}}

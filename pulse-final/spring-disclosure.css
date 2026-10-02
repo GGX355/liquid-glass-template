@@ -1,0 +1,10 @@
+/* Size the surface itself, keeping the type at its natural size while it opens. */
+#island[data-disclosure-measuring],#island[data-disclosure-measuring] *{transition:none!important}
+#island.spring-disclosure{position:relative;flex:none;max-width:none;min-width:0;overflow:hidden;transition:none}
+.pulse-site .pulse-interactions #island.spring-disclosure{max-width:none}
+#island.spring-disclosure #island-content{display:block;position:absolute;left:50%;top:var(--disclosure-header-height);width:var(--disclosure-content-width);grid-template-rows:initial;transition:none;opacity:clamp(0,calc((var(--disclosure-reveal) - .18) / .62),1);transform:translateX(-50%) translateY(calc((1 - var(--disclosure-reveal)) * 8px))}
+#island.spring-disclosure #island-content>div{overflow:hidden}
+#island.spring-disclosure #island-toggle{position:relative;z-index:1}
+#island.spring-disclosure #island-toggle:focus-visible{outline:2px solid currentColor;outline-offset:-5px;border-radius:inherit}
+#island.spring-disclosure .island-icon{transition:none;rotate:calc(var(--disclosure-reveal) * 90deg)}
+#island.spring-disclosure .island-chevron{transition:none;rotate:calc(var(--disclosure-reveal) * 45deg)}

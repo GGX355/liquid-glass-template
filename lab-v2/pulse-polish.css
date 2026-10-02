@@ -25,6 +25,9 @@
 .pulse-site .pulse-stage[data-palette=dune] .stage-top{color:#462b22;text-shadow:0 1px 4px #fff7}
 .pulse-site .pulse-nav button{font-size:13px;font-weight:500}
 .pulse-site .pulse-nav button[aria-selected=true]{font-weight:700}
+.pulse-site .pulse-nav button{height:54px}
+.pulse-site .pulse-nav button>.nav-tab-content{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:inherit;line-height:20px}
+.pulse-site .pulse-nav .nav-tab-icon{display:grid;place-items:center;width:20px;height:20px;flex:none;font-size:20px;line-height:1}
 .pulse-site .stage-story{color:#fff;text-shadow:0 1px 3px #0b283a66}
 .pulse-site .pulse-stage[data-palette=dune] .stage-story{color:#462b22;text-shadow:none}
 .pulse-site .story-kicker{font-size:11px;letter-spacing:1.2px;margin-bottom:20px}
@@ -78,7 +81,7 @@
 .pulse-site .dialog-glass h2{font-weight:500;letter-spacing:-.5px}
 .pulse-site .dialog-glass>p:not(.dialog-kicker),.pulse-site .dialog-detail{font-size:14px;line-height:1.9}
 .pulse-site .dialog-fine{font-size:9px;letter-spacing:1px;opacity:1}
-.pulse-site .dialog-close{width:44px;height:44px;top:14px;right:14px}
+.pulse-site .dialog-close{width:44px;height:44px;top:26px;right:26px;display:grid;place-items:center;padding:0;line-height:1}
 .pulse-site .pulse-dialog::backdrop{background:#0c17244d}
 .pulse-site[data-palette=dune] .pulse-dialog::backdrop{background:#e9ceaf26}
 
@@ -94,6 +97,8 @@
   .pulse-site .pulse-lead{align-items:flex-start;flex-wrap:wrap;gap:12px}
   .pulse-site .pulse-lead p{font-size:14px}
   .pulse-site .pulse-nav button{font-size:12px;letter-spacing:0}
+  .pulse-site .pulse-nav button>.nav-tab-content{gap:0}
+  .pulse-site .pulse-nav .nav-tab-icon{display:none}
   .pulse-site .story-kicker{font-size:10px;margin-bottom:16px}
   .pulse-site .stage-story .story-link{position:static;margin-top:10px;width:145px;font-size:12px}
   .pulse-site .pulse-stage[data-view=explore]{height:750px;min-height:750px}
@@ -117,7 +122,7 @@
   .pulse-site .pulse-interactions .island-fine{font-size:8px;letter-spacing:.5px;margin:16px 0 22px}
   .pulse-site .dialog-glass{padding:38px 26px 25px}
   .pulse-site .dialog-symbol{font-size:54px;margin-bottom:18px}
-  .pulse-site .dialog-kicker{margin:12px 20px 22px}
+  .pulse-site .dialog-kicker{margin:36px 20px 22px}
   .pulse-site .footer-links{max-width:190px}
   .pulse-site footer{flex-wrap:wrap}
 }

@@ -1,5 +1,5 @@
 {
-  "source_commit": "0f0d970508a707a532cd2627d58ccb2c5b7b6191",
+  "source_commit": "48f69bb8f91e01154974b8ba11c92bc185178078",
   "material_reference_commit": "aa4c4405a49701bff2eb8743ff812f3043e8e739",
   "files": {
     "index.html": "54f64e87739dae0d2f9e0eb07a102789212221c3d0f596201fc1f9d49c68c821",
@@ -10,7 +10,7 @@
     "liquid-glass.css": "ed7708049cbeded283053438a7e8a7f40b6160b76d17ed06daa72a3bec358137",
     "optics.js": "f6b9333c27d86781cfbfd4e08a3734a5517088ceb00eeaf9c4a0af391a3f09c8",
     "THIRD-PARTY-LICENSE.txt": "30677f167845a6aa93e5f8a239a9de7d62f63f2b7fd351466e8fe25fe54ed0ec",
-    "pulse.html": "72d077f51ca5aed7c3462f8b721a336770b25cefb359b47829aec81d087968c1",
+    "pulse.html": "a7c2e23a6f0a4fc4e91bedcf94a0af531ad50cab57f2ed243318f45d4ef562eb",
     "pulse-site.css": "317711de08e10bde6ac7bce73c62628dfd4df62d8be54a9d08f16ab14ba7a302",
     "pulse-site.js": "b932701dca4b612aa6600ef08510df1e7fa00e4b6d03b1c8dfbe0955ed8a46a4",
     "pulse-interactions.js": "76f88bae521d44363eac0648fd4a37eddd1797d0be702e76c2771b4f486c6665",
@@ -22,7 +22,7 @@
     "server.mjs": "b14f8caee3daf70bfef859d3f6e72a78771751b5a449b342736dc3e1be797258",
     "motion.test.mjs": "b066dcb0ba015b0969f41b1515a9dc4d320bab71dfb5d7edcb8a32163b32c5bd",
     "optics.test.mjs": "3023ca66e8a28161295cb1f33ec6ddf692263a862189b0ee99eecd9fbe07f4af",
-    "pulse-polish.css": "854a2d74ff7f10180c8087d28c7c9fbcc391c80b32a30d689fe724e7b87ee363",
+    "pulse-polish.css": "79e9ef8e81f53578c1353118bc741b66b349e3d123f828ddbfc04c4f0f322f04",
     "pulse-interactions.test.mjs": "1c667bd974589e7ec630117abbe3519917442fc30f06995fa8dc0183ccc064de",
     "VISUAL_REVIEW.md": "4d91d3aa8e878b006a846b79dbd2747732cd1da3e3527f29690992404506f0d6",
     "spring-disclosure.js": "8f1d778959c2bca26247661f161bcfbcb0b4a92f354bfaa64292285e9fde8362",

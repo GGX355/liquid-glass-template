@@ -2,7 +2,7 @@
 
 用户指定的最终视觉基准：[实验室 PULSE](https://liquid-glass-lab.cyz200552032.chatgpt.site/pulse#pulse-stage)。
 
-本目录是 PULSE 玻璃视觉的来源，保留该版布局、三套动态背景、可拖动透镜与形变、流动导航、倾斜卡片、展开胶囊、弹窗弹簧、玻璃预热和指针高光。PULSE 使用 embedded 挂载方式承载 dev 的原版 React 功能页面，避免简化业务表单造成遗漏。
+本目录是 PULSE 玻璃视觉的来源。实验室保留原展示布局与交互；PULSE embedded 工作页面仅保留全宽投票、抽签和管理区，移除宣传侧栏和互动展示区。三套动态背景、流动导航、弹簧、玻璃预热和指针高光沿用原引擎，外观控制折叠到页头。原版 React 功能页面跟随整页滚动，手机端不再限制为小型内部滚动卡片。
 
 - [独立体验站](https://pulse-glass.cyz200552032.chatgpt.site)
 - index.html / pulse.html：PULSE 入口。

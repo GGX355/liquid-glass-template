@@ -37,3 +37,59 @@
 .pulse-application .pulse-business-host .poll-option input:focus-visible{outline:0}
 .pulse-application .pulse-business-host .poll-option:focus-within{outline:2px solid #fff;outline-offset:3px}
 @media(max-width:640px){.pulse-application .pulse-business-host{max-height:70dvh;padding-right:5px}.pulse-route-nav{gap:6px}.pulse-route-nav a{padding:10px 12px;font-size:13px}.pulse-application .pulse-business-host h1{font-size:23px!important}}
+
+/* Working application: the activity occupies the page, not a demo corner. */
+.pulse-site.pulse-application{padding:0!important}
+.pulse-application :is(.pulse-intro,.stage-story,.stage-bottom,.pulse-motion-note,.pulse-interactions,.pulse-manifesto,.edition,.lab-link,.help-button,.stage-index,.scene-word,.ruler,#explore-panel,#explore-tab),.pulse-application main>footer,.pulse-application>footer{display:none!important}
+.pulse-application .site-header{position:relative;width:calc(100% - 40px);max-width:1080px;height:72px;margin:0 auto;gap:12px;padding:0;border-bottom:0;z-index:10}
+.pulse-application .pulse-brand{font-size:33px;margin-right:auto}
+.pulse-application .pulse-brand>span{font-size:25px}
+.pulse-application main{width:100%;max-width:1120px;margin:0 auto;padding:0 20px 32px}
+.pulse-application .pulse-route-nav{margin:0 0 16px;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.pulse-application .pulse-route-nav a{justify-content:center;font-size:14px;min-height:44px;padding:10px 6px;white-space:nowrap}
+.pulse-application .app-preview-label{grid-column:1/-1;margin:0;font-size:11px;text-align:center}
+.pulse-application .pulse-stage{height:auto!important;min-height:calc(100svh - 170px)!important;border-radius:32px;overflow:hidden}
+.pulse-application .stage-top{position:relative;padding:20px 24px 0;min-height:0;display:flex;justify-content:center}
+.pulse-application .stage-top::after{display:none}
+.pulse-application .pulse-nav.lab-nav{width:min(100%,420px);height:58px;margin:0}
+.pulse-application .pulse-nav button{width:50%;min-height:44px;font-size:14px}
+.pulse-application .pulse-nav.lab-nav .nav-indicator{width:calc((100% - 14px)/2)!important;height:44px}
+.pulse-application .stage-layout{display:block!important;min-height:0!important;max-width:none;padding:20px 24px 24px;gap:0}
+.pulse-application #poll-panel{position:relative!important;grid-area:auto!important;inset:auto!important;width:100%!important;max-width:none!important;margin:0;min-height:calc(100svh - 320px)!important;padding:28px;--radius:32px!important}
+.pulse-application .pulse-stage[data-view=explore] #poll-panel{visibility:visible!important;pointer-events:auto!important}
+.pulse-application .pulse-business-host{max-height:none!important;overflow:visible!important;padding:0;min-height:0}
+.pulse-application .pulse-business-host form{max-width:none}
+.pulse-application .pulse-business-host h1{font-size:30px!important}
+.pulse-application .pulse-business-host .poll-option{min-height:78px;margin:14px 0;padding:18px 20px}
+.pulse-application .pulse-business-host .poll-option input{width:1px;height:1px}
+.pulse-application .pulse-business-host :is(input,select){min-height:46px}
+.pulse-application .pulse-business-host .sr-only{min-height:0}
+.pulse-application .pulse-workspace-settings{position:relative;font-size:13px}
+.pulse-application .pulse-workspace-settings summary{cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:44px;padding:8px 14px;border-radius:24px;border:1px solid var(--line);list-style:none}
+.pulse-application .pulse-workspace-settings summary::-webkit-details-marker{display:none}
+.pulse-application .pulse-workspace-settings[open] summary{font-weight:700}
+.pulse-application .pulse-controls{position:absolute;right:0;top:52px;width:min(350px,calc(100vw - 32px));margin:0;padding:20px;border:1px solid var(--line);border-radius:24px;background:var(--page);box-shadow:0 12px 40px #13283a22;display:flex;flex-direction:column;align-items:stretch;gap:18px}
+.pulse-application .pulse-controls .control-group{display:flex;flex-wrap:wrap;gap:10px;margin:0!important;justify-content:flex-start!important}
+.pulse-application .pulse-controls .control-label{font-size:12px;width:100%}
+.pulse-application .pulse-controls .control-group:has(.shapes){display:none}
+.pulse-application .pulse-controls button{font-size:12px;min-height:44px}
+.pulse-application .pulse-controls #motion{padding:8px 12px}
+.pulse-application .pulse-stage[data-palette=dune] .pulse-business-host{color:#38251d;text-shadow:0 1px 2px #fff5;--color-foreground:#38251d;--color-muted:#493126;--color-subtle:#513629;--color-primary-foreground:#38251d;--color-border:#58372550}
+.pulse-application .pulse-stage[data-palette=dune] .pulse-business-host :is(input,textarea)::placeholder{color:#594035b8}
+@media(max-width:640px){
+ .pulse-application .site-header{width:calc(100% - 24px);height:64px;gap:8px}
+ .pulse-application .pulse-brand{font-size:29px}
+ .pulse-application .theme-control{font-size:12px;min-width:0;padding:8px 10px}
+ .pulse-application main{padding:0 8px 20px}
+ .pulse-application .pulse-route-nav{gap:5px;margin:0 4px 12px}
+ .pulse-application .pulse-route-nav a{font-size:12px;padding:10px 2px;min-height:44px}
+ .pulse-application .pulse-stage{border-radius:24px;min-height:calc(100svh - 146px)!important}
+ .pulse-application .stage-top{padding:12px 12px 0}
+ .pulse-application .pulse-nav.lab-nav{width:100%;max-width:none;height:58px}
+ .pulse-application .pulse-nav button{font-size:14px;padding:0 8px}
+ .pulse-application .stage-layout{padding:12px 6px 10px}
+ .pulse-application #poll-panel{padding:20px 12px;min-height:calc(100svh - 230px)!important;--radius:24px!important}
+ .pulse-application .pulse-business-host h1{font-size:26px!important}
+ .pulse-application .pulse-business-host .poll-option{padding:14px 12px;min-height:74px;border-radius:22px}
+ .pulse-application .pulse-business-host{font-size:15px}
+}

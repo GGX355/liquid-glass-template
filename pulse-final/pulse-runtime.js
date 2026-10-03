@@ -29,9 +29,9 @@ const modalMotion = dialogTransitions({ dialog, canAnimate: active, signal: abor
   },
 });
 const feedback = elasticFeedback({ canAnimate: active });
-const navigations = $$('.pulse-nav, #flow-nav').map(rail => labNavigation({ rail, canAnimate: active }));
+const navigations = $$('.pulse-nav, #flow-nav').map(rail => labNavigation({ rail, canAnimate: active, count: embedded && rail.matches('.pulse-nav') ? 2 : 3 }));
 function selectNavigation(next) {
-  for (const navigation of navigations) navigation.select(['explore', 'poll', 'draw'].indexOf(next));
+  for (const [index, navigation] of navigations.entries()) navigation.select((embedded && index === 0 ? ['poll', 'draw'] : ['explore', 'poll', 'draw']).indexOf(next));
   for (const button of $$('[data-nav-mode]')) button.setAttribute('aria-pressed', String(button.dataset.navMode === next));
   $('#flow-caption').textContent = { explore: '发现 · 好点子，从这里开始。', poll: '投票 · 让每一个选择被看见。', draw: '抽签 · 给日常一点随机的惊喜。' }[next];
 }
@@ -58,7 +58,7 @@ const observer = new IntersectionObserver(entries => { visible = entries[0].isIn
 observer.observe(stage);
 updateMotion();
 
-const modes = ['explore', 'poll', 'draw'];
+const modes = embedded ? ['poll', 'draw'] : ['explore', 'poll', 'draw'];
 const panels = panelTransitions({ stage });
 function setMode(next, focusTab = false) {
   if (!modes.includes(next)) return;
@@ -86,8 +86,8 @@ for (const button of $$('[data-nav-mode]')) on(button, 'click', () => setMode(bu
 on($('.pulse-nav'), 'keydown', event => {
   if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
   event.preventDefault();
-  const names = ['explore', 'poll', 'draw'], direction = event.key === 'ArrowLeft' ? -1 : 1;
-  setMode(event.key === 'Home' ? 'explore' : event.key === 'End' ? 'draw' : names[(names.indexOf(mode) + direction + names.length) % names.length], true);
+  const names = modes, direction = event.key === 'ArrowLeft' ? -1 : 1;
+  setMode(event.key === 'Home' ? names[0] : event.key === 'End' ? names.at(-1) : names[(names.indexOf(mode) + direction + names.length) % names.length], true);
 });
 for (const button of $$('[data-go]')) on(button, 'click', () => {
   setMode(button.dataset.go, true);

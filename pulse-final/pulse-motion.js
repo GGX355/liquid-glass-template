@@ -59,14 +59,14 @@ export function elasticFeedback({ canAnimate }) {
 
 // Exact motion recipe from experience.js / #nav-pill in visual.css. The left
 // transition retargets naturally; the 520ms squash is the original lab bounce.
-export function labNavigation({ rail, canAnimate }) {
+export function labNavigation({ rail, canAnimate, count = 3 }) {
   const indicator = rail.querySelector('.nav-indicator');
   let animation = null;
   const stop = () => { animation?.cancel(); animation = null; };
   rail.classList.add('lab-nav');
   return {
     select(index) {
-      indicator.style.left = `calc(7px + (100% - 14px) * ${index}/3)`;
+      indicator.style.left = `calc(7px + (100% - 14px) * ${index}/${count})`;
       stop();
       if (!canAnimate()) return;
       const amount = .13;

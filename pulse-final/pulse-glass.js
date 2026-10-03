@@ -65,10 +65,13 @@ export function configurePulseGlass({ root = document, signal }) {
     refresh() {
       for (const [element, surface] of surfaces) if (!element.isConnected) { surface.destroy(); surfaces.delete(element); }
       for (let i = overlays.length - 1; i >= 0; i--) if (!overlays[i].isConnected) overlays.splice(i, 1);
-      for (const element of find('.business-content button, .business-content .glass-control, #poll-form .poll-option, .business-tools button, .pulse-business-host button, .pulse-business-host .poll-option, .pulse-route-nav a')) {
+      for (const element of find('.business-content button, .business-content .glass-control, #poll-form .poll-option, .business-tools button, .pulse-business-host button, .pulse-business-host .poll-option, .pulse-business-host a.rounded-full, .pulse-business-host .divide-y > div > a, .pulse-route-nav a')) {
         if (!element.hasAttribute('data-glass')) element.dataset.glass = '22';
-        element.dataset.glassRole = 'control'; element.classList.add('glass-control');
-        if (surfaces.has(element) || overlays.includes(element)) continue;
+        // React can replace className when a choice or route becomes active.
+        // Restore the existing material without rebuilding its optical filter.
+        element.dataset.glassRole = 'control'; element.classList.add('glass-control', 'liquid-surface');
+        if (overlays.includes(element)) { element.classList.add('glass-overlay'); continue; }
+        if (surfaces.has(element)) continue;
         if (element.parentElement.closest('[data-glass]')) {
           element.classList.add('liquid-surface', 'glass-overlay');
           element.style.setProperty('--radius', `${element.dataset.glass}px`); overlays.push(element);

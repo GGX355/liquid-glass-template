@@ -93,3 +93,110 @@
  .pulse-application .pulse-business-host .poll-option{padding:14px 12px;min-height:74px;border-radius:22px}
  .pulse-application .pulse-business-host{font-size:15px}
 }
+
+/* Calm workspace. The lab remains colourful; application chrome uses one
+   neutral material in every state, including after a vote or route change. */
+.pulse-site.pulse-application {
+ --page:#f7f7f2;--ink:#273c34;--muted:#657269;--line:#354b3626;
+ --work-edge:#fffdf7;--work-shadow:#34412e22;--work-low:#69745a42;
+ --work-face:linear-gradient(155deg,#ffffffa3,#ffffff24 48%,#d9dfcf2e);
+ --work-selected:linear-gradient(150deg,#fbfff9d9,#e4eee0a8 55%,#c9d8cba1);
+ --work-rim:inset 0 1.5px 1px var(--work-edge),inset 1px 0 1px #ffffff60,inset 0 -2px 3px var(--work-low),0 7px 16px var(--work-shadow),0 2px 3px var(--work-shadow);
+ background:var(--page)!important;color:var(--ink);
+}
+.pulse-site.pulse-application.dark {
+ --page:#040509;--ink:#e8e6df;--muted:#bcbfd0;--line:#ffffff26;
+ --work-edge:#ffffff70;--work-shadow:#00000066;--work-low:#00000080;
+ --work-face:linear-gradient(155deg,#ffffff17,#ffffff04 48%,#0c10202e);
+ --work-selected:linear-gradient(150deg,#63708a69,#363e575e 55%,#1b273953);
+ background:radial-gradient(ellipse at 14% 2%,#5860ff26,transparent 53%),radial-gradient(ellipse at 88% 14%,#a054ff1c,transparent 48%),radial-gradient(ellipse at 58% 92%,#28aaf01a,transparent 57%),linear-gradient(180deg,#07080d,#040509)!important;
+ background-attachment:fixed!important;
+}
+.pulse-application .pulse-stage {background:transparent!important;color:var(--ink);box-shadow:none;border:0;overflow:visible}
+.pulse-application .pulse-stage>.landscape {display:none!important}
+.pulse-application .pulse-controls .control-group:has(.scenes) {display:none}
+.pulse-application .stage-top {padding-top:4px}
+.pulse-application .stage-layout {padding:22px 0 0}
+.pulse-application #poll-panel {padding:32px;--radius:28px!important;color:var(--ink);text-shadow:none}
+.pulse-application #poll-panel::before {background:var(--work-face);box-shadow:var(--work-rim)}
+.pulse-application #poll-panel::after {border-color:var(--line)}
+.pulse-application .pulse-business-host {
+ color:var(--ink);text-shadow:none;line-height:1.6;
+ --color-foreground:var(--ink);--color-muted:var(--muted);--color-subtle:var(--muted);
+ --color-accent:#366450;--color-primary:#396a54;--color-primary-foreground:var(--ink);
+ --color-border:var(--line);--color-fill:#77997425;--color-ring:#48785c;
+ --color-surface:#dde5d51a;--color-surface-2:#dae4d633;--glass-border:var(--line);
+ --mover-bg:var(--work-selected);--mover-shadow:var(--work-rim);
+}
+.pulse-application.dark .pulse-business-host {--color-accent:#a8d3bf;--color-primary:#a8d3bf;--color-ring:#a8d3bf;--color-fill:#a8d3bf22;--color-surface:#ffffff08;--color-surface-2:#ffffff12}
+.pulse-application .pulse-nav.lab-nav {border:1px solid var(--line);background:#98a78c0c}
+.pulse-application .pulse-nav.lab-nav button {color:var(--muted)!important;text-shadow:none;font-weight:550;display:flex;align-items:center;justify-content:center;line-height:1}
+.pulse-application .pulse-nav.lab-nav button[aria-selected=true] {color:var(--ink)!important;font-weight:750}
+.pulse-application .nav-tab-content {display:inline-flex;align-items:center;justify-content:center;gap:10px;line-height:1.25}
+.pulse-application .nav-tab-icon {display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;line-height:1;flex:none}
+.pulse-application .nav-indicator::before {background:var(--work-selected);box-shadow:var(--work-rim)}
+.pulse-application .nav-indicator::after {border-color:var(--work-edge)}
+.pulse-application .glass-control {color:var(--ink);border-color:var(--line);text-shadow:none;transition:translate .35s cubic-bezier(.22,1,.36,1),transform .35s cubic-bezier(.22,1.3,.36,1),color .2s}
+.pulse-application .glass-control::before,
+.pulse-application .glass-control:hover:not(:disabled)::before,
+.pulse-application .glass-control:active:not(:disabled)::before {opacity:1;z-index:-1;background:var(--work-face);box-shadow:var(--work-rim)}
+.pulse-application .glass-control::after {border-color:var(--work-edge);box-shadow:none}
+.pulse-application .glass-control:active:not(:disabled) {translate:0 0;transform:scale(.99)}
+.pulse-application .glass-control:is([aria-current=page],[aria-pressed=true],.is-mine)::before,
+.pulse-application .glass-control:has(input:checked)::before {background:var(--work-selected);box-shadow:var(--work-rim)}
+.pulse-application .glass-control:is([aria-current=page],[aria-pressed=true],.is-mine) {color:var(--ink);font-weight:700;border-color:var(--color-accent,var(--ink));box-shadow:0 0 0 1px var(--line)}
+.pulse-application .pulse-business-host button:not(.flip-card):not(.scratch-pick):not(.nine-cell) {display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;line-height:1.4;text-align:center;vertical-align:middle}
+.pulse-application .pulse-business-host button[aria-label^="删除"] {width:44px;min-width:44px;height:44px;padding:0;margin-left:12px;font-size:17px}
+.pulse-application .pulse-business-host .poll-option {padding:16px 20px;min-height:80px;margin:12px 0;border:1px solid var(--line);box-shadow:none;translate:0 0;color:var(--ink)}
+.pulse-application .pulse-business-host .poll-option::before {opacity:1!important;z-index:-1;background:var(--work-face);box-shadow:var(--work-rim)}
+.pulse-application .pulse-business-host .poll-option.is-mine::before {background:var(--work-selected)}
+.pulse-application .pulse-business-host .poll-option.is-mine {border-color:var(--color-accent);box-shadow:0 0 0 1px var(--line)}
+.pulse-application .pulse-business-host .poll-option.is-mine::after {animation:none;background:radial-gradient(ellipse at var(--light-x) var(--light-y),rgb(255 255 255 / calc(var(--pointer-light)*.188)),transparent 65%)}
+.pulse-application .pulse-business-host .poll-option.is-locked:not(.is-mine) {opacity:.82}
+.pulse-application .pulse-business-host :is(.seg-mover,.tab-slider,.segment-toggle-mover) {background:var(--work-selected);box-shadow:var(--work-rim);border:1px solid var(--work-edge)}
+.pulse-application .pulse-business-host [role=group] {align-items:center}
+.pulse-application .pulse-business-host :is(input:not([type=radio]):not([type=checkbox]),textarea,select) {border-radius:16px;background:#889d7610;border:1px solid var(--line);box-shadow:inset 0 1px 2px var(--work-shadow),0 1px 0 var(--work-edge);padding:12px 14px;color:var(--ink);line-height:1.5}
+.pulse-application .pulse-business-host :is(input,textarea)::placeholder {color:var(--muted);opacity:.8}
+.pulse-application .pulse-business-host>h1 {text-align:center;margin-bottom:12px}
+.pulse-application .pulse-business-host>p:not(:last-child) {text-align:center}
+.pulse-application .pulse-business-host>.mb-8.flex {align-items:center;margin-bottom:28px}
+.pulse-application .pulse-business-host .divide-y {border:0;display:grid;gap:16px}
+.pulse-application .pulse-business-host .divide-y>div {border:0;gap:8px}
+.pulse-application .pulse-business-host .divide-y>div>a {border:1px solid var(--line);border-radius:22px;padding:18px 20px;min-height:92px}
+.pulse-application .pulse-business-host .divide-y>div>a:hover {opacity:1}
+.pulse-application .pulse-business-host .divide-y>div>a .items-center {flex-wrap:wrap;row-gap:6px}
+.pulse-application .pulse-business-host .divide-y>div>a .truncate {white-space:normal;overflow-wrap:anywhere}
+.pulse-application .pulse-business-host .text-xs.rounded-full {display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:2px 9px;line-height:1.3}
+.pulse-application .pulse-business-host a.rounded-full {display:inline-flex;align-items:center;justify-content:center;min-height:44px;line-height:1.4}
+.pulse-application .pulse-business-host :is(.glass-control,.poll-option):focus-visible,.pulse-application .pulse-business-host .poll-option:focus-within {outline:2px solid var(--color-ring);outline-offset:4px}
+.pulse-application .pulse-controls .glass-control[aria-pressed=true] {box-shadow:0 0 0 1px var(--line)}
+@media(max-width:640px){
+ .pulse-application .stage-layout{padding:16px 0 0}
+ .pulse-application #poll-panel{padding:24px 16px;--radius:24px!important}
+ .pulse-application .pulse-business-host h1{font-size:25px!important}
+ .pulse-application .pulse-business-host .poll-option{padding:14px 16px}
+ .pulse-application .pulse-business-host>.mb-8.flex{align-items:center;flex-wrap:wrap;gap:16px}
+ .pulse-application .pulse-business-host .divide-y>div>a{padding:15px 16px}
+ .pulse-application .pulse-business-host button[aria-label^="删除"]{margin-left:0}
+}
+
+/* Align the optical pill and its content to the same 44px box. */
+.pulse-application .pulse-nav.lab-nav button{height:44px;min-height:44px;max-height:44px}
+.pulse-application .pulse-nav.lab-nav :is(button,.nav-tab-content,.nav-tab-icon){text-shadow:none!important}
+.pulse-site.pulse-application .glass-control::before{background:var(--work-face);box-shadow:var(--work-rim)}
+.pulse-site.pulse-application .glass-control:is([aria-current=page],[aria-pressed=true],[aria-checked=true],.is-mine)::before{background:var(--work-selected);box-shadow:var(--work-rim)}
+.pulse-application .pulse-route-nav a[aria-current=page]{border-color:var(--ink)}
+.pulse-application .pulse-business-host>div:has(>h1),.pulse-application .pulse-business-host form>div:has(>h1){text-align:center}
+.pulse-application .pulse-business-host>p:first-child{margin-bottom:12px;letter-spacing:.08em}
+.pulse-application .pulse-business-host [role=radiogroup]{max-width:none;padding:5px;gap:3px;min-height:56px}
+.pulse-application .pulse-business-host [role=radiogroup] button{font-size:13px;font-weight:550}
+.pulse-application .pulse-business-host .glass-control[aria-checked=true]{font-weight:750;color:var(--ink)}
+.pulse-application .pulse-business-host button[role=radio]::before{box-shadow:none;background:transparent}
+.pulse-application .pulse-business-host button[role=radio]::after{border:0}
+.pulse-application .pulse-business-host .segment-toggle-mover{top:5px;bottom:5px;left:5px}
+
+.pulse-application #poll-panel{border-radius:28px!important}
+.pulse-application .pulse-business-host section>div:has(>h1){text-align:center}
+.pulse-application .theme-control.glass-control{color:var(--ink)!important;text-shadow:none}
+.pulse-application .pulse-stage::before,.pulse-application .pulse-stage::after{display:none}
+@media(max-width:640px){.pulse-application #poll-panel{border-radius:24px!important}}

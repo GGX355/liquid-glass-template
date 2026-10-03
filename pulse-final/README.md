@@ -20,3 +20,5 @@
 独立公开站使用原版功能页面与示例数据库，刷新后重置，不支持多人共享示例活动。本地 PULSE dev 使用原有服务器函数，保留登录权限、截止时间、一人一票和原子抽签。这里不包含生产密钥。正式后端部署另行验证，原 vote.fflun.com 未改动。
 
 Embedded 工作区使用统一米色背景，深色沿用原 PULSE 近黑底和蓝紫柔光。实验室的三套背景继续保留。按钮、选项、历史卡片统一凸面材质；React 更新选中状态后恢复已建立的玻璃表面，不重建滤镜。
+
+Dark workspace uses charcoal backgrounds, blue-grey card faces and softer highlights. Flip front/back surfaces are styled separately without flattening the 3D parent. The application navigation uses a clear participation label; optical parameters are unchanged.

@@ -200,3 +200,54 @@
 .pulse-application .theme-control.glass-control{color:var(--ink)!important;text-shadow:none}
 .pulse-application .pulse-stage::before,.pulse-application .pulse-stage::after{display:none}
 @media(max-width:640px){.pulse-application #poll-panel{border-radius:24px!important}}
+
+/* Dark surfaces separate the page, the workspace and the interactive cards. */
+.pulse-site.pulse-application.dark{
+ --page:#151c25;--ink:#f0f3f5;--muted:#b7c4d0;--line:#c5d5e32b;
+ --work-edge:#eff8ff59;--work-shadow:#060c1638;--work-low:#07132152;
+ --work-face:linear-gradient(145deg,#8aa0b126,#526e8a12 55%,#879cad1c);
+ --work-selected:linear-gradient(145deg,#617c9275,#3c596d66 65%,#56748270);
+ --work-rim:inset 0 1px 1px var(--work-edge),inset 0 -1px 2px var(--work-low),0 5px 16px var(--work-shadow);
+ background:radial-gradient(ellipse at 12% 0,#3d596a24,transparent 55%),radial-gradient(ellipse at 95% 75%,#4751691f,transparent 55%),linear-gradient(165deg,#151c25,#1b2531)!important;
+ background-attachment:fixed!important;
+}
+.pulse-application.dark #poll-panel::before{background:linear-gradient(155deg,#8195a126,#31425640 60%,#4b607526);box-shadow:inset 0 1px 0 #e8f4ff3b,0 16px 50px #080f1938}
+.pulse-application.dark .glass-control::after{border-color:#dfedfa38}
+.pulse-application.dark .pulse-business-host{--color-accent:#b7dfd1;--color-ring:#b7dfd1;--color-subtle:#b7c4d0}
+.pulse-application .pulse-business-host .stage-panel{padding:12px 0}
+.pulse-application .pulse-business-host .draw-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;width:100%;height:auto;min-height:0;background:none;color:var(--ink);border:0;overflow:visible;isolation:auto;perspective:1000px}
+.pulse-application .pulse-business-host .draw-blind-card{height:196px;min-height:196px;cursor:pointer;color:var(--ink);border-radius:22px;animation:none;transform-style:preserve-3d;isolation:auto;overflow:visible}
+.pulse-application .pulse-business-host .draw-blind-card::after{display:none}
+.pulse-application .pulse-business-host .dc-face{display:flex;flex-direction:column;gap:10px;border:1px solid #70897540;background:linear-gradient(145deg,#fcfdf7f2,#e3ecdfed);color:#284839;box-shadow:inset 0 1.5px 1px #fff,0 7px 20px #2034271c;backdrop-filter:none;-webkit-backdrop-filter:none;transform:rotateY(0);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.pulse-application .pulse-business-host .dc-face.dc-back{transform:rotateY(180deg);background:linear-gradient(145deg,#e2efdaeF,#c7ddcbed);color:#244c38}
+.pulse-application .pulse-business-host .dc-front-value{color:inherit;white-space:normal;overflow-wrap:anywhere;font-size:17px;font-weight:650;line-height:1.4;max-width:100%}
+.pulse-application .pulse-business-host .dc-card-index{position:absolute;top:15px;left:17px;font-size:11px;letter-spacing:.08em;font-variant-numeric:tabular-nums;color:#536e5d}
+.pulse-application .pulse-business-host .dc-card-mark{width:34px;height:34px;fill:none;stroke:#668770;stroke-width:1.25;margin:4px 0 2px}
+.pulse-application .pulse-business-host .dc-card-hint{font-size:12px;color:#526c5b;line-height:1.4}
+.pulse-application .pulse-business-host .dc-face .dc-back-label{font-size:12px;color:inherit;opacity:.85}
+.pulse-application .pulse-business-host .dc-face .dc-back-value{font-size:23px;font-weight:750;color:inherit;background:none;-webkit-text-fill-color:currentColor;overflow-wrap:anywhere;line-height:1.35}
+.pulse-application.dark .pulse-business-host .dc-face{background:linear-gradient(145deg,#3a4d60f0,#27384cee);border-color:#b9ccdd55;color:#f2f6fa;box-shadow:inset 0 1.5px 1px #ecf6ff55,inset 0 -1px 2px #10223790,0 10px 25px #060e1c40}
+.pulse-application.dark .pulse-business-host .dc-face.dc-back{background:linear-gradient(145deg,#49665f,#2a4748);color:#f1fff8;border-color:#c6efdb80}
+.pulse-application.dark .pulse-business-host :is(.dc-card-index,.dc-card-hint){color:#c7d7e5}
+.pulse-application.dark .pulse-business-host .dc-card-mark{stroke:#b8d4df}
+.pulse-application .pulse-business-host .draw-blind-card:focus-visible{outline:2px solid var(--color-ring);outline-offset:5px}
+.pulse-application .pulse-business-host .seg{min-height:54px;max-width:460px;width:100%;display:flex;align-items:center;justify-content:center;padding:5px;border-color:var(--line)}
+.pulse-application .pulse-business-host .seg-item{flex:1;white-space:nowrap;min-width:0;padding:10px 12px;font-size:13px;font-weight:550;line-height:1.4}
+.pulse-application .pulse-business-host .seg-item.on{font-weight:750}
+.pulse-application .pulse-business-host .seg-item::before,.pulse-application .pulse-business-host .seg-item::after{display:none}
+.pulse-application .pulse-business-host :is(.scratch-pick,.cell9,.prize-face){background:var(--work-selected);color:var(--ink);border-color:var(--line);box-shadow:var(--work-rim)}
+.pulse-application .pulse-business-host :is(.prize-val,.prize-value){background:none;color:var(--ink);-webkit-text-fill-color:currentColor}
+@media(max-width:640px){
+ .pulse-application .pulse-business-host .draw-grid{gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .pulse-application .pulse-business-host .draw-blind-card{height:164px;min-height:164px}
+ .pulse-application .pulse-business-host .draw-blind-card:last-child:nth-child(odd){grid-column:1/-1;height:142px;min-height:142px}
+ .pulse-application .pulse-business-host .dc-front-value{font-size:16px}
+ .pulse-application .pulse-business-host .seg-item{padding:10px 5px;font-size:12px}
+ .pulse-application .pulse-business-host .tip{font-size:12px;line-height:1.6;margin-top:20px}
+}
+
+.pulse-application.dark #poll-panel::after{background:radial-gradient(ellipse at var(--light-x) var(--light-y),rgb(225 242 255 / calc(var(--pointer-light)*.055)),transparent 65%)}
+.pulse-application.dark .glass-control::after{background:radial-gradient(ellipse at var(--light-x) var(--light-y),rgb(225 242 255 / calc(var(--pointer-light)*.09)),transparent 65%)}
+.pulse-application .pulse-business-host .stage-panel.glass{border:0}
+.pulse-application .pulse-business-host .stage-panel.glass::after{display:none}
+.pulse-application .pulse-business-host .seg-item.on{color:var(--ink)!important}
